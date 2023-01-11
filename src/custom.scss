@@ -1,0 +1,7 @@
+// Add customization to bootstrap here...
+// Regular styling goes to App.scss or other imports there.
+
+$primary: red;
+
+// Bootstrap (imported at the end to include the above customization.
+@import "~bootstrap/scss/bootstrap";
