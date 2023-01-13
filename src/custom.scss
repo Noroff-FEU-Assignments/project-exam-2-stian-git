@@ -1,7 +1,12 @@
 // Add customization to bootstrap here...
 // Regular styling goes to App.scss or other imports there.
 
-$primary: red;
+//$primary: red;
+$body-bg: #2d344d;
+$body-color: #fff;
 
+// cards:
+$card-bg: #3c4d71;
+$card-color: white;
 // Bootstrap (imported at the end to include the above customization.
 @import "~bootstrap/scss/bootstrap";
