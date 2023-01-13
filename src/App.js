@@ -7,6 +7,9 @@ import Logout from "./components/Logout";
 import ShowAllPosts from "./components/AllPosts";
 import SessionContext, { SessionProvider } from "./context/SessionContext";
 import AllPosts from "./components/AllPosts";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Post from "./pages/Post";
 
 function App() {
     //const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
@@ -15,10 +18,18 @@ function App() {
     //console.log(typeof isLoggedIn);
     return (
         <SessionProvider>
-            <LoginUser />
-            <Logout />
-            <AllPosts />
-            {/* {isLoggedIn.name !== "" ? "Not logged in" : <ShowAllPosts />} */}
+            <BrowserRouter>
+                <nav>
+                    <Link to="/">Home</Link>
+                    <Link to="/post">New Post</Link>
+                    <LoginUser />
+                    <Logout />
+                </nav>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/post" element={<Post />} />
+                </Routes>
+            </BrowserRouter>
         </SessionProvider>
     );
 }
