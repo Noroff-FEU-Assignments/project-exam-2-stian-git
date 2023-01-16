@@ -10,6 +10,7 @@ import AllPosts from "./components/AllPosts";
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Post from "./pages/Post";
+import ViewProfiles from "./pages/ViewProfiles";
 
 function App() {
     //const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
@@ -22,12 +23,14 @@ function App() {
                 <nav>
                     <Link to="/">Home</Link>
                     <Link to="/post">New Post</Link>
+                    <Link to="/profiles">View Profiles</Link>
                     <LoginUser />
                     <Logout />
                 </nav>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/post" element={<Post />} />
+                    <Route path="/profiles" element={<ViewProfiles />} />
                 </Routes>
             </BrowserRouter>
         </SessionProvider>
