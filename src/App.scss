@@ -36,5 +36,16 @@
                 object-fit: cover;
             }
         }
+        &-content {
+            &-name {
+                font-size: 1.5em;
+            }
+        }
+        &-counts {
+            &-detail {
+                font-size: 0.8em;
+                margin: 0;
+            }
+        }
     }
 }
