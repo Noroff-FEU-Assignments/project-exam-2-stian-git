@@ -11,6 +11,7 @@ import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Post from "./pages/Post";
 import ViewProfiles from "./pages/ViewProfiles";
+import ViewSingleProfile from "./pages/ViewSingleProfile";
 
 function App() {
     //const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
@@ -31,6 +32,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/post" element={<Post />} />
                     <Route path="/profiles" element={<ViewProfiles />} />
+                    <Route path="/profiles/:username" element={<ViewSingleProfile />} />
                 </Routes>
             </BrowserRouter>
         </SessionProvider>
