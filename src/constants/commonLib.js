@@ -1,4 +1,7 @@
+import axios from "axios";
 import { Button, Card, Col, ListGroup } from "react-bootstrap";
+import { apiBaseUrl, apiToken } from "./variables";
+//import useLocalStorage from "../hooks/useLocalStorage";
 
 function toggleComments(e) {
     const areCommentsShowing = e.target.dataset.showcomments === "true";
@@ -46,4 +49,40 @@ export function showPosts(arr) {
             </Col>
         );
     });
+}
+
+export function IsFollowed(name, followedArr) {
+    return followedArr.some((user) => user.name === name);
+}
+
+export async function followUser(username) {
+    const followUserApiUrl = apiBaseUrl + "/profiles/" + username + "/follow";
+    console.log(followUserApiUrl);
+    console.log("Following: " + username);
+    try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        const response = await axios.put(followUserApiUrl);
+        console.log(response);
+        if (response.status === 200) {
+            return true;
+        }
+    } catch (error) {
+        return false;
+    }
+}
+
+export async function unfollowUser(username) {
+    const unfollowUserApiUrl = apiBaseUrl + "/profiles/" + username + "/unfollow";
+    //console.log(followUserApiUrl);
+    //console.log("Following: " + username);
+    try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        const response = await axios.put(unfollowUserApiUrl);
+        console.log(response);
+        if (response.status === 200) {
+            return true;
+        }
+    } catch (error) {
+        return false;
+    }
 }
