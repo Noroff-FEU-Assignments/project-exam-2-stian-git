@@ -1,4 +1,5 @@
 export const apiBaseUrl = "https://nf-api.onrender.com/api/v1/social";
+//alternative base url: export const apiBaseUrl = "https://api.noroff.dev/api/v1/social";
 
 export const apiToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMyLCJuYW1lIjoic21nX3Rlc3R1c2VyIiwiZW1haWwiOiJmaXJzdC5sYXN0bmFtZUBzdHVkLm5vcm9mZi5ubyIsImF2YXRhciI6bnVsbCwiYmFubmVyIjpudWxsLCJpYXQiOjE2NzMzNjE2NzV9.1b_KFqGHfPJjlHMJ0Yvc04OV6unnjJ8ddg0pUMona-c";
 

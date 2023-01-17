@@ -5,6 +5,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { followUser, IsFollowed, unfollowUser } from "../constants/commonLib";
 import { apiBaseUrl, apiToken } from "../constants/variables";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -108,6 +109,7 @@ function ViewProfiles() {
                             <Button data-username={profile.name} size="sm" variant="success" onClick={toggleFollow}>
                                 {IsFollowed(profile.name, usersFollowed) ? "Unfollow" : "Follow"}
                             </Button>
+                            <Link to={"./" + profile.name}>Visit {profile.name}</Link>
                         </td>
                     </tr>
                 ))}
