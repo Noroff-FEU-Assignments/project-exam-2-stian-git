@@ -42,11 +42,6 @@ async function deletePost(e) {
 export function showPosts(arr, owner = "nothing12345667") {
     return arr.map((post) => {
         const isPostOwner = owner === post.author?.name;
-
-        // if (isPostOwner) {
-        //     console.log(isPostOwner);
-        // }
-        // console.log(post);
         // Add a "Be the first to react"-feature.
         return (
             <Col key={post.id}>

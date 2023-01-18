@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { showPosts } from "../constants/commonLib";
 import { apiBaseUrl, apiToken } from "../constants/variables";
@@ -12,7 +11,6 @@ function ViewSingleProfile() {
     const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
     const getUsersPostsApiUrl = apiBaseUrl + "/profiles/" + username + "/posts?_author=true&_comments=true&_reactions=true";
     const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
-    //const [isOwnProfile, setIsOwnProfile] = useState(false);
 
     // should profile be null or array?
     const [userProfile, setUserProfile] = useState(null);
@@ -21,13 +19,6 @@ function ViewSingleProfile() {
 
     useEffect(() => {
         setLoadingProfile(true);
-        // console.log(loggedIn.name);
-        // console.log(isOwnProfile);
-        // if (loggedIn.name === username) {
-        //     console.log("This is myself");
-        //     setIsOwnProfile(true);
-        // }
-        // console.log(isOwnProfile);
         // get all userinfo
         async function getUserProfile() {
             try {
@@ -66,37 +57,14 @@ function ViewSingleProfile() {
         getUsersPosts();
     }, []);
 
-    // useEffect(() => {
-    //     function isThisOwnProfile() {
-    //         //console.log(loggedIn.name);
-    //         //console.log(isOwnProfile);
-    //         if (loggedIn.name === username) {
-    //             console.log("This is myself");
-    //             setIsOwnProfile(true);
-    //         }
-    //         //console.log(isOwnProfile);
-    //     }
-    //     isThisOwnProfile();
-    // });
     return (
         <>
             <div>
-                <h1>ViewSingleProfile: {username}</h1>
+                <h1>{username}</h1>
                 <p>{userProfile?.email}</p>
             </div>
             <hr />
-            <div>
-                {/* {posts.map((post) => (
-                    <div data-postid={post.id} key={post.id}>
-                        <h3>{post.title}</h3>
-                        <p>{post.body}</p>
-                        <Button size="sm" data-id={post.id}>
-                            Show comments
-                        </Button>
-                    </div>
-                ))} */}
-                {showPosts(posts, loggedIn.name)}
-            </div>
+            <div>{showPosts(posts, loggedIn.name)}</div>
         </>
     );
 }
