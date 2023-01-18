@@ -1,8 +1,9 @@
 import axios from "axios";
+import { Picker } from "emoji-picker-element";
 import moment from "moment/moment";
 import { Button, Card, Col, ListGroup } from "react-bootstrap";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { apiBaseUrl, apiToken } from "./variables";
+import { apiBaseUrl, apiToken, emojiVersion } from "./variables";
 //import useLocalStorage from "../hooks/useLocalStorage";
 //const userInfo = useLocalStorage("socialSessionInfo");
 
@@ -39,6 +40,27 @@ async function deletePost(e) {
     }
 }
 
+function addReaction(id, emoji) {
+    console.log("Adding " + emoji + " to " + id);
+}
+function reactToPost(e) {
+    //console.log("Reacting to: " + e.target.dataset.postid);
+    //const reactIcon = "👍";
+    const emojiSelected = new Picker({ emojiVersion: "15.1" });
+    // Create its own element, or a modal?
+    e.target.appendChild(emojiSelected);
+    emojiSelected.addEventListener("emoji-click", (icon) => {
+        //console.log("Adding " + icon.detail.unicode + " to " + e.target.dataset.postid);
+        const emojiToAdd = icon.detail.unicode;
+        // run apicall
+        addReaction(e.target.dataset.postid, icon.detail.unicode);
+        // update
+        // remove the element:
+        emojiSelected.remove();
+    });
+    //console.log(emojiSelected);
+}
+
 export function showPosts(arr, owner = "nothing12345667") {
     return arr.map((post) => {
         const isPostOwner = owner === post.author?.name;
@@ -54,7 +76,12 @@ export function showPosts(arr, owner = "nothing12345667") {
                         </Card.Text>
                         <Card.Text>{post.body}</Card.Text>
                     </Card.Body>
-                    <Card.Body>{post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""}</Card.Body>
+                    <Card.Body>
+                        {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""}
+                        <Button size="sm" data-postid={post.id} onClick={reactToPost}>
+                            React!
+                        </Button>
+                    </Card.Body>
                     <ListGroup className="list-group-flush post__comment-header">
                         <p className="post__comment-count">{post.comments ? post.comments.length : "No"} Comments </p>
                         {isPostOwner ? (

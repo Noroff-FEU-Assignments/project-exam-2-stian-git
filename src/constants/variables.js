@@ -6,6 +6,8 @@ export const apiToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMyLCJuYW
 //RegEx used to identify a valid URL for media. Notice how filetypes can be changed by adding |.ext inside the parenthesis.
 export const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
 
+//Check this resource before changing emoji Version: https://emojipedia.org/emoji-versions/
+export const emojiVersion = "15.1";
 // export const testPost = [
 //     {
 //         title: "Happy 2023!",

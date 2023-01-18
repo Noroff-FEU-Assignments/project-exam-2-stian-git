@@ -13,6 +13,7 @@ import Post from "./pages/Post";
 import ViewProfiles from "./pages/ViewProfiles";
 import ViewSingleProfile from "./pages/ViewSingleProfile";
 import useLocalStorage from "./hooks/useLocalStorage";
+import SinglePost from "./pages/SinglePost";
 
 function App() {
     const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
@@ -32,6 +33,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/post" element={<Post />} />
+                    <Route path="/post/:postid" element={<SinglePost />} />
                     <Route path="/profiles" element={<ViewProfiles />} />
                     <Route path="/profiles/:username" element={<ViewSingleProfile />} />
                     {/* <Route path="" element={} /> */}
