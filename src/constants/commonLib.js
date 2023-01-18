@@ -40,12 +40,27 @@ async function deletePost(e) {
     }
 }
 
-function addReaction(id, emoji) {
+async function addReaction(id, emoji) {
     console.log("Adding " + emoji + " to " + id);
+    const addReactionUrl = apiBaseUrl + "/posts/" + id + "/react/" + emoji;
+    try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        const response = await axios.put(addReactionUrl);
+        console.log(response);
+        if (response.status === 200) {
+            console.log("Reaction added");
+            return true;
+        }
+    } catch (error) {
+        console.log("An error occured adding reaction." + error);
+    }
 }
 function reactToPost(e) {
     //console.log("Reacting to: " + e.target.dataset.postid);
     //const reactIcon = "👍";
+    //
+    // Move version to variables!!
+    //
     const emojiSelected = new Picker({ emojiVersion: "15.1" });
     // Create its own element, or a modal?
     e.target.appendChild(emojiSelected);
