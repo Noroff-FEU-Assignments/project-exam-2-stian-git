@@ -22,7 +22,7 @@ const schema = yup.object().shape({
     media: yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"),
 });
 
-function EditPostForm() {
+export function EditPostForm() {
     const [isPosting, setIsPosting] = useState(false);
     const [postError, setPostError] = useState(null);
     const [tags, setTags] = useState([]);
@@ -121,7 +121,7 @@ function EditPostForm() {
     );
 }
 
-export default EditPostForm;
+//export default EditPostForm;
 
 // Object needs to look like this:
 // {

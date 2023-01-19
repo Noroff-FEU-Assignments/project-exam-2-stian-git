@@ -2,6 +2,7 @@ import axios from "axios";
 import { Picker } from "emoji-picker-element";
 import moment from "moment/moment";
 import { Button, Card, Col, ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { apiBaseUrl, apiToken, emojiVersion } from "./variables";
 //import useLocalStorage from "../hooks/useLocalStorage";
@@ -61,7 +62,7 @@ function reactToPost(e) {
     //
     // Move version to variables!!
     //
-    const emojiSelected = new Picker({ emojiVersion: "15.1" });
+    const emojiSelected = new Picker({ emojiVersion: 14.0 });
     // Create its own element, or a modal?
     e.target.appendChild(emojiSelected);
     emojiSelected.addEventListener("emoji-click", (icon) => {
@@ -76,8 +77,9 @@ function reactToPost(e) {
     //console.log(emojiSelected);
 }
 
-export function showPosts(arr, owner = "nothing12345667") {
+export function showPosts(arr, owner = "nothing12345667", showAll = false) {
     return arr.map((post) => {
+        console.log(post);
         const isPostOwner = owner === post.author?.name;
         // Add a "Be the first to react"-feature.
         return (
@@ -106,6 +108,8 @@ export function showPosts(arr, owner = "nothing12345667") {
                         ) : (
                             ""
                         )}
+
+                        {showAll ? "" : <Link to={`/post/${post.id}`}>View</Link>}
                         <Button data-showcomments="false" variant="link" className="post__comment-viewtoggler" onClick={toggleComments}>
                             Show
                         </Button>
@@ -186,5 +190,42 @@ export async function unfollowUser(username) {
         }
     } catch (error) {
         return false;
+    }
+}
+
+export async function getSinglePost(postid) {
+    console.log("Retrieving post ID: " + postid);
+    const singlePostApiUrl = apiBaseUrl + "/posts/" + postid + "?_author=true&_comments=true&_reactions=true";
+    try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        const response = await axios.get(singlePostApiUrl);
+        console.log(response);
+        if (response.status === 200) {
+            //return true;
+            return response.data;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        return [];
+    }
+}
+
+export async function getPosts(qty = 20, offset = 0) {
+    console.log("Retrieving " + qty + " posts, skipping: " + offset);
+    const allPostsApiUrl = apiBaseUrl + "/posts?_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
+    try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        const response = await axios.get(allPostsApiUrl);
+        console.log(response);
+        if (response.status === 200) {
+            //return true;
+            console.log(response.data);
+            return response.data;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        return [];
     }
 }

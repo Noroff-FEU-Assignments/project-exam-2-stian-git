@@ -8,21 +8,8 @@ export const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*
 
 //Check this resource before changing emoji Version: https://emojipedia.org/emoji-versions/
 export const emojiVersion = "15.1";
-// export const testPost = [
-//     {
-//         title: "Happy 2023!",
-//         body: "This is just a test post where we usually put a status or gets mad an unimportant things we care about",
-//         tags: ["post tag"],
-//         media: "https://media.tenor.com/1tqGmyaP-pQAAAAd/2023-happy2023.gif",
-//         created: "2023-01-02T14:30:53.604Z",
-//         updated: "2023-01-02T14:31:25.546Z",
-//         id: 2061,
-//         _count: {
-//             comments: 0,
-//             reactions: 2,
-//         },
-//     },
-// ];
+
+export const postsToLoad = 2;
 
 export const testPost = [
     {
