@@ -25,7 +25,7 @@ function ViewSingleProfile() {
                 axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
                 const response = await axios(getProfileApiUrl);
                 if (response.status === 200) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     setUserProfile(response.data);
                 } else {
                     console.log("Something went wrong retrieving profile");
@@ -43,7 +43,7 @@ function ViewSingleProfile() {
                 axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
                 const response = await axios(getUsersPostsApiUrl);
                 if (response.status === 200) {
-                    console.log(response.data);
+                    //console.log(response.data);
                     setPosts(response.data);
                 } else {
                     console.log("Something went wrong retrieving posts");

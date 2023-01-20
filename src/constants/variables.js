@@ -9,7 +9,7 @@ export const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*
 //Check this resource before changing emoji Version: https://emojipedia.org/emoji-versions/
 export const emojiVersion = "15.1";
 
-export const postsToLoad = 2;
+export const postsToLoad = 100;
 
 export const testPost = [
     {

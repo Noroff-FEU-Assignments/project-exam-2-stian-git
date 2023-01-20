@@ -34,6 +34,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/post" element={<Post />} />
                     <Route path="/post/:postid" element={<SinglePost />} />
+                    <Route path="/post/:postid/edit" element={<Post />} />
                     <Route path="/profiles" element={<ViewProfiles />} />
                     <Route path="/profiles/:username" element={<ViewSingleProfile />} />
                     {/* <Route path="" element={} /> */}

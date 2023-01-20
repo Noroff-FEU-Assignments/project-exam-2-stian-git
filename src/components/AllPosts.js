@@ -17,29 +17,19 @@ function AllPosts() {
     async function getAllPosts() {
         const data = await getPosts(postsToLoad, offset);
         // check if data count is correct;
-        // set data.
-        //console.log(data);
-        //console.log(data.length);
         setPosts(posts.concat(data));
         setOffset(offset + postsToLoad);
 
-        //
-        // Need to add a check that sets
-        // noMorePages when the array length is less than postsToLoad.
-        //
-        //
+        if (data.length < postsToLoad) {
+            console.log("There are no more posts to load...removing button.");
+            setNoMorePages(true);
+        }
     }
 
-    function loadMorePosts() {
-        console.log("Loading page..." + offset + postsToLoad);
-
-        getAllPosts();
-    }
-    //return <p>Hello</p>;
     return (
         <>
             {isLoggedIn ? <Row className="postscontainer">{showPosts(posts)}</Row> : "User not logged in"}
-            {noMorePages ? "" : <Button onClick={loadMorePosts}>Load more posts</Button>}
+            {noMorePages ? <Button disabled>No more posts.</Button> : <Button onClick={getAllPosts}>Load more posts</Button>}
         </>
     );
 }

@@ -1,15 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Image } from "react-bootstrap";
 import { InputTags } from "react-bootstrap-tagsinput";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { apiBaseUrl, apiToken, mediaUrlSyntax } from "../constants/variables";
-// check the below:
-// import "react-bootstrap-tagsinput/dist/index.css";
-
-// function updateContent() {
+//
+// Status: 20.1.2023:
+// Error shows up. Possibly something to do with the fillout of tags.
+// if moving from edit to new post, the fields should be emptied.
+//
 
 //const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
 
@@ -22,10 +23,13 @@ const schema = yup.object().shape({
     media: yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"),
 });
 
-export function EditPostForm() {
+export function EditPostForm(props) {
     const [isPosting, setIsPosting] = useState(false);
     const [postError, setPostError] = useState(null);
     const [tags, setTags] = useState([]);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [oldPostData, setOldPostData] = useState(null);
+    const postId = props?.id;
 
     const {
         register,
@@ -34,6 +38,25 @@ export function EditPostForm() {
         formState: { errors },
     } = useForm({ resolver: yupResolver(schema) });
 
+    useEffect(() => {
+        async function getSinglePost(id) {
+            console.log("Props", id);
+            const getPostUrl = apiBaseUrl + "/posts/" + id;
+            try {
+                axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+                const response = await axios(getPostUrl);
+                //console.log(response.data);
+                setOldPostData(response.data);
+                setTags(oldPostData.tags);
+            } catch (error) {
+                console.log("Failed to retrieve data.");
+            }
+        }
+        if (postId) {
+            setIsEditMode(true);
+            getSinglePost(postId);
+        }
+    }, []);
     async function postContent(data) {
         setIsPosting(true);
         console.log(data);
@@ -82,10 +105,10 @@ export function EditPostForm() {
     return (
         <Form onSubmit={handleSubmit(postContent)}>
             <Form.Group className="mb-3" controlId="edistPostFormTitle">
-                <Form.Control type="text" placeholder="Title" {...register("title")} />
+                <Form.Control type="text" placeholder="Title" {...register("title")} value={isEditMode ? oldPostData?.title : ""} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="edistPostFormBody">
-                <Form.Control as="textarea" rows={3} placeholder="Body" {...register("body")} />
+                <Form.Control as="textarea" rows={3} placeholder="Body" {...register("body")} value={isEditMode ? oldPostData?.body : ""} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="edistPostFormTags">
                 <div className="input-group">
@@ -98,20 +121,10 @@ export function EditPostForm() {
                             setValue("tags", value.values);
                         }}
                     />
-                    {/* <button
-                        className="btn btn-outline-secondary"
-                        type="button"
-                        data-testid="button-clearAll"
-                        onClick={() => {
-                            setTags([]);
-                        }}
-                    >
-                        Delete all
-                    </button> */}
                 </div>
             </Form.Group>
             <Form.Group className="mb-3" controlId="editPostFormMedia">
-                <Form.Control type="text" onKeyUp={showPreview} placeholder="Image URL" {...register("media")} />
+                <Form.Control type="text" onKeyUp={showPreview} placeholder="Image URL" {...register("media")} value={isEditMode ? oldPostData?.media : ""} />
                 <Form.Text className="text-muted">{errors.media ? <span className="form-requirement">{errors.media.message}</span> : <Image className="mediaThumb" src={document.querySelector("#editPostFormMedia")?.value} onError={imageError} thumbnail />}</Form.Text>
             </Form.Group>
             <Button variant="primary" type="submit">

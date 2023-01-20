@@ -79,7 +79,7 @@ function reactToPost(e) {
 
 export function showPosts(arr, owner = "nothing12345667", showAll = false) {
     return arr.map((post) => {
-        console.log(post);
+        //console.log(post);
         const isPostOwner = owner === post.author?.name;
         // Add a "Be the first to react"-feature.
         return (
@@ -110,6 +110,7 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
                         )}
 
                         {showAll ? "" : <Link to={`/post/${post.id}`}>View</Link>}
+                        {isPostOwner ? <Link to={`/post/${post.id}/edit`}>Edit</Link> : ""}
                         <Button data-showcomments="false" variant="link" className="post__comment-viewtoggler" onClick={toggleComments}>
                             Show
                         </Button>

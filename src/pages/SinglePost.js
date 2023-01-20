@@ -6,11 +6,14 @@ function SinglePost() {
     const { postid } = useParams();
     const [postData, setPostData] = useState([]);
 
-    useEffect(async function () {
-        const data = await getSinglePost(postid);
-        console.log("Data:", data);
-        setPostData(data);
-        console.log(typeof postData);
+    useEffect(() => {
+        async function getPostData() {
+            const data = await getSinglePost(postid);
+            console.log("Data:", data);
+            setPostData(data);
+            console.log(typeof postData);
+        }
+        getPostData();
     }, []);
 
     //console.log("This is post id: " + postid);
@@ -21,13 +24,7 @@ function SinglePost() {
     // Concider tags?
     //getSinglePost(postid);
 
-    return (
-        <div>
-            {postData.then((data) => {
-                showPosts(data);
-            })}{" "}
-        </div>
-    );
+    return <div>{showPosts([postData])}</div>;
 }
 
 export default SinglePost;
