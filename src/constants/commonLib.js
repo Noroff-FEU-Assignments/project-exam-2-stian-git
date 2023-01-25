@@ -77,13 +77,17 @@ function reactToPost(e) {
   //console.log(emojiSelected);
 }
 
+function showPost(e) {
+  console.log("Showing post;", e);
+}
+
 export function showPosts(arr, owner = "nothing12345667", showAll = false) {
   return arr.map((post) => {
     //console.log(post);
     const isPostOwner = owner === post.author?.name;
     // Add a "Be the first to react"-feature.
     return (
-      <Card key={post.id} className="post" style={{ width: "18rem" }}>
+      <Card key={post.id} className="post" style={{ width: "18rem" }} onClick={showPost}>
         {post.media ? <Card.Img variant="top" src={post.media} /> : ""}
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>

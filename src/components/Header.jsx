@@ -9,6 +9,7 @@ import { Link, NavLink } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
 import LoginUser from "./LoginUser";
 import Logout from "./Logout";
+//import logo from "../../public/images/MyFriends-logo.png";
 
 export default function Header() {
   const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
@@ -21,9 +22,11 @@ export default function Header() {
   //   setActivePage(key);
   // }
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar collapseOnSelect expand="lg" variant="dark">
       <Container>
-        <Navbar.Brand href="/">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="images/MyFriends-logo.png" />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">

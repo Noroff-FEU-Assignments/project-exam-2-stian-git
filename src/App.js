@@ -23,15 +23,15 @@ function App() {
     <SessionProvider>
       <BrowserRouter>
         <Header />
-        <nav>
+        {/* <nav>
           <Link to="/"> Home |</Link>
           {loggedIn ? <Link to="/post"> New Post |</Link> : ""}
           {loggedIn ? <Link to="/profiles"> View Profiles |</Link> : ""}
           {loggedIn ? <Link to={`/profiles/${loggedIn.name}`}> {loggedIn.name} |</Link> : "not logged in"}
-          {/* <Link to="/">Home</Link> */}
+          {/* <Link to="/">Home</Link> }
           {loggedIn ? "" : <LoginUser />}
           {loggedIn ? <Logout /> : ""}
-        </nav>
+        </nav> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/post" element={<Post />} />

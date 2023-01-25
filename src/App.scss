@@ -1,51 +1,73 @@
 @import "custom";
 
+// Header
+
+.navbar {
+  &-brand {
+    &-logo {
+      max-height: 50px;
+    }
+  }
+}
+
 // Posts and Comments
 
 .post {
-    &__comment {
-        &-header {
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-        }
-        &-count {
-            margin: 0;
-            padding: 6px 12px;
-        }
-        &-viewtoggler {
-            font-style: italic;
-            color: white;
-            &:hover {
-                // Change color!
-                color: grey;
-            }
-        }
+  &__comment {
+    &-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
     }
+    &-count {
+      margin: 0;
+      padding: 6px 12px;
+    }
+    &-viewtoggler {
+      font-style: italic;
+      color: white;
+      &:hover {
+        // Change color!
+        color: grey;
+      }
+    }
+  }
+}
+
+.card {
+  &-text {
+    font-family: $font-family-serif;
+  }
+  &-img {
+    &-top {
+      max-height: 150px;
+      object-fit: cover;
+    }
+  }
 }
 
 // Profiles
 
 .user {
-    list-style: none;
-    &__profile {
-        &-imagecontainer {
-            &-img {
-                height: 100px;
-                width: 100px;
-                object-fit: cover;
-            }
-        }
-        &-content {
-            &-name {
-                font-size: 1.5em;
-            }
-        }
-        &-counts {
-            &-detail {
-                font-size: 0.8em;
-                margin: 0;
-            }
-        }
+  list-style: none;
+  &__profile {
+    &-imagecontainer {
+      &-img {
+        height: 100px;
+        width: 100px;
+        object-fit: cover;
+      }
     }
+    &-content {
+      &-name {
+        font-size: 1.5em;
+      }
+    }
+    &-counts {
+      &-detail {
+        font-size: 0.8em;
+        margin: 0;
+      }
+    }
+  }
 }
