@@ -15,6 +15,7 @@ import ViewSingleProfile from "./pages/ViewSingleProfile";
 import useLocalStorage from "./hooks/useLocalStorage";
 import SinglePost from "./pages/SinglePost";
 import Header from "./components/Header";
+import { Container } from "react-bootstrap";
 
 function App() {
   const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
@@ -32,15 +33,17 @@ function App() {
           {loggedIn ? "" : <LoginUser />}
           {loggedIn ? <Logout /> : ""}
         </nav> */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/post" element={<Post />} />
-          <Route path="/post/:postid" element={<SinglePost />} />
-          <Route path="/post/:postid/edit" element={<Post />} />
-          <Route path="/profiles" element={<ViewProfiles />} />
-          <Route path="/profiles/:username" element={<ViewSingleProfile />} />
-          {/* <Route path="" element={} /> */}
-        </Routes>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/post" element={<Post />} />
+            <Route path="/post/:postid" element={<SinglePost />} />
+            <Route path="/post/:postid/edit" element={<Post />} />
+            <Route path="/profiles" element={<ViewProfiles />} />
+            <Route path="/profiles/:username" element={<ViewSingleProfile />} />
+            {/* <Route path="" element={} /> */}
+          </Routes>
+        </main>
       </BrowserRouter>
     </SessionProvider>
   );

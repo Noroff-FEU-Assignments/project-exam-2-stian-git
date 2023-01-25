@@ -87,7 +87,7 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
     const isPostOwner = owner === post.author?.name;
     // Add a "Be the first to react"-feature.
     return (
-      <Card key={post.id} className="post" style={{ width: "18rem" }} onClick={showPost}>
+      <Card key={post.id} className="post" onClick={showPost}>
         {post.media ? <Card.Img variant="top" src={post.media} /> : ""}
         <Card.Body>
           <Card.Title>{post.title}</Card.Title>
@@ -95,12 +95,6 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
             {formatTime(post.created)}
           </Card.Text>
           <Card.Text>{post.body}</Card.Text>
-        </Card.Body>
-        <Card.Body>
-          {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""}
-          <Button size="sm" data-postid={post.id} onClick={reactToPost}>
-            React!
-          </Button>
         </Card.Body>
         <ListGroup className="list-group-flush post__comment-header">
           <p className="post__comment-count">{post.comments ? post.comments.length : "No"} Comments </p>
@@ -111,7 +105,10 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
           ) : (
             ""
           )}
-
+          {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""}
+          <Button size="sm" data-postid={post.id} onClick={reactToPost}>
+            React!
+          </Button>
           {showAll ? "" : <Link to={`/post/${post.id}`}>View</Link>}
           {isPostOwner ? <Link to={`/post/${post.id}/edit`}>Edit</Link> : ""}
           <Button data-showcomments="false" variant="link" className="post__comment-viewtoggler" onClick={toggleComments}>

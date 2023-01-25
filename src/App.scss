@@ -10,9 +10,16 @@
   }
 }
 
+// Main
+
+main {
+  margin: 2em auto;
+}
+
 // Posts and Comments
 
 .post {
+  width: 18rem;
   &__comment {
     &-header {
       flex-direction: row;
@@ -32,9 +39,20 @@
       }
     }
   }
+  box-shadow: 2px 2px 3px black;
+  border-width: 1px 0 0 0;
+
+  &:hover {
+    //border: 1px solid white;
+    // filter: drop-shadow(2px 4px 6px black);
+    filter: saturate(0.5);
+    cursor: pointer;
+  }
 }
 
 .card {
+  padding: 0;
+  margin: 5px;
   &-text {
     font-family: $font-family-serif;
   }
