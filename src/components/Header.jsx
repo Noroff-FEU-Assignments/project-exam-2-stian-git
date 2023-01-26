@@ -1,31 +1,29 @@
+import { useContext } from "react";
 import { useState } from "react";
-import { NavItem } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { Link, NavLink } from "react-router-dom";
-//import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
-import LoginUser from "./LoginUser";
-import Logout from "./Logout";
-//import logo from "../../public/images/MyFriends-logo.png";
 
 export default function Header() {
-  const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
+  const [socialUsers, setSocialUsers] = useLocalStorage("socialUsersFollowed", null);
+  const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
   const [activePage, setActivePage] = useState("home");
+  const history = useNavigate();
 
-  // function goToLink(key) {
-  //   //e.preventDefault();
-  //   //console.log(e.target.dataset.rrUiEventKey);
-  //   console.log(key);
-  //   setActivePage(key);
-  // }
+  function doLogout() {
+    setIsLoggedIn(null);
+    setSocialUsers(null);
+    history("/");
+  }
+
   return (
     <Navbar collapseOnSelect expand="lg" variant="dark">
       <Container>
         <Navbar.Brand href="/">
-          <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="images/MyFriends-logo.png" />
+          <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="/images/MyFriends-logo.png" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -33,19 +31,30 @@ export default function Header() {
             <NavLink to="/" className="nav-link">
               Home
             </NavLink>
-            {loggedIn ? (
+            {isLoggedIn ? (
               <>
                 <NavLink to="/profiles" className="nav-link" end>
                   Profiles
                 </NavLink>
-                <NavLink to="/post" className="nav-link">
+                <NavLink
+                  to="/post"
+                  className="nav-link"
+                  onClick={(e) => {
+                    console.log(e);
+                    e.preventDefault();
+                    console.log("Test");
+                  }}
+                  end
+                >
                   New Post
                 </NavLink>
-                <NavLink to={`/profiles/${loggedIn.name}`} className="nav-link" exact>
+                <NavLink to={`/profiles/${isLoggedIn.name}`} className="nav-link">
                   My Activity
                 </NavLink>
                 <Nav>
-                  <Logout />
+                  <NavLink to="#" className="nav-link" onClick={doLogout}>
+                    {isLoggedIn.name} (Logout)
+                  </NavLink>
                 </Nav>
               </>
             ) : (

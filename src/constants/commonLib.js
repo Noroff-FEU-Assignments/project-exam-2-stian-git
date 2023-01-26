@@ -158,7 +158,7 @@ export function formatTime(timestamp) {
 }
 
 export function IsFollowed(name, followedArr) {
-  return followedArr.some((user) => user.name === name);
+  return followedArr?.some((user) => user.name === name);
 }
 
 export async function followUser(username) {

@@ -15,10 +15,8 @@ const schema = yup.object().shape({
     .email()
     .required("A valid email is required.")
     .test("Domain check", "Email domain is not accepted", function (email) {
-      const enteredDomain = email.split("@")[1];
+      const enteredDomain = email.split("@")[1].toLowerCase();
       return validEmailDomains.includes(enteredDomain);
-      //console.log(email);
-      //return isValid;
     }),
   password: yup.string().required("You don`t want a blank password."),
   password_recheck: yup

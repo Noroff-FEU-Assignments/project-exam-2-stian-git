@@ -1,20 +1,34 @@
-import React from "react";
-import { Container } from "react-bootstrap";
+import React, { useContext } from "react";
+import { Accordion, Container } from "react-bootstrap";
 import AllPosts from "../components/AllPosts";
 import LoginUser from "../components/LoginUser";
 import NewUserForm from "../components/NewUserForm";
+import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 function Home() {
-  const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
+  //const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
+  const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
   return (
     <>
-      {loggedIn ? (
+      {isLoggedIn ? (
         <AllPosts />
       ) : (
         <Container>
-          <NewUserForm />
-          <LoginUser />
+          <Accordion defaultActiveKey="0">
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Login</Accordion.Header>
+              <Accordion.Body>
+                <LoginUser />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>New User</Accordion.Header>
+              <Accordion.Body>
+                <NewUserForm />
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
         </Container>
       )}
     </>

@@ -1,25 +1,14 @@
-//import logo from "./logo.svg";
-import { useContext, useEffect } from "react";
 import "./App.scss";
-//import { Button } from "react-bootstrap";
-import LoginUser from "./components/LoginUser.js";
-import Logout from "./components/Logout";
-import ShowAllPosts from "./components/AllPosts";
-import SessionContext, { SessionProvider } from "./context/SessionContext";
-import AllPosts from "./components/AllPosts";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { SessionProvider } from "./context/SessionContext";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Post from "./pages/Post";
 import ViewProfiles from "./pages/ViewProfiles";
 import ViewSingleProfile from "./pages/ViewSingleProfile";
-import useLocalStorage from "./hooks/useLocalStorage";
 import SinglePost from "./pages/SinglePost";
 import Header from "./components/Header";
-import { Container } from "react-bootstrap";
 
 function App() {
-  //const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
-  //console.log(loggedIn.name);
   return (
     <SessionProvider>
       <BrowserRouter>
