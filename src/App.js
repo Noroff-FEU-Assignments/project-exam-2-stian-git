@@ -18,21 +18,12 @@ import Header from "./components/Header";
 import { Container } from "react-bootstrap";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
-  console.log(loggedIn.name);
+  //const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
+  //console.log(loggedIn.name);
   return (
     <SessionProvider>
       <BrowserRouter>
         <Header />
-        {/* <nav>
-          <Link to="/"> Home |</Link>
-          {loggedIn ? <Link to="/post"> New Post |</Link> : ""}
-          {loggedIn ? <Link to="/profiles"> View Profiles |</Link> : ""}
-          {loggedIn ? <Link to={`/profiles/${loggedIn.name}`}> {loggedIn.name} |</Link> : "not logged in"}
-          {/* <Link to="/">Home</Link> }
-          {loggedIn ? "" : <LoginUser />}
-          {loggedIn ? <Logout /> : ""}
-        </nav> */}
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -41,7 +32,6 @@ function App() {
             <Route path="/post/:postid/edit" element={<Post />} />
             <Route path="/profiles" element={<ViewProfiles />} />
             <Route path="/profiles/:username" element={<ViewSingleProfile />} />
-            {/* <Route path="" element={} /> */}
           </Routes>
         </main>
       </BrowserRouter>

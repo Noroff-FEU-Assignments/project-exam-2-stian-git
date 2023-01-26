@@ -13,7 +13,7 @@ function Logout() {
   //return <>{isLoggedIn ? <Button onClick={doLogout}>Logout</Button> : ""}</>;
 
   return (
-    <Link to="#" className="nav-link">
+    <Link to="#" className="nav-link" onClick={doLogout}>
       {isLoggedIn.name} (Logout)
     </Link>
   );

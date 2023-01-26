@@ -33,26 +33,25 @@ export default function Header() {
             <NavLink to="/" className="nav-link">
               Home
             </NavLink>
-            <NavLink to="/profiles" className="nav-link" end>
-              Profiles
-            </NavLink>
-            <NavLink to="/post" className="nav-link">
-              New Post
-            </NavLink>
-            <NavLink to={`/profiles/${loggedIn.name}`} className="nav-link" exact>
-              My Activity
-            </NavLink>
-            {/* <Nav.Link eventKey={"home"} href="/">
-              Home
-            </Nav.Link>
-            <Nav.Link eventKey={"profiles"} href="/profiles">
-              Profiles
-            </Nav.Link>
-            <Nav.Link eventKey={"post"} href="/post">
-              New post
-            </Nav.Link> */}
+            {loggedIn ? (
+              <>
+                <NavLink to="/profiles" className="nav-link" end>
+                  Profiles
+                </NavLink>
+                <NavLink to="/post" className="nav-link">
+                  New Post
+                </NavLink>
+                <NavLink to={`/profiles/${loggedIn.name}`} className="nav-link" exact>
+                  My Activity
+                </NavLink>
+                <Nav>
+                  <Logout />
+                </Nav>
+              </>
+            ) : (
+              ""
+            )}
           </Nav>
-          <Nav>{loggedIn ? <Logout /> : <LoginUser />}</Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
