@@ -89,3 +89,10 @@ main {
     }
   }
 }
+
+// hide thumbs by default.
+.mediaThumb {
+  display: none;
+  max-height: 100px;
+  margin-top: 0.5em;
+}

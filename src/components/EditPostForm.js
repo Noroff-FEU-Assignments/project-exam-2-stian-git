@@ -7,8 +7,6 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { apiBaseUrl, apiToken, mediaUrlSyntax } from "../constants/variables";
 //
-// if moving from edit to new post, the fields should be emptied.
-//
 
 //const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
 
@@ -54,25 +52,13 @@ export default function EditPostForm(props) {
         console.log("Failed to retrieve data.");
       }
     }
+    // Make sure we only retrieve the postdata if we are editing.
     if (postId) {
-      console.log("Fetching postid: " + postId);
       setIsEditMode(true);
       getSinglePost(postId);
-    } else {
-      console.log("New post. first useEffect!");
     }
   }, []);
 
-  useEffect(() => {
-    function checkReset() {
-      console.log(props.id);
-      if (!props.id) {
-        console.log("New post!");
-        reset();
-      }
-    }
-    checkReset();
-  }, []);
   async function postContent(data) {
     setIsPosting(true);
     console.log(data);

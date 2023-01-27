@@ -7,6 +7,7 @@ import ViewProfiles from "./pages/ViewProfiles";
 import ViewSingleProfile from "./pages/ViewSingleProfile";
 import SinglePost from "./pages/SinglePost";
 import Header from "./components/Header";
+import EditPost from "./pages/EditPost";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/post" element={<Post />} />
             <Route path="/post/:postid" element={<SinglePost />} />
-            <Route path="/post/:postid/edit" element={<Post />} />
+            <Route path="/post/:postid/edit" element={<EditPost />} />
             <Route path="/profiles" element={<ViewProfiles />} />
             <Route path="/profiles/:username" element={<ViewSingleProfile />} />
           </Routes>

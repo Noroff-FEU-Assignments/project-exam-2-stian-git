@@ -1,36 +1,39 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
-import { apiBaseUrl, mediaUrlSyntax, validEmailDomains } from "../constants/variables";
+import { allowedUserNameRegex, apiBaseUrl, mediaUrlSyntax, minPasswordLength, validEmailDomains } from "../constants/variables";
 import * as yup from "yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Form, Image } from "react-bootstrap";
+import axios from "axios";
 
 const regUserApiUrl = apiBaseUrl + "/auth/register";
 
 const schema = yup.object().shape({
-  name: yup.string().required("Please enter a name"),
+  name: yup.string().required("Username is required.").matches(allowedUserNameRegex, "Please avoid punctuation marks."),
   email: yup
     .string()
     .email()
     .required("A valid email is required.")
     .test("Domain check", "Email domain is not accepted", function (email) {
-      const enteredDomain = email.split("@")[1].toLowerCase();
+      const enteredDomain = email.split("@")[1]?.toLowerCase();
       return validEmailDomains.includes(enteredDomain);
     }),
-  password: yup.string().required("You don`t want a blank password."),
+  password: yup.string().min(minPasswordLength, `Minimum length is ${minPasswordLength} characters.`).required("You don`t want a blank password."),
   password_recheck: yup
     .string()
-    .required()
+    .required("Retyped password must match the above.")
     .oneOf([yup.ref("password"), null], "Passwords must match"),
-  avatar: yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"),
-  banner: yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"),
+  avatar: yup.string().matches(mediaUrlSyntax, { message: "Please enter a valid url to an image", excludeEmptyString: true }),
+  banner: yup.string().matches(mediaUrlSyntax, { message: "Please enter a valid url to an image", excludeEmptyString: true }),
 });
 function NewUserForm() {
   const [isSending, setIsSending] = useState(false);
   const [regFailed, setRegFailed] = useState(null);
   const [avatarError, setAvatarError] = useState(null);
   const [bannerError, setBannerError] = useState(null);
+  const [avatarImage, setAvatarImage] = useState(null);
+  const [bannerImage, setBannerImage] = useState(null);
 
   const {
     register,
@@ -40,22 +43,38 @@ function NewUserForm() {
 
   async function registerUser(data) {
     console.log(data);
+    setIsSending(true);
+
+    try {
+      const response = await axios.post(regUserApiUrl, data);
+      console.log(response);
+      if (response.status === 200) {
+        console.log("User successfully registered!");
+      }
+    } catch (error) {
+      console.log("Registration failed: " + error);
+      setRegFailed(error);
+    } finally {
+      setIsSending(false);
+    }
   }
 
-  function showPreview() {
-    // show image...
-  }
-  function imageError(e) {
-    console.log(e);
-    e.target.style.display = "none";
-
-    // Identify avatar or banner and set the proper message:
-    //errors.avatar = "Image could not be loaded. Please check your url.";
+  function showPreview(e) {
+    const imageUrl = e.target.value;
+    switch (e.target.id) {
+      case "regUserFormAvatar":
+        setAvatarImage(imageUrl);
+        break;
+      default:
+        // default = regUserFormBanner:
+        setBannerImage(imageUrl);
+        break;
+    }
   }
   return (
     <Form onSubmit={handleSubmit(registerUser)}>
       <Form.Group className="mb-3" controlId="regUserFormName">
-        <Form.Control type="text" placeholder="Name" {...register("name")} />
+        <Form.Control type="text" placeholder="Username" {...register("name")} />
         <Form.Text className="text-muted">{errors.name ? <span className="form-requirement">{errors.name.message}</span> : ""}</Form.Text>
       </Form.Group>
       <Form.Group className="mb-3" controlId="regUserFormEmail">
@@ -72,14 +91,44 @@ function NewUserForm() {
       </Form.Group>
       <Form.Group className="mb-3" controlId="regUserFormAvatar">
         <Form.Control type="text" onKeyUp={showPreview} placeholder="Avatar URL" {...register("avatar")} />
-        <Form.Text className="text-muted">{errors.avatar ? <span className="form-requirement">{errors.avatar.message}</span> : <Image className="mediaThumb" src={document.querySelector("#regUserFormAvatar")?.value} onError={imageError} thumbnail />}</Form.Text>
+        <Form.Text className="text-muted">
+          {errors.avatar ? (
+            <span className="form-requirement">{errors.avatar.message}</span>
+          ) : (
+            <Image
+              className="mediaThumb"
+              src={document.querySelector("#regUserFormAvatar")?.value}
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+              onLoad={(e) => {
+                e.target.style.display = "inline";
+              }}
+            />
+          )}
+        </Form.Text>
       </Form.Group>
       <Form.Group className="mb-3" controlId="regUserFormBanner">
         <Form.Control type="text" onKeyUp={showPreview} placeholder="Banner URL" {...register("banner")} />
-        <Form.Text className="text-muted">{errors.banner ? <span className="form-requirement">{errors.banner.message}</span> : <Image className="mediaThumb" src={document.querySelector("#regUserFormBanner")?.value} onError={imageError} thumbnail />}</Form.Text>
+        <Form.Text className="text-muted">
+          {errors.banner ? (
+            <span className="form-requirement">{errors.banner.message}</span>
+          ) : (
+            <Image
+              className="mediaThumb"
+              src={document.querySelector("#regUserFormBanner")?.value}
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+              onLoad={(e) => {
+                e.target.style.display = "inline";
+              }}
+            />
+          )}
+        </Form.Text>
       </Form.Group>
       <Button variant="primary" type="submit">
-        Submit
+        {isSending ? "Submitting" : "Submit"}
       </Button>
     </Form>
   );

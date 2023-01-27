@@ -36,16 +36,7 @@ export default function Header() {
                 <NavLink to="/profiles" className="nav-link" end>
                   Profiles
                 </NavLink>
-                <NavLink
-                  to="/post"
-                  className="nav-link"
-                  onClick={(e) => {
-                    console.log(e);
-                    e.preventDefault();
-                    console.log("Test");
-                  }}
-                  end
-                >
+                <NavLink to="/post" className="nav-link" end>
                   New Post
                 </NavLink>
                 <NavLink to={`/profiles/${isLoggedIn.name}`} className="nav-link">
