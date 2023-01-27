@@ -1,21 +1,19 @@
 // Todo:
 // Retrieve usersFollowed: https://noroff-api-docs.netlify.app/social-endpoints/profiles#single-entry
 // Toggle follow/unfollow
-// Add my own default banner.
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { followUser, IsFollowed, unfollowUser } from "../constants/commonLib";
-import { apiBaseUrl, apiToken, defaultAvatar } from "../constants/variables";
+import { apiBaseUrl, apiToken } from "../constants/variables";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 const myUserName = "smg_testuser";
 const usersApiUrl = apiBaseUrl + "/profiles";
 const usersFollowedApiUrl = apiBaseUrl + "/profiles/" + myUserName + "?_following=true";
 
-const bannerTest = "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg";
 //const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
 
 function ViewProfiles() {
@@ -86,61 +84,40 @@ function ViewProfiles() {
   // Add users banner on Stats?
   // example banner: https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg
   return (
-    <>
-      {users.map((profile, idx) => (
-        <div className="user" key={idx} style={{ backgroundImage: `url(${profile.banner ? profile.banner : bannerTest})` }}>
-          <div className="user__profile-imagecontainer">
-            <img src={profile.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" />
-          </div>
-
-          <div className="user__profile">
-            <div className="user__profile-details">
-              <h3 className="user__profile-details-name">{profile.name}</h3>
-              <p className="user__profile-details-email">{profile.email}</p>
-            </div>
-            <div className="user__profile-counts">
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th className="user__profile-imagecontainer">Avatar</th>
+          <th>User Info</th>
+          <th>Stats</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((profile) => (
+          <tr key={profile.name}>
+            {/* concider to remove first column on small screens? */}
+            <td className="user__profile-imagecontainer">{profile.avatar ? <img src={profile.avatar} className="user__profile-imagecontainer-img" /> : ""}</td>
+            <td className="user__profile-content">
+              <p className="user__profile-content-name">{profile.name}</p>
+              <p className="user__profile-content-email">
+                <a href={`mailto:${profile.email}`} className="user__profile-content-email-link">
+                  {profile.email}
+                </a>
+              </p>
+            </td>
+            <td className="user__profile-counts">
               <p className="user__profile-counts-detail">Posts: {profile._count.posts}</p>
               <p className="user__profile-counts-detail">Followers: {profile._count.followers}</p>
               <p className="user__profile-counts-detail">Following: {profile._count.following}</p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </>
-    // <Table striped bordered hover>
-    //   <thead>
-    //     <tr>
-    //       {/* <th className="user__profile-imagecontainer">Avatar</th> */}
-    //       <th>User Info</th>
-    //       <th>Stats</th>
-    //     </tr>
-    //   </thead>
-    //   <tbody>
-    //     {users.map((profile) => (
-    //       <tr key={profile.name}>
-    //         {/* concider to remove first column on small screens? */}
-    //         {/* <td className="user__profile-imagecontainer">{profile.avatar ? <img src={profile.avatar} className="user__profile-imagecontainer-img" /> : ""}</td> */}
-    //         <td className="user__profile-content" style={{ background: bannerTest }}>
-    //           <p className="user__profile-content-name">{profile.name}</p>
-    //           <p className="user__profile-content-email">
-    //             <a href={`mailto:${profile.email}`} className="user__profile-content-email-link">
-    //               {profile.email}
-    //             </a>
-    //           </p>
-    //         </td>
-    //         <td className="user__profile-counts">
-    //           <p className="user__profile-counts-detail">Posts: {profile._count.posts}</p>
-    //           <p className="user__profile-counts-detail">Followers: {profile._count.followers}</p>
-    //           <p className="user__profile-counts-detail">Following: {profile._count.following}</p>
-    //           <Button data-username={profile.name} size="sm" variant="success" onClick={toggleFollow}>
-    //             {IsFollowed(profile.name, usersFollowed) ? "Unfollow" : "Follow"}
-    //           </Button>
-    //           <Link to={"./" + profile.name}>Visit {profile.name}</Link>
-    //         </td>
-    //       </tr>
-    //     ))}
-    //   </tbody>
-    // </Table>
+              <Button data-username={profile.name} size="sm" variant="success" onClick={toggleFollow}>
+                {IsFollowed(profile.name, usersFollowed) ? "Unfollow" : "Follow"}
+              </Button>
+              <Link to={"./" + profile.name}>Visit {profile.name}</Link>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
   );
 }
 

@@ -9,6 +9,8 @@ export const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*
 export const allowedUserNameRegex = /^[\w\d\!\%\@\$\+\&\~\#\^\*\=\|]*$/;
 export const validEmailDomains = ["stud.noroff.no", "noroff.no"];
 
+export const defaultAvatar = "\\images\\default_avatar_60pst opacity.png";
+
 //Check this resource before changing emoji Version: https://emojipedia.org/emoji-versions/
 export const emojiVersion = "15.1";
 
