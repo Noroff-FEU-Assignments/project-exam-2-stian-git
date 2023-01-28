@@ -15,6 +15,7 @@ export const defaultAvatar = "\\images\\default_avatar_60pst opacity.png";
 export const emojiVersion = "15.1";
 
 export const postsToLoad = 100;
+export const profilesToLoad = 100;
 export const minPasswordLength = 8;
 export const testPost = [
   {

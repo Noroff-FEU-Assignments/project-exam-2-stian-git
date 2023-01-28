@@ -67,30 +67,48 @@ main {
 // Profiles
 
 .user {
-  margin: 2em;
+  margin: 0.6em;
   display: flex;
-  flex-direction: row;
   background-size: cover;
   background-position-y: center;
+  background-color: #7e91d9;
   max-width: fit-content;
   box-shadow: 2px 2px 4px black;
-
+  padding: 0;
   &:hover {
     .user__profile {
       background-color: rgba($color: #000000, $alpha: 0);
+      color: white;
     }
     .user__profile-counts {
       display: none;
     }
+    .user__profile-follow {
+      display: block;
+    }
+  }
+  &-wrapper {
+    margin: 0;
+  }
+  &-link {
+    display: flex;
+    color: white;
+    text-decoration: none;
+  }
+  &-isfollowed {
+    box-shadow: 2px 2px 4px springgreen;
   }
   &__profile {
     display: flex;
-    background-color: rgba($color: #000000, $alpha: 0.6);
+    background-color: rgba($color: #000000, $alpha: 0.7);
     justify-content: space-between;
     align-items: center;
     padding: 1em;
     width: 300px;
     margin: 0 0 0 1em;
+    &-follow {
+      display: none;
+    }
     &-imagecontainer {
       align-self: center;
       &-img {
@@ -116,7 +134,7 @@ main {
     &-counts {
       margin-right: 1em;
       &-detail {
-        font-size: 0.8em;
+        font-size: 0.9em;
         margin: 0;
       }
     }
