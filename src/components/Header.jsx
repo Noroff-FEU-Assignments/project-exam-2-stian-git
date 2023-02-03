@@ -42,16 +42,20 @@ export default function Header() {
                 <NavLink to={`/profiles/${isLoggedIn.name}`} className="nav-link">
                   My Activity
                 </NavLink>
-                <Nav>
-                  <NavLink to="#" className="nav-link" onClick={doLogout}>
-                    {isLoggedIn.name} (Logout)
-                  </NavLink>
-                </Nav>
               </>
             ) : (
               ""
             )}
           </Nav>
+          {isLoggedIn ? (
+            <Nav>
+              <NavLink to="#" className="nav-link" onClick={doLogout}>
+                {isLoggedIn.name} (Logout)
+              </NavLink>
+            </Nav>
+          ) : (
+            ""
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
