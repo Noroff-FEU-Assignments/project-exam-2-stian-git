@@ -20,8 +20,8 @@ export default function Header() {
   }
 
   return (
-    <Navbar collapseOnSelect expand="lg" variant="dark">
-      <Container>
+    <Container>
+      <Navbar collapseOnSelect expand="lg" variant="dark">
         <Navbar.Brand href="/">
           <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="/images/MyFriends-logo.png" />
         </Navbar.Brand>
@@ -29,18 +29,23 @@ export default function Header() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             <NavLink to="/" className="nav-link">
-              Home
+              <i className="fa-solid fa-house-chimney navbar-link-icon"></i>
+              <p className="navbar-link-text">Home</p>
             </NavLink>
             {isLoggedIn ? (
               <>
                 <NavLink to="/profiles" className="nav-link" end>
-                  Profiles
+                  <i className="fa-solid fa-users navbar-link-icon"></i>
+                  <p className="navbar-link-text">Profiles</p>
                 </NavLink>
                 <NavLink to="/post" className="nav-link" end>
-                  New Post
+                  <i className="fa-solid fa-pen-to-square navbar-link-icon"></i>
+                  <p className="navbar-link-text">New Post</p>
                 </NavLink>
                 <NavLink to={`/profiles/${isLoggedIn.name}`} className="nav-link">
-                  My Activity
+                  <i className="fa-solid fa-circle-user navbar-link-icon"></i>
+                  {/* concider profile image instead? */}
+                  <p className="navbar-link-text">My Activity</p>
                 </NavLink>
               </>
             ) : (
@@ -49,15 +54,16 @@ export default function Header() {
           </Nav>
           {isLoggedIn ? (
             <Nav>
-              <NavLink to="#" className="nav-link" onClick={doLogout}>
-                {isLoggedIn.name} (Logout)
+              <NavLink to="/" className="nav-link" onClick={doLogout}>
+                <i className="fa-solid fa-right-from-bracket navbar-link-icon"></i>
+                <p className="navbar-link-text">Logout ({isLoggedIn.name})</p>
               </NavLink>
             </Nav>
           ) : (
             ""
           )}
         </Navbar.Collapse>
-      </Container>
-    </Navbar>
+      </Navbar>
+    </Container>
   );
 }

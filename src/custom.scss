@@ -11,9 +11,18 @@ $font-family-serif: "Lora", serif;
 // Header
 
 $nav-link-font-size: 1.4em;
+// $navbar-light-color: #92d1b2 !important;
+$navbar-light-color: #fff7ac !important;
+$navbar-light-hover-color: #92d1b2 !important;
+//$navbar-light-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{$navbar-light-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>") !default;
+$navbar-dark-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{$body-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>") !default;
 
 // cards:
 $card-bg: #3c4d71;
 $card-color: white;
 // Bootstrap (imported at the end to include the above customization.
+// form:
+$input-bg: #abcdff;
+$input-color: black;
+$input-placeholder-color: rgba(0, 0, 0, 0.6);
 @import "~bootstrap/scss/bootstrap";

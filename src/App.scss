@@ -8,6 +8,30 @@
       max-height: 50px;
     }
   }
+  &-link {
+    &-text {
+      display: inline;
+    }
+    &-icon {
+      width: 40px;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .navbar {
+    &-collapse {
+      padding-left: 5em;
+    }
+    &-link {
+      &-text {
+        display: none;
+      }
+      &-icon {
+        margin-left: 1em;
+      }
+    }
+  }
 }
 
 // Main

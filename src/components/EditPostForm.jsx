@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Form, Image } from "react-bootstrap";
+import { Button, Col, Container, Form, Image } from "react-bootstrap";
 import { InputTags } from "react-bootstrap-tagsinput";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -102,58 +102,63 @@ export default function EditPostForm(props) {
   // Add function to add a new tag using tabs. (avoid unsaved tag to be ignored)
 
   return (
-    <Form onSubmit={handleSubmit(postContent)}>
-      <Form.Group className="mb-3" controlId="edistPostFormTitle">
-        <Form.Control type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? oldPostData?.title : ""} />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="edistPostFormBody">
-        <Form.Control as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? oldPostData?.body : ""} />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="edistPostFormTags">
-        <div className="input-group">
-          <InputTags
-            values={tags}
-            onKeyDown={ignoreEnter}
-            placeholder="Tags"
-            onTags={(value) => {
-              setTags(value.values);
-              setValue("tags", value.values);
-            }}
-          />
-        </div>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="editPostFormMedia">
-        <Form.Control
-          type="text"
-          onKeyUp={(e) => {
-            setImageUrl(e.target.value);
-          }}
-          placeholder="Image URL"
-          {...register("media")}
-          defaultValue={isEditMode ? oldPostData?.media : ""}
-        />
-        <Form.Text className="text-muted">
-          {errors.media ? (
-            <span className="form-requirement">{errors.media.message}</span>
-          ) : (
-            <Image
-              className="mediaThumb"
-              src={document.querySelector("#editPostFormMedia")?.value}
-              onError={(e) => {
-                e.target.style.display = "none";
+    <Container>
+      <Col md={6}>
+        <Form onSubmit={handleSubmit(postContent)}>
+          <Form.Group className="mb-3" controlId="edistPostFormTitle">
+            <Form.Control type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? oldPostData?.title : ""} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="edistPostFormBody">
+            <Form.Control as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? oldPostData?.body : ""} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="edistPostFormTags">
+            <div className="input-group">
+              <InputTags
+                className="form-control"
+                values={tags}
+                onKeyDown={ignoreEnter}
+                placeholder="Tags"
+                onTags={(value) => {
+                  setTags(value.values);
+                  setValue("tags", value.values);
+                }}
+              />
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="editPostFormMedia">
+            <Form.Control
+              type="text"
+              onKeyUp={(e) => {
+                setImageUrl(e.target.value);
               }}
-              onLoad={(e) => {
-                e.target.style.display = "inline";
-              }}
-              thumbnail
+              placeholder="Image URL"
+              {...register("media")}
+              defaultValue={isEditMode ? oldPostData?.media : ""}
             />
-          )}
-        </Form.Text>
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
-    </Form>
+            <Form.Text className="text-muted">
+              {errors.media ? (
+                <span className="form-requirement">{errors.media.message}</span>
+              ) : (
+                <Image
+                  className="mediaThumb"
+                  src={document.querySelector("#editPostFormMedia")?.value}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                  onLoad={(e) => {
+                    e.target.style.display = "inline";
+                  }}
+                  thumbnail
+                />
+              )}
+            </Form.Text>
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </Col>
+    </Container>
   );
 }
 

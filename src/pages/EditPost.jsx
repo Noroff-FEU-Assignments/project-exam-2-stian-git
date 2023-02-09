@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import EditPostForm from "../components/EditPostForm.js";
+import EditPostForm from "../components/EditPostForm.jsx";
 
 function EditPost() {
   const { postid } = useParams();
