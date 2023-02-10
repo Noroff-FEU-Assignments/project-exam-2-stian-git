@@ -90,11 +90,17 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
       <Card key={post.id} className="post" onClick={showPost}>
         {post.media ? <Card.Img variant="top" src={post.media} /> : ""}
         <Card.Body>
-          <Card.Title>{post.title}</Card.Title>
+          <Card.Title>
+            <h2 className="card-title">{post.title}</h2>
+          </Card.Title>
           <Card.Text title={moment(post.created).format("MMM Do YYYY, HH:mm:ss")} className="post__body-created">
-            {formatTime(post.created)}
+            {formatTime(post.created)} (by{" "}
+            <a className="post__body-created-link" href={`/profiles/${post.author?.name}`}>
+              {post.author?.name}
+            </a>
+            )
           </Card.Text>
-          <Card.Text>{post.body}</Card.Text>
+          <Card.Text className="post__body-maintext">{post.body}</Card.Text>
         </Card.Body>
         <ListGroup className="list-group-flush post__comment-header">
           <p className="post__comment-count">{post.comments ? post.comments.length : "No"} Comments </p>
@@ -105,15 +111,16 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
           ) : (
             ""
           )}
-          {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""}
-          <Button size="sm" data-postid={post.id} onClick={reactToPost}>
+          <p className="post__comment-count">{post.reactions.length} Reactions</p>
+          {/* {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""} */}
+          {/* <Button size="sm" data-postid={post.id} onClick={reactToPost}>
             React!
-          </Button>
-          {showAll ? "" : <Link to={`/post/${post.id}`}>View</Link>}
-          {isPostOwner ? <Link to={`/post/${post.id}/edit`}>Edit</Link> : ""}
-          <Button data-showcomments="false" variant="link" className="post__comment-viewtoggler" onClick={toggleComments}>
+          </Button> */}
+          {/* {showAll ? "" : <Link to={`/post/${post.id}`}>View</Link>} */}
+          {/* {isPostOwner ? <Link to={`/post/${post.id}/edit`}>Edit</Link> : ""} */}
+          {/* <Button data-showcomments="false" variant="link" className="post__comment-viewtoggler" onClick={toggleComments}>
             Show
-          </Button>
+          </Button> */}
         </ListGroup>
         <ListGroup className="list-group-flush post__comment-wrapper" hidden={true}>
           {post.comments
