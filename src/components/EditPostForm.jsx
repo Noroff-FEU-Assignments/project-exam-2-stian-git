@@ -18,6 +18,7 @@ const postApiUrl = apiBaseUrl + "/posts/";
 const schema = yup.object().shape({
   title: yup.string().required("Title is a required field"),
   body: yup.string(),
+  //media: yup.string().when().nullable(yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"), ),
   media: yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"),
 });
 

@@ -1,23 +1,32 @@
 import axios from "axios";
 import { Picker } from "emoji-picker-element";
 import moment from "moment/moment";
-import { Button, Card, Col, ListGroup } from "react-bootstrap";
+import { Button, Card, Col, Form, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { apiBaseUrl, apiToken, emojiVersion } from "./variables";
+
 //import useLocalStorage from "../hooks/useLocalStorage";
 //const userInfo = useLocalStorage("socialSessionInfo");
 
 function toggleComments(e) {
-  const areCommentsShowing = e.target.dataset.showcomments === "true";
+  //console.log("togglecomments", e);
+  //console.log("test", e.target.closest(".post"));
+  const postContainer = e.target.closest(".post");
+  //const areCommentsShowing = e.target.dataset.showcomments === "true";
+  const areCommentsShowing = postContainer.dataset.showcomments === "true";
   if (areCommentsShowing) {
-    e.target.dataset.showcomments = "false";
-    e.target.innerText = "Show";
-    e.target.parentElement.nextElementSibling.hidden = true;
+    //e.target.dataset.showcomments = "false";
+    postContainer.dataset.showcomments = "false";
+    postContainer.lastElementChild.hidden = true;
+    //e.target.innerText = "Show";
+    //e.target.parentElement.nextElementSibling.hidden = true;
   } else {
-    e.target.dataset.showcomments = "true";
-    e.target.innerText = "Hide";
-    e.target.parentElement.nextElementSibling.hidden = false;
+    //e.target.dataset.showcomments = "true";
+    postContainer.dataset.showcomments = "true";
+    postContainer.lastElementChild.hidden = false;
+    //e.target.innerText = "Hide";
+    //e.target.parentElement.nextElementSibling.hidden = false;
     // concider adding a limitation here... show first 10 comments, etc?
   }
 }
@@ -29,12 +38,12 @@ async function deletePost(e) {
   try {
     axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
     const response = await axios.delete(deletePostApiUrl);
-    console.log(response);
     if (response.status === 200) {
-      //hide/delete this post from the dom.
-      e.target.parentElement.parentElement.innerHTML = `<i>Post deleted.</>`;
-      // Add more styling here...
-      //e.target.parentElement.parentElement.style.backgroundColor = "transparent";
+      const postContentContainer = e.target.parentElement.parentElement;
+      postContentContainer.innerHTML = `<i>Post deleted.</>`;
+      setTimeout(() => {
+        postContentContainer.parentElement.remove();
+      }, 4000);
     }
   } catch (error) {
     console.log("An error occured deleting post: ", error);
@@ -77,19 +86,44 @@ function reactToPost(e) {
   //console.log(emojiSelected);
 }
 
-function showPost(e) {
+function ShowPost(e) {
   console.log("Showing post;", e);
+  const currentSitePath = document.location.pathname;
+  //console.log(currentSitePath);
+  const isProfilesPage = currentSitePath.includes("profiles");
+  //console.log(isProfilesPage);
+  const postId = e.target.closest(".post").dataset.postid;
+  //console.log(postContainer.dataset.postid);
+  //console.log(postId);
+  //const navigate = useNavigate();
+  if (isProfilesPage) {
+    // show comments
+    toggleComments(e);
+  } else {
+    // forward user to /posts/postid
+    window.location.href = `/post/${postId}`;
+  }
 }
 
-export function showPosts(arr, owner = "nothing12345667", showAll = false) {
-  return arr.map((post) => {
-    //console.log(post);
+export function showPosts(arr, owner, showAll = false) {
+  return arr.map((post, index) => {
+    //console.log(post.id);
     const isPostOwner = owner === post.author?.name;
     // Add a "Be the first to react"-feature.
     return (
-      <Card key={post.id} className="post" onClick={showPost}>
+      <Card key={index} className="post" data-showcomments="false" data-postid={post.id} onClick={ShowPost}>
         {post.media ? <Card.Img variant="top" src={post.media} /> : ""}
         <Card.Body>
+          {isPostOwner ? (
+            <Card.Text className="post__body-toolbar">
+              <Link to={`/post/${post.id}/edit`}>
+                <i className="fa-solid fa-pen-to-square"></i>
+              </Link>
+              <i className="fa-solid fa-trash-can" data-postid={post.id} onClick={deletePost}></i>
+            </Card.Text>
+          ) : (
+            ""
+          )}
           <Card.Title>
             <h2 className="card-title">{post.title}</h2>
           </Card.Title>
@@ -104,14 +138,7 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
         </Card.Body>
         <ListGroup className="list-group-flush post__comment-header">
           <p className="post__comment-count">{post.comments ? post.comments.length : "No"} Comments </p>
-          {isPostOwner ? (
-            <Button data-postid={post.id} variant="link" className="post__comment-viewtoggler" onClick={deletePost}>
-              Delete
-            </Button>
-          ) : (
-            ""
-          )}
-          <p className="post__comment-count">{post.reactions.length} Reactions</p>
+          <p className="post__comment-count">{post.reactions ? post.reactions.length : "No"} Reactions</p>
           {/* {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""} */}
           {/* <Button size="sm" data-postid={post.id} onClick={reactToPost}>
             React!
@@ -122,20 +149,50 @@ export function showPosts(arr, owner = "nothing12345667", showAll = false) {
             Show
           </Button> */}
         </ListGroup>
-        <ListGroup className="list-group-flush post__comment-wrapper" hidden={true}>
+        <ListGroup className="list-group-flush comments" hidden={true}>
           {post.comments
             ? post.comments.map((comment) => (
-                <ListGroup.Item key={comment.id}>
-                  <p>{comment.body}</p>
-                  <p>{comment.owner}</p>
-                  <p title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>{formatTime(comment.created)}</p>
+                <ListGroup.Item key={comment.id} className="comments__body">
+                  <p className="comments__body-writtenby" title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>
+                    <a className="comments__body-writtenby-link" href={`/profiles/${comment.owner}`}>
+                      {comment.owner}
+                    </a>{" "}
+                    @ {formatTime(comment.created)}
+                  </p>
+                  <p className="comments__body-text">{comment.body}</p>
+
+                  {/* <p title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>{formatTime(comment.created)}</p> */}
                 </ListGroup.Item>
               ))
             : ""}
+          <ListGroup.Item className="comments__form">
+            <Form>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Control
+                  type="email"
+                  placeholder="Write Comment"
+                  onFocus={showSendCommentButton}
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </ListGroup.Item>
         </ListGroup>
       </Card>
     );
   });
+}
+
+export function showSendCommentButton(e) {
+  e.preventDefault();
+  console.log("ShowSendCommentButton", e);
+  // There is a conflict with the toggling of comment showing or not.
+  // Might need to move the comment outside of the Card. Requires additional styling!
 }
 
 export function formatTime(timestamp) {
