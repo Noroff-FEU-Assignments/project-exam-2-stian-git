@@ -144,6 +144,38 @@ p {
     &-text {
     }
   }
+  &__form {
+    &:focus-within {
+      .comments__form-submitbutton {
+        display: inline-block;
+        //color: green;
+      }
+
+      .comments__form-commentfield {
+        height: 90px;
+      }
+    }
+    &-submitbutton {
+      display: none;
+      float: right;
+      //display: inline;
+    }
+    &-commentfield {
+      height: 35px;
+      // &:empty {
+      //   .comments__form-submitbutton {
+      //     pointer-events: none;
+      //   }
+      // }
+      // &:active,
+      // &:focus {
+      //   .comments__form-submitbutton {
+      //     //display: block;
+      //     color: green;
+      //   }
+      // }
+    }
+  }
 }
 
 .card {

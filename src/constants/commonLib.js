@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Picker } from "emoji-picker-element";
 import moment from "moment/moment";
-import { Button, Card, Col, Form, ListGroup } from "react-bootstrap";
+import { Button, Card, Col, Container, Form, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { apiBaseUrl, apiToken, emojiVersion } from "./variables";
@@ -10,23 +10,16 @@ import { apiBaseUrl, apiToken, emojiVersion } from "./variables";
 //const userInfo = useLocalStorage("socialSessionInfo");
 
 function toggleComments(e) {
-  //console.log("togglecomments", e);
-  //console.log("test", e.target.closest(".post"));
   const postContainer = e.target.closest(".post");
-  //const areCommentsShowing = e.target.dataset.showcomments === "true";
   const areCommentsShowing = postContainer.dataset.showcomments === "true";
   if (areCommentsShowing) {
-    //e.target.dataset.showcomments = "false";
     postContainer.dataset.showcomments = "false";
-    postContainer.lastElementChild.hidden = true;
-    //e.target.innerText = "Show";
-    //e.target.parentElement.nextElementSibling.hidden = true;
+    // Hide comments
+    postContainer.childNodes[postContainer.childNodes.length - 2].hidden = true;
   } else {
-    //e.target.dataset.showcomments = "true";
     postContainer.dataset.showcomments = "true";
-    postContainer.lastElementChild.hidden = false;
-    //e.target.innerText = "Hide";
-    //e.target.parentElement.nextElementSibling.hidden = false;
+    // Show comments
+    postContainer.childNodes[postContainer.childNodes.length - 2].hidden = false;
     // concider adding a limitation here... show first 10 comments, etc?
   }
 }
@@ -111,9 +104,9 @@ export function showPosts(arr, owner, showAll = false) {
     const isPostOwner = owner === post.author?.name;
     // Add a "Be the first to react"-feature.
     return (
-      <Card key={index} className="post" data-showcomments="false" data-postid={post.id} onClick={ShowPost}>
+      <Card key={index} className="post" data-showcomments="false" data-postid={post.id}>
         {post.media ? <Card.Img variant="top" src={post.media} /> : ""}
-        <Card.Body>
+        <Card.Body onClick={ShowPost}>
           {isPostOwner ? (
             <Card.Text className="post__body-toolbar">
               <Link to={`/post/${post.id}/edit`}>
@@ -136,7 +129,7 @@ export function showPosts(arr, owner, showAll = false) {
           </Card.Text>
           <Card.Text className="post__body-maintext">{post.body}</Card.Text>
         </Card.Body>
-        <ListGroup className="list-group-flush post__comment-header">
+        <ListGroup className="list-group-flush post__comment-header" onClick={ShowPost}>
           <p className="post__comment-count">{post.comments ? post.comments.length : "No"} Comments </p>
           <p className="post__comment-count">{post.reactions ? post.reactions.length : "No"} Reactions</p>
           {/* {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""} */}
@@ -165,31 +158,24 @@ export function showPosts(arr, owner, showAll = false) {
                 </ListGroup.Item>
               ))
             : ""}
-          <ListGroup.Item className="comments__form">
-            <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control
-                  type="email"
-                  placeholder="Write Comment"
-                  onFocus={showSendCommentButton}
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                />
-              </Form.Group>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-            </Form>
-          </ListGroup.Item>
         </ListGroup>
+        <ListGroup.Item className="comments__form">
+          <Form>
+            <Form.Group className="mb-3" controlId={`formComment-${post.id}`}>
+              <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" />
+              <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post.id}>
+                Send
+              </Button>
+            </Form.Group>
+          </Form>
+        </ListGroup.Item>
       </Card>
     );
   });
 }
 
 export function showSendCommentButton(e) {
-  e.preventDefault();
+  //e.preventDefault();
   console.log("ShowSendCommentButton", e);
   // There is a conflict with the toggling of comment showing or not.
   // Might need to move the comment outside of the Card. Requires additional styling!
