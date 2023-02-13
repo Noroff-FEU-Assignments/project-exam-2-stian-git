@@ -141,7 +141,21 @@ p {
         }
       }
     }
+
     &-text {
+    }
+  }
+  &__reactions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #7e91d9;
+    &-emoji {
+      margin: 0;
+      &:hover {
+        border-radius: 100px;
+        background-color: $hover-color;
+      }
     }
   }
   &__form {
@@ -198,7 +212,7 @@ p {
     margin-bottom: 1em;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    // justify-content: center;
   }
 }
 

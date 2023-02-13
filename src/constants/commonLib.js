@@ -4,7 +4,7 @@ import moment from "moment/moment";
 import { Button, Card, Col, Container, Form, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { apiBaseUrl, apiToken, emojiVersion } from "./variables";
+import { apiBaseUrl, apiToken, availableEmojies, emojiVersion } from "./variables";
 
 //import useLocalStorage from "../hooks/useLocalStorage";
 //const userInfo = useLocalStorage("socialSessionInfo");
@@ -56,40 +56,42 @@ async function addReaction(id, emoji) {
     }
   } catch (error) {
     console.log("An error occured adding reaction." + error);
+    return false;
   }
 }
-function reactToPost(e) {
-  //console.log("Reacting to: " + e.target.dataset.postid);
-  //const reactIcon = "👍";
-  //
-  // Move version to variables!!
-  //
-  const emojiSelected = new Picker({ emojiVersion: 14.0 });
-  // Create its own element, or a modal?
-  e.target.appendChild(emojiSelected);
-  emojiSelected.addEventListener("emoji-click", (icon) => {
-    //console.log("Adding " + icon.detail.unicode + " to " + e.target.dataset.postid);
-    const emojiToAdd = icon.detail.unicode;
-    // run apicall
-    addReaction(e.target.dataset.postid, icon.detail.unicode);
-    // update
-    // remove the element:
-    emojiSelected.remove();
-  });
-  //console.log(emojiSelected);
+
+async function reactToPost(e) {
+  const postId = e.target.closest(".post").dataset.postid;
+  const reaction = e.target.innerHTML.split(" ")[0];
+  const count = e.target.innerHTML.split(" ")[1];
+  //console.log(reaction);
+  //console.log("Reacting to: " + postId);
+  //console.log(e.target.innerHTML);
+
+  // Make API Call.
+  const isEmojiAdded = await addReaction(postId, reaction);
+  //const isEmojiAdded = true;
+  // Update counter if success
+  if (isEmojiAdded) {
+    //console.log("Emoji has been added");
+    e.target.innerHTML = `${reaction} ${parseInt(count) + 1}`;
+  } else {
+    // handle error?
+  }
 }
 
 function ShowPost(e) {
-  console.log("Showing post;", e);
+  //console.log("Showing post;", e);
   const currentSitePath = document.location.pathname;
   //console.log(currentSitePath);
   const isProfilesPage = currentSitePath.includes("profiles");
+  const isSinglePostPage = currentSitePath.includes("post");
   //console.log(isProfilesPage);
   const postId = e.target.closest(".post").dataset.postid;
   //console.log(postContainer.dataset.postid);
   //console.log(postId);
   //const navigate = useNavigate();
-  if (isProfilesPage) {
+  if (isProfilesPage || isSinglePostPage) {
     // show comments
     toggleComments(e);
   } else {
@@ -98,7 +100,29 @@ function ShowPost(e) {
   }
 }
 
-export function showPosts(arr, owner, showAll = false) {
+function countReactions(allReactions) {
+  let counter = 0;
+  // filter out emojies to display only the ones available for this site. (other frontends may use other reactions)
+  const filteredArray = allReactions.filter((reaction) => {
+    return availableEmojies.includes(reaction.symbol);
+  });
+  // Counts the total number of reactions for each available emoji.
+  filteredArray.forEach((element) => {
+    counter = counter + element.count;
+  });
+  return counter;
+}
+
+function countThisEmoji(emoji, reactions) {
+  const currentEmoji = reactions?.find((reaction) => reaction.symbol === emoji);
+  //console.log(currentEmoji?.count);
+  if (currentEmoji) {
+    return currentEmoji.count;
+  }
+  return 0;
+}
+
+export function showPosts(arr, owner, hideAll = true) {
   return arr.map((post, index) => {
     //console.log(post.id);
     const isPostOwner = owner === post.author?.name;
@@ -131,18 +155,16 @@ export function showPosts(arr, owner, showAll = false) {
         </Card.Body>
         <ListGroup className="list-group-flush post__comment-header" onClick={ShowPost}>
           <p className="post__comment-count">{post.comments ? post.comments.length : "No"} Comments </p>
-          <p className="post__comment-count">{post.reactions ? post.reactions.length : "No"} Reactions</p>
-          {/* {post.reactions ? post.reactions.map((reaction) => `${reaction.symbol} ${reaction.count}`) : ""} */}
-          {/* <Button size="sm" data-postid={post.id} onClick={reactToPost}>
-            React!
-          </Button> */}
-          {/* {showAll ? "" : <Link to={`/post/${post.id}`}>View</Link>} */}
-          {/* {isPostOwner ? <Link to={`/post/${post.id}/edit`}>Edit</Link> : ""} */}
-          {/* <Button data-showcomments="false" variant="link" className="post__comment-viewtoggler" onClick={toggleComments}>
-            Show
-          </Button> */}
+          <p className="post__comment-count">{post.reactions ? countReactions(post.reactions) : "No"} Reactions</p>
         </ListGroup>
-        <ListGroup className="list-group-flush comments" hidden={true}>
+        <ListGroup className="list-group-flush comments" hidden={hideAll}>
+          <ListGroup.Item className="comments__reactions">
+            {availableEmojies.map((emoji, index) => (
+              <p key={index} className="comments__reactions-emoji" onClick={reactToPost}>
+                {emoji} {countThisEmoji(emoji, post.reactions)}
+              </p>
+            ))}
+          </ListGroup.Item>
           {post.comments
             ? post.comments.map((comment) => (
                 <ListGroup.Item key={comment.id} className="comments__body">

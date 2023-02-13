@@ -25,7 +25,7 @@ function SinglePost() {
   // Concider tags?
   //getSinglePost(postid);
   //return <p>Nothing</p>;
-  return <>{showPosts([postData])}</>;
+  return <>{showPosts([postData], undefined, false)}</>;
 }
 
 export default SinglePost;
