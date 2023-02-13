@@ -373,3 +373,20 @@ export function displayProfile(profile, usersFollowed) {
     </Col>
   );
 }
+
+export async function getUserProfile(username) {
+  const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
+  try {
+    axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+    const response = await axios(getProfileApiUrl);
+    if (response.status === 200) {
+      console.log(response.data);
+      //setUserProfile(response.data);
+      return response.data;
+    } else {
+      console.log("Something went wrong retrieving profile");
+    }
+  } catch (error) {
+    console.log("Retrieving profile failed: ", error);
+  }
+}
