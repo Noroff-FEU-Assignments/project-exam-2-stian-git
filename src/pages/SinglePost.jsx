@@ -10,9 +10,9 @@ function SinglePost() {
   useEffect(() => {
     async function getPostData() {
       const data = await getSinglePost(postid);
-      console.log("Data:", data);
+      //console.log("Data:", data);
       setPostData(data);
-      console.log(typeof postData);
+      //console.log(typeof postData);
     }
     getPostData();
   }, []);

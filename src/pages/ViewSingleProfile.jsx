@@ -65,14 +65,20 @@ function ViewSingleProfile() {
 
   return (
     <>
-      <div>
-        <h1>{username}</h1>
-        <p>{userProfile?.email}</p>
-      </div>
-      <hr />
+      <h1>My Posts</h1>
       <div>
         {noPostsToShow ? <p>There are no posts to show.</p> : ""}
         {showPosts(posts, loggedIn.name)}
+      </div>
+
+      <h1>Followed Users</h1>
+      <div></div>
+      <h1>My Followers</h1>
+      {/* <div>{userProfile.followers}</div> */}
+      <h1>Edit Profile</h1>
+      <div>
+        <h1>{username}</h1>
+        <p>{userProfile?.email}</p>
       </div>
     </>
   );

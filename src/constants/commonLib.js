@@ -1,10 +1,9 @@
 import axios from "axios";
-import { Picker } from "emoji-picker-element";
 import moment from "moment/moment";
 import { Button, Card, Col, Container, Form, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { apiBaseUrl, apiToken, availableEmojies, emojiVersion } from "./variables";
+import { apiBaseUrl, apiToken, availableEmojies, defaultAvatar, emojiVersion } from "./variables";
 
 //import useLocalStorage from "../hooks/useLocalStorage";
 //const userInfo = useLocalStorage("socialSessionInfo");
@@ -129,7 +128,17 @@ export function showPosts(arr, owner, hideAll = true) {
     // Add a "Be the first to react"-feature.
     return (
       <Card key={index} className="post" data-showcomments="false" data-postid={post.id}>
-        {post.media ? <Card.Img variant="top" src={post.media} /> : ""}
+        {post.media ? (
+          <Card.Img
+            variant="top"
+            src={post.media}
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
+        ) : (
+          ""
+        )}
         <Card.Body onClick={ShowPost}>
           {isPostOwner ? (
             <Card.Text className="post__body-toolbar">
@@ -300,4 +309,67 @@ export async function getPosts(qty = 20, offset = 0) {
   } catch (error) {
     return [];
   }
+}
+export function toggleFollow(e) {
+  const username = e.target.dataset.username;
+  console.log(e);
+  console.log(e.target.dataset.username);
+  const profileContainer = e.target.closest(".col");
+  if (e.target.innerText === "Follow") {
+    // Follow:
+    const userIsAdded = followUser(username);
+    if (userIsAdded) {
+      e.target.innerText = "Unfollow";
+    }
+    profileContainer.classList.add("user-isfollowed");
+    // Do we need error handling?
+  } else {
+    // Unfollow:
+    const userIsRemoved = unfollowUser(username);
+    profileContainer.classList.remove("user-isfollowed");
+    if (userIsRemoved) {
+      e.target.innerText = "Follow";
+    }
+    // IF user is on own profile = hide the profile from UI.
+  }
+  // Update usersFollowed - Not needed?
+}
+
+export function displayProfile(profile, usersFollowed) {
+  return (
+    <Col className={IsFollowed(profile.name, usersFollowed) ? "user user-isfollowed" : "user"} key={profile.name} style={{ backgroundImage: `url(${profile.banner ? profile.banner : "none"})` }}>
+      {/* <NavLink to={"./" + profile.name} className="user-link"> */}
+      <div
+        className="user__profile-imagecontainer"
+        onClick={() => {
+          window.location.href = `/${profile.name}`;
+        }}
+      >
+        <img src={profile.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" />
+      </div>
+
+      <div className="user__profile">
+        <div
+          className="user__profile-details"
+          onClick={() => {
+            window.location.href = `/${profile.name}`;
+          }}
+        >
+          <h3 className="user__profile-details-name">{profile.name}</h3>
+          <p className="user__profile-details-email">{profile.email}</p>
+        </div>
+        <div className="user__profile-counts">
+          <p className="user__profile-counts-detail">Posts: {profile._count.posts}</p>
+          <p className="user__profile-counts-detail">Followers: {profile._count.followers}</p>
+          <p className="user__profile-counts-detail">Following: {profile._count.following}</p>
+        </div>
+        <div className="user__profile-follow">
+          <Button data-username={profile.name} size="sm" variant="success" onClick={toggleFollow}>
+            {IsFollowed(profile.name, usersFollowed) ? "Unfollow" : "Follow"}
+          </Button>
+        </div>
+      </div>
+      {/* </NavLink> */}
+    </Col>
+  );
 }

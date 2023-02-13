@@ -256,7 +256,8 @@ p {
     justify-content: space-between;
     align-items: center;
     padding: 1em;
-    width: 300px;
+    width: 400px;
+    // Need to be less on mobile devices...
     margin: 0 0 0 1em;
     &-follow {
       display: none;
@@ -276,6 +277,9 @@ p {
       &-name,
       &-email {
         filter: drop-shadow(2px 4px 6px black);
+      }
+      &-email {
+        font-size: 0.8em;
       }
     }
     // &-content {
