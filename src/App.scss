@@ -303,3 +303,40 @@ p {
   max-height: 100px;
   margin-top: 0.5em;
 }
+
+// followers
+.follow {
+  width: 18rem;
+  margin: 5px;
+  &__container {
+    background-color: $card-bg;
+    box-shadow: 2px 2px 3px black;
+    border-radius: 10px;
+    display: flex;
+    margin-bottom: 10px;
+    //margin: 1em;
+    align-items: center;
+    justify-content: space-between;
+    //padding: 1em;
+    &-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      &-img {
+        height: 70px;
+        width: 70px;
+        border-radius: 50px;
+        margin: 0.5em;
+      }
+      &-name {
+        margin: 0 5px;
+      }
+    }
+
+    &-buttons {
+      &-follow {
+        width: 50px;
+      }
+    }
+  }
+}
