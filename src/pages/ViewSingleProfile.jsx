@@ -2,10 +2,12 @@
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, CardGroup, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
-import { displayProfile, getUserProfile, IsFollowed, showPosts, toggleFollow } from "../constants/commonLib";
+import FollowButton from "../components/FollowButton";
+import ShowUser from "../components/ShowUser";
+import { displayProfile, getUserProfile, IsFollowed, showPosts } from "../constants/commonLib";
 import { apiBaseUrl, apiToken, defaultAvatar } from "../constants/variables";
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -26,6 +28,8 @@ function ViewSingleProfile() {
 
   //getUserProfile;
   useEffect(() => {
+    //console.log(loggedIn);
+    //console.log(loggedIn.name);
     setLoadingProfile(true);
     // get all userinfo
 
@@ -80,8 +84,10 @@ function ViewSingleProfile() {
     <>
       <h1>My Posts</h1>
       <div>
-        {noPostsToShow ? <p>There are no posts to show.</p> : ""}
-        {showPosts(posts, loggedIn.name)}
+        <CardGroup>
+          {noPostsToShow ? <p>There are no posts to show.</p> : ""}
+          <Row className="postscontainer">{showPosts(posts, loggedIn.name)}</Row>
+        </CardGroup>
       </div>
 
       <div className="follow">
@@ -93,9 +99,7 @@ function ViewSingleProfile() {
               <h2 className="follow__container-info-name">{user.name}</h2>
             </div>
             <div className="follow__container-buttons">
-              <Button data-username={user.name} size="sm" variant="success" onClick={toggleFollow} className="follow__container-buttons-follow">
-                {IsFollowed(user.name, usersFollowed) ? "Unfollow" : "Follow"}
-              </Button>
+              <FollowButton username={user?.name} />
             </div>
           </div>
         ))}
@@ -103,28 +107,12 @@ function ViewSingleProfile() {
 
       <div className="follow">
         <h1>My Followers</h1>
-        {userProfile?.followers.map((user) => (
-          <div className="follow__container col" key={`followers-${user.name}`}>
-            <div className="follow__container-info">
-              <img src={user.avatar ? user.avatar : defaultAvatar} className="follow__container-info-img" />
-              <h2 className="follow__container-info-name">{user.name}</h2>
-            </div>
-            <div className="follow__container-buttons">
-              <Button data-username={user.name} size="sm" variant="success" onClick={toggleFollow} className="follow__container-buttons-follow">
-                {IsFollowed(user.name, usersFollowed) ? "Unfollow" : "Follow"}
-              </Button>
-            </div>
-          </div>
+        {userProfile?.followers.map((profile) => (
+          <ShowUser key={`followers-${profile.name}`} user={profile} />
         ))}
       </div>
       <h1>Edit Profile</h1>
       <EditUserForm user={userProfile} />
-      {/* <div className="editprofile">
-        {userProfile.banner ? <img src={userProfile.banner} className="editprofile-banner" /> : ""}
-        <img src={userProfile.avatar ? userProfile.avatar : defaultAvatar} className="editprofile-avatar" />
-        <h1>{username}</h1>
-        <p>{userProfile?.email}</p>
-      </div> */}
     </>
   );
 }

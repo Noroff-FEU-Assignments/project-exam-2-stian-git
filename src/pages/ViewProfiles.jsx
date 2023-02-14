@@ -9,7 +9,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
-import { displayProfile, followUser, IsFollowed, unfollowUser } from "../constants/commonLib";
+import { displayProfile, IsFollowed } from "../constants/commonLib";
 import { apiBaseUrl, apiToken, defaultAvatar, profilesToLoad } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";

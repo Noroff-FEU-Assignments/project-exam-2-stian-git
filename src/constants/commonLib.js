@@ -2,8 +2,10 @@ import axios from "axios";
 import moment from "moment/moment";
 import { Button, Card, Col, Container, Form, ListGroup } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
+import FollowButton from "../components/FollowButton";
+import PostCommentForm from "../components/PostCommentForm";
 import useLocalStorage from "../hooks/useLocalStorage";
-import { apiBaseUrl, apiToken, availableEmojies, defaultAvatar, emojiVersion } from "./variables";
+import { apiBaseUrl, apiToken, availableEmojies, defaultAvatar } from "./variables";
 
 //import useLocalStorage from "../hooks/useLocalStorage";
 //const userInfo = useLocalStorage("socialSessionInfo");
@@ -190,16 +192,8 @@ export function showPosts(arr, owner, hideAll = true) {
               ))
             : ""}
         </ListGroup>
-        <ListGroup.Item className="comments__form">
-          <Form>
-            <Form.Group className="mb-3" controlId={`formComment-${post.id}`}>
-              <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" />
-              <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post.id}>
-                Send
-              </Button>
-            </Form.Group>
-          </Form>
-        </ListGroup.Item>
+
+        <PostCommentForm id={post.id} />
       </Card>
     );
   });
@@ -238,42 +232,6 @@ export function formatTime(timestamp) {
   return moment(timestamp).format("MMM Do YYYY");
 }
 
-export function IsFollowed(name, followedArr) {
-  return followedArr?.some((user) => user.name === name);
-}
-
-export async function followUser(username) {
-  const followUserApiUrl = apiBaseUrl + "/profiles/" + username + "/follow";
-  console.log(followUserApiUrl);
-  console.log("Following: " + username);
-  try {
-    axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
-    const response = await axios.put(followUserApiUrl);
-    console.log(response);
-    if (response.status === 200) {
-      return true;
-    }
-  } catch (error) {
-    return false;
-  }
-}
-
-export async function unfollowUser(username) {
-  const unfollowUserApiUrl = apiBaseUrl + "/profiles/" + username + "/unfollow";
-  //console.log(followUserApiUrl);
-  //console.log("Following: " + username);
-  try {
-    axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
-    const response = await axios.put(unfollowUserApiUrl);
-    console.log(response);
-    if (response.status === 200) {
-      return true;
-    }
-  } catch (error) {
-    return false;
-  }
-}
-
 export async function getSinglePost(postid) {
   console.log("Retrieving post ID: " + postid);
   const singlePostApiUrl = apiBaseUrl + "/posts/" + postid + "?_author=true&_comments=true&_reactions=true";
@@ -310,34 +268,10 @@ export async function getPosts(qty = 20, offset = 0) {
     return [];
   }
 }
-export function toggleFollow(e) {
-  const username = e.target.dataset.username;
-  console.log(e);
-  console.log(e.target.dataset.username);
-  const profileContainer = e.target.closest(".col");
-  if (e.target.innerText === "Follow") {
-    // Follow:
-    const userIsAdded = followUser(username);
-    if (userIsAdded) {
-      e.target.innerText = "Unfollow";
-    }
-    profileContainer.classList.add("user-isfollowed");
-    // Do we need error handling?
-  } else {
-    // Unfollow:
-    const userIsRemoved = unfollowUser(username);
-    profileContainer.classList.remove("user-isfollowed");
-    if (userIsRemoved) {
-      e.target.innerText = "Follow";
-    }
-    // IF user is on own profile = hide the profile from UI.
-  }
-  // Update usersFollowed - Not needed?
-}
 
 export function displayProfile(profile, usersFollowed) {
   return (
-    <Col className={IsFollowed(profile.name, usersFollowed) ? "user user-isfollowed" : "user"} key={profile.name} style={{ backgroundImage: `url(${profile.banner ? profile.banner : "none"})` }}>
+    <Col className="user" key={profile.name} style={{ backgroundImage: `url(${profile.banner ? profile.banner : "none"})` }}>
       {/* <NavLink to={"./" + profile.name} className="user-link"> */}
       <div
         className="user__profile-imagecontainer"
@@ -364,9 +298,7 @@ export function displayProfile(profile, usersFollowed) {
           <p className="user__profile-counts-detail">Following: {profile._count.following}</p>
         </div>
         <div className="user__profile-follow">
-          <Button data-username={profile.name} size="sm" variant="success" onClick={toggleFollow}>
-            {IsFollowed(profile.name, usersFollowed) ? "Unfollow" : "Follow"}
-          </Button>
+          <FollowButton username={profile.name} />
         </div>
       </div>
       {/* </NavLink> */}
