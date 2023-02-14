@@ -4,7 +4,8 @@ import { Button, Card, Col, Container, Form, ListGroup } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
 import FollowButton from "../components/FollowButton";
 import PostCommentForm from "../components/PostCommentForm";
-import useLocalStorage from "../hooks/useLocalStorage";
+import ShowComment from "../components/ShowComment";
+//import useLocalStorage from "../hooks/useLocalStorage";
 import { apiBaseUrl, apiToken, availableEmojies, defaultAvatar } from "./variables";
 
 //import useLocalStorage from "../hooks/useLocalStorage";
@@ -178,17 +179,18 @@ export function showPosts(arr, owner, hideAll = true) {
           </ListGroup.Item>
           {post.comments
             ? post.comments.map((comment) => (
-                <ListGroup.Item key={comment.id} className="comments__body">
-                  <p className="comments__body-writtenby" title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>
-                    <a className="comments__body-writtenby-link" href={`/profiles/${comment.owner}`}>
-                      {comment.owner}
-                    </a>{" "}
-                    @ {formatTime(comment.created)}
-                  </p>
-                  <p className="comments__body-text">{comment.body}</p>
+                // <ListGroup.Item key={comment.id} className="comments__body">
+                //   <p className="comments__body-writtenby" title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>
+                //     <a className="comments__body-writtenby-link" href={`/profiles/${comment.owner}`}>
+                //       {comment.owner}
+                //     </a>{" "}
+                //     @ {formatTime(comment.created)}
+                //   </p>
+                //   <p className="comments__body-text">{comment.body}</p>
 
-                  {/* <p title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>{formatTime(comment.created)}</p> */}
-                </ListGroup.Item>
+                /* <p title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>{formatTime(comment.created)}</p> */
+                // </ListGroup.Item>
+                <ShowComment key={comment.id} commentData={comment} />
               ))
             : ""}
         </ListGroup>
@@ -266,59 +268,5 @@ export async function getPosts(qty = 20, offset = 0) {
     }
   } catch (error) {
     return [];
-  }
-}
-
-export function displayProfile(profile, usersFollowed) {
-  return (
-    <Col className="user" key={profile.name} style={{ backgroundImage: `url(${profile.banner ? profile.banner : "none"})` }}>
-      {/* <NavLink to={"./" + profile.name} className="user-link"> */}
-      <div
-        className="user__profile-imagecontainer"
-        onClick={() => {
-          window.location.href = `/${profile.name}`;
-        }}
-      >
-        <img src={profile.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" />
-      </div>
-
-      <div className="user__profile">
-        <div
-          className="user__profile-details"
-          onClick={() => {
-            window.location.href = `/${profile.name}`;
-          }}
-        >
-          <h3 className="user__profile-details-name">{profile.name}</h3>
-          <p className="user__profile-details-email">{profile.email}</p>
-        </div>
-        <div className="user__profile-counts">
-          <p className="user__profile-counts-detail">Posts: {profile._count.posts}</p>
-          <p className="user__profile-counts-detail">Followers: {profile._count.followers}</p>
-          <p className="user__profile-counts-detail">Following: {profile._count.following}</p>
-        </div>
-        <div className="user__profile-follow">
-          <FollowButton username={profile.name} />
-        </div>
-      </div>
-      {/* </NavLink> */}
-    </Col>
-  );
-}
-
-export async function getUserProfile(username) {
-  const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
-  try {
-    axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
-    const response = await axios(getProfileApiUrl);
-    if (response.status === 200) {
-      console.log(response.data);
-      //setUserProfile(response.data);
-      return response.data;
-    } else {
-      console.log("Something went wrong retrieving profile");
-    }
-  } catch (error) {
-    console.log("Retrieving profile failed: ", error);
   }
 }

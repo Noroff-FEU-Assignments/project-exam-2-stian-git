@@ -9,7 +9,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
-import { displayProfile, IsFollowed } from "../constants/commonLib";
+import ShowUserDetails from "../components/ShowUserDetails";
 import { apiBaseUrl, apiToken, defaultAvatar, profilesToLoad } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -69,7 +69,10 @@ function ViewProfiles() {
       axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
       const response = await axios.get(usersFollowedApiUrl);
       //console.log(response.data.following);
-      setUsersFollowed(response.data.following);
+      if (response.status === 200) {
+        const data = await response.data;
+        setUsersFollowed(data.following);
+      }
     } catch (error) {
       //console.log(error);
       setError("Failed to retrieve users followed: " + error);
@@ -82,7 +85,11 @@ function ViewProfiles() {
   // example banner: https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg
   return (
     <>
-      <Row className="user-wrapper">{users.map((profile) => displayProfile(profile, usersFollowed))}</Row>
+      <Row className="user-wrapper">
+        {users.map((profile) => (
+          <ShowUserDetails userprofile={profile} key={profile.name} />
+        ))}
+      </Row>
       {noMoreProfiles ? <Button disabled>No more profiles</Button> : <Button onClick={getUsers}>More profiles</Button>}
     </>
   );
