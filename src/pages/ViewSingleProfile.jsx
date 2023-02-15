@@ -5,9 +5,9 @@ import React, { useEffect, useState } from "react";
 import { Button, CardGroup, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
+import ShowPost from "../components/ShowPost";
 import ShowUser from "../components/ShowUser";
 import ShowUserDetails from "../components/ShowUserDetails";
-import { showPosts } from "../constants/commonLib";
 import { apiBaseUrl, apiToken } from "../constants/variables";
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -23,7 +23,9 @@ function ViewSingleProfile() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [posts, setPosts] = useState([]);
-  const [noPostsToShow, setNoPostsToShow] = useState(null);
+  const [noPostsToShow, setNoPostsToShow] = useState(false);
+  const [noFollowingsToShow, setNoFollowingsToShow] = useState(false);
+  const [noFollowedUsersToShow, setNoFollowedUsersToShow] = useState(false);
   const [usersFollowed, setUsersFollowed] = useLocalStorage("socialUsersFollowed", []);
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
@@ -41,14 +43,23 @@ function ViewSingleProfile() {
         const response = await axios(getProfileApiUrl);
         if (response.status === 200) {
           const data = await response.data;
-          //console.log(response.data);
+          console.log(response.data);
           //console.log(response.data.following);
           setUserProfile(data);
           setUsersFollowed(data.following);
+          // If this is the owner the view will be slightly different.
           if (username === loggedIn.name) {
-            console.log("This is the owner!");
             setIsOwner(true);
           }
+          if (data.following.length === 0) {
+            console.log("No followings");
+            setNoFollowingsToShow(true);
+          }
+          if (data.followers.length === 0) {
+            console.log("No followed users");
+            setNoFollowedUsersToShow(true);
+          }
+
           return response.data;
         } else {
           console.log("Something went wrong retrieving profile");
@@ -101,12 +112,17 @@ function ViewSingleProfile() {
       <div>
         <CardGroup>
           {noPostsToShow ? <p>There are no posts to show.</p> : ""}
-          <Row className="postscontainer">{showPosts(posts, loggedIn.name)}</Row>
+          <Row className="postscontainer">
+            {posts.map((post) => (
+              <ShowPost postdata={post} key={post.id} />
+            ))}
+          </Row>
         </CardGroup>
       </div>
 
       <div className="follow">
         <h1>Followed Users</h1>
+        {noFollowingsToShow ? <p>No users followed.</p> : ""}
         {userProfile?.following.map((followedProfile) => (
           <ShowUser key={`followed-${followedProfile.name}`} user={followedProfile} followed={usersFollowed} />
         ))}
@@ -114,6 +130,7 @@ function ViewSingleProfile() {
 
       <div className="follow">
         <h1>My Followers</h1>
+        {noFollowedUsersToShow ? <p>No users are following.</p> : ""}
         {userProfile?.followers.map((profile) => (
           <ShowUser key={`followers-${profile.name}`} user={profile} followed={usersFollowed} />
         ))}

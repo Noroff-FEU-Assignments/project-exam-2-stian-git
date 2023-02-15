@@ -264,6 +264,7 @@ p {
     }
     &-imagecontainer {
       align-self: center;
+      cursor: pointer;
       &-img {
         height: 100px;
         width: 100px;
@@ -274,6 +275,7 @@ p {
       }
     }
     &-details {
+      cursor: pointer;
       &-name,
       &-email {
         filter: drop-shadow(2px 4px 6px black);

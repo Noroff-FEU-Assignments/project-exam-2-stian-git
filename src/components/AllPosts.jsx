@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, CardGroup, Row } from "react-bootstrap";
-import { getPosts, showPosts } from "../constants/commonLib";
+import { getPosts } from "../constants/commonLib";
 import { postsToLoad, testPost } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
+import ShowPost from "./ShowPost";
 
 function AllPosts() {
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
@@ -30,7 +31,11 @@ function AllPosts() {
     <>
       {isLoggedIn ? (
         <CardGroup>
-          <Row className="postscontainer">{showPosts(posts)}</Row>
+          <Row className="postscontainer">
+            {posts.map((post) => (
+              <ShowPost postdata={post} key={post.id} />
+            ))}
+          </Row>
         </CardGroup>
       ) : (
         "User not logged in"

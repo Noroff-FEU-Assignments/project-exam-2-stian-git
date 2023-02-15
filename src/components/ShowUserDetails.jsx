@@ -28,7 +28,7 @@ function ShowUserDetails(props) {
       <div
         className="user__profile-imagecontainer"
         onClick={() => {
-          window.location.href = `/${profile?.name}`;
+          window.location.href = `/profiles/${profile?.name}`;
         }}
       >
         <img src={profile?.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" />
@@ -38,10 +38,10 @@ function ShowUserDetails(props) {
         <div
           className="user__profile-details"
           onClick={() => {
-            window.location.href = `/${profile?.name}`;
+            window.location.href = `/profiles/${profile?.name}`;
           }}
         >
-          <h3 className="user__profile-details-name">{profile?.name}</h3>
+          <h2 className="user__profile-details-name">{profile?.name}</h2>
           <p className="user__profile-details-email">{profile?.email}</p>
         </div>
         <div className="user__profile-counts">

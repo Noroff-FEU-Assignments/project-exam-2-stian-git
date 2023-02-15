@@ -8,7 +8,6 @@ import FollowButton from "./FollowButton";
 function ShowUser(props) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-
   //const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
   const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
 
