@@ -1,11 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Form, Image } from "react-bootstrap";
 import { InputTags } from "react-bootstrap-tagsinput";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { apiBaseUrl, apiToken, mediaUrlSyntax } from "../constants/variables";
+import { GetSinglePost } from "../constants/commonLib";
+import { apiBaseUrl, mediaUrlSyntax } from "../constants/variables";
+import SessionContext from "../context/SessionContext";
 //
 
 //const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
@@ -14,7 +16,7 @@ import { apiBaseUrl, apiToken, mediaUrlSyntax } from "../constants/variables";
 
 // }
 const postApiUrl = apiBaseUrl + "/posts/";
-//const authConfig = { headers: { Authorization: `Bearer ${apiToken}` } };
+
 const schema = yup.object().shape({
   title: yup.string().required("Title is a required field"),
   body: yup.string(),
@@ -23,6 +25,7 @@ const schema = yup.object().shape({
 });
 
 export default function EditPostForm(props) {
+  const [loggedIn, setLoggedIn] = useContext(SessionContext);
   const [isPosting, setIsPosting] = useState(false);
   const [postError, setPostError] = useState(null);
   const [tags, setTags] = useState([]);
@@ -44,7 +47,7 @@ export default function EditPostForm(props) {
       //console.log("Props", id);
       const getPostUrl = apiBaseUrl + "/posts/" + id;
       try {
-        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
         const response = await axios(getPostUrl);
         //console.log(response.data);
         setOldPostData(response.data);
@@ -56,7 +59,7 @@ export default function EditPostForm(props) {
     // Make sure we only retrieve the postdata if we are editing.
     if (postId) {
       setIsEditMode(true);
-      getSinglePost(postId);
+      GetSinglePost(postId);
     }
   }, []);
 
@@ -65,7 +68,7 @@ export default function EditPostForm(props) {
     console.log(data);
     try {
       // is this the right way to add headers? (it works though, but defaults?)
-      axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+      axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       let response;
       if (isEditMode) {
         const updatePostApiUrl = postApiUrl + postId;

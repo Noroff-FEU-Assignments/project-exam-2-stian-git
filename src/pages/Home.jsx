@@ -4,10 +4,8 @@ import AllPosts from "../components/AllPosts";
 import LoginUser from "../components/LoginUser";
 import NewUserForm from "../components/NewUserForm";
 import SessionContext from "../context/SessionContext";
-import useLocalStorage from "../hooks/useLocalStorage";
 
 function Home() {
-  //const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
   return (
     <>

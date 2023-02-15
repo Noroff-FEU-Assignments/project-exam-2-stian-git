@@ -1,22 +1,22 @@
 // TODO 13.2: Adding profiles of followers are next.
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Button, CardGroup, Row } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { CardGroup, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
 import ShowPost from "../components/ShowPost";
 import ShowUser from "../components/ShowUser";
 import ShowUserDetails from "../components/ShowUserDetails";
-import { apiBaseUrl, apiToken } from "../constants/variables";
+import { apiBaseUrl, storageKeyFollowedUsers } from "../constants/variables";
+import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 function ViewSingleProfile() {
   // retrieve username from url:
   const { username } = useParams();
-  //const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
-  //const getUsersPostsApiUrl = apiBaseUrl + "/profiles/" + username + "/posts?_author=true&_comments=true&_reactions=true";
-  const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
+
+  const [loggedIn, setLoggedIn] = useContext(SessionContext);
 
   // should profile be null or array?
   const [userProfile, setUserProfile] = useState(null);
@@ -26,11 +26,9 @@ function ViewSingleProfile() {
   const [noPostsToShow, setNoPostsToShow] = useState(false);
   const [noFollowingsToShow, setNoFollowingsToShow] = useState(false);
   const [noFollowedUsersToShow, setNoFollowedUsersToShow] = useState(false);
-  const [usersFollowed, setUsersFollowed] = useLocalStorage("socialUsersFollowed", []);
+  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
-
-  //const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
 
   //getUserProfile;
   useEffect(() => {
@@ -39,7 +37,7 @@ function ViewSingleProfile() {
     async function getUserProfile() {
       const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
       try {
-        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
         const response = await axios(getProfileApiUrl);
         if (response.status === 200) {
           const data = await response.data;
@@ -76,7 +74,7 @@ function ViewSingleProfile() {
       setLoadingPosts(true);
       const getUsersPostsApiUrl = apiBaseUrl + "/profiles/" + username + "/posts?_author=true&_comments=true&_reactions=true";
       try {
-        axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+        axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
         const response = await axios(getUsersPostsApiUrl);
         if (response.status === 200) {
           //console.log(response.data);

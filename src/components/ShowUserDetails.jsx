@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
-import { defaultAvatar } from "../constants/variables";
+import { defaultAvatar, storageKeyFollowedUsers } from "../constants/variables";
 import useLocalStorage from "../hooks/useLocalStorage";
 import FollowButton from "./FollowButton";
 
 function ShowUserDetails(props) {
   const [profile, setProfile] = useState(null);
-  const [usersFollowed, setUsersFollowed] = useLocalStorage("socialUsersFollowed", []);
+  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [userIsFollowed, setUserIsFollowed] = useState(false);
 
   useEffect(() => {

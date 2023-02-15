@@ -1,15 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { apiBaseUrl, apiToken, defaultAvatar } from "../constants/variables";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { defaultAvatar } from "../constants/variables";
 import FollowButton from "./FollowButton";
 
 function ShowUser(props) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-  //const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
-  const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
 
   useEffect(() => {
     setUser(props.user);

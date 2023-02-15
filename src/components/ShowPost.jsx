@@ -1,17 +1,17 @@
 import axios from "axios";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { formatTime } from "../constants/commonLib";
-import { apiBaseUrl, apiToken, availableEmojies } from "../constants/variables";
-import useLocalStorage from "../hooks/useLocalStorage";
+import { apiBaseUrl, availableEmojies } from "../constants/variables";
+import SessionContext from "../context/SessionContext";
+import FormatTimeStamp from "./FormatTimeStamp";
 import PostCommentForm from "./PostCommentForm";
 import ShowComment from "./ShowComment";
 
 function ShowPost(props) {
   const [isPostOwner, setIsPostOwner] = useState(false);
-  const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
+  const [loggedIn, setLoggedIn] = useContext(SessionContext);
   const [post, setPost] = useState(null);
   const [hideComments, setHideComments] = useState(true);
   useEffect(() => {
@@ -19,11 +19,11 @@ function ShowPost(props) {
     if (props.comments === false) {
       setHideComments(false);
     }
-    //console.log(props.comments);
-    if (props.postdata.name === loggedIn.name) {
-      console.log("This is the owner!");
+    //console.log(props);
+    if (props?.postdata?.author?.name === loggedIn.name) {
+      //console.log("This is the owner!");
       setIsPostOwner(true);
-      console.log(props);
+      //console.log(props);
     }
   }, [props]);
 
@@ -33,7 +33,7 @@ function ShowPost(props) {
 
     //console.log("Deleting: " + e.target.dataset.postid);
     try {
-      axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+      axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.delete(deletePostApiUrl);
       if (response.status === 200) {
         const postContentContainer = e.target.parentElement.parentElement;
@@ -91,7 +91,7 @@ function ShowPost(props) {
     console.log("Adding " + emoji + " to " + id);
     const addReactionUrl = apiBaseUrl + "/posts/" + id + "/react/" + emoji;
     try {
-      axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+      axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.put(addReactionUrl);
       console.log(response);
       if (response.status === 200) {
@@ -167,7 +167,7 @@ function ShowPost(props) {
           <h2 className="card-title">{post?.title}</h2>
         </Card.Title>
         <Card.Text title={moment(post?.created).format("MMM Do YYYY, HH:mm:ss")} className="post__body-created">
-          {formatTime(post?.created)} (by{" "}
+          <FormatTimeStamp timestamp={post?.created} /> (by{" "}
           <a className="post__body-created-link" href={`/profiles/${post?.author?.name}`}>
             {post?.author?.name}
           </a>

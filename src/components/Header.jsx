@@ -4,11 +4,12 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useNavigate } from "react-router-dom";
+import { storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Header() {
-  const [socialUsers, setSocialUsers] = useLocalStorage("socialUsersFollowed", null);
+  const [socialUsers, setSocialUsers] = useLocalStorage(storageKeyFollowedUsers, null);
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
   const [activePage, setActivePage] = useState("home");
   const history = useNavigate();

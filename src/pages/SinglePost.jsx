@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import ShowPost from "../components/ShowPost";
-import { getSinglePost } from "../constants/commonLib";
+import { GetSinglePost } from "../constants/commonLib";
 
 function SinglePost() {
   const { postid } = useParams();
@@ -10,7 +10,7 @@ function SinglePost() {
 
   useEffect(() => {
     async function getPostData() {
-      const data = await getSinglePost(postid);
+      const data = await GetSinglePost(postid);
       console.log("Data:", data);
       setPostData(data);
       console.log(typeof postData);

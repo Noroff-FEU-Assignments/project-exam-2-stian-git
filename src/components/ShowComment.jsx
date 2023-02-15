@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import { formatTime } from "../constants/commonLib";
+import FormatTimeStamp from "./FormatTimeStamp";
 
 function ShowComment(props) {
   const [data, setData] = useState(null);
@@ -17,11 +17,9 @@ function ShowComment(props) {
         <a className="comments__body-writtenby-link" href={`/profiles/${data?.owner}`}>
           {data?.owner}
         </a>{" "}
-        @ {formatTime(data?.created)}
+        @ <FormatTimeStamp timestamp={data?.created} />
       </p>
       <p className="comments__body-text">{data?.body}</p>
-
-      {/* <p title={moment(comment.created).format("MMM Do YYYY, HH:mm:ss")}>{formatTime(comment.created)}</p> */}
     </ListGroup.Item>
   );
 }

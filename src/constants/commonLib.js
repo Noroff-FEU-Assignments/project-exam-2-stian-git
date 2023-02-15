@@ -1,36 +1,15 @@
-import axios from "axios";
-import moment from "moment/moment";
+// TODO: Need to refactor this.
+// API-token can't be obtained from localstorage.
 
-//import useLocalStorage from "../hooks/useLocalStorage";
+import axios from "axios";
+import { useContext } from "react";
+import SessionContext from "../context/SessionContext";
+
 import { apiBaseUrl, apiToken } from "./variables";
 
-export function formatTime(timestamp) {
-  //const str = new Date(timestamp);
+export async function GetSinglePost(postid) {
+  //const [loggedIn, setLoggedIn] = useContext(SessionContext);
 
-  //console.log(new Date(timestamp));
-  //console.log(str.toLocaleDateString());
-  const todaysDate = Date.now();
-  const isThisHour = moment(timestamp).isSame(todaysDate, "hour");
-  // if (isThisHour) {
-  //     return moment(timestamp).fromNow();
-  // }
-
-  // const isToday = moment(timestamp).isSame(timestamp2, "day");
-  // if (isToday) {
-  //     return moment(timestamp).fromNow();
-  // }
-  const isThisWeek = moment(timestamp).isSame(todaysDate, "week");
-
-  if (isThisWeek) {
-    return moment(timestamp).fromNow();
-  }
-
-  //console.log(isThisWeek);
-
-  return moment(timestamp).format("MMM Do YYYY");
-}
-
-export async function getSinglePost(postid) {
   console.log("Retrieving post ID: " + postid);
   const singlePostApiUrl = apiBaseUrl + "/posts/" + postid + "?_author=true&_comments=true&_reactions=true";
   try {

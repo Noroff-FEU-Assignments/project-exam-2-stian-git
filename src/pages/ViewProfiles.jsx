@@ -1,16 +1,8 @@
-// Todo:
-// Retrieve usersFollowed: https://noroff-api-docs.netlify.app/social-endpoints/profiles#single-entry
-// Check if above still works.
-// Toggle follow/unfollow
-// Add my own default banner.
-// Todo 28.1: Remove main container with link. Replace it with a button shown on hover?
-
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
-import { Link, NavLink } from "react-router-dom";
+import { Button, Row } from "react-bootstrap";
 import ShowUserDetails from "../components/ShowUserDetails";
-import { apiBaseUrl, apiToken, defaultAvatar, profilesToLoad } from "../constants/variables";
+import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -18,7 +10,6 @@ import useLocalStorage from "../hooks/useLocalStorage";
 //console.log("Username: ", myUserName);
 
 const bannerTest = "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg";
-//const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
 
 function ViewProfiles() {
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
@@ -26,7 +17,7 @@ function ViewProfiles() {
   const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
-  const [usersFollowed, setUsersFollowed] = useLocalStorage("socialUsersFollowed", []);
+  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [offset, setOffset] = useState(0);
   const [noMoreProfiles, setNoMoreProfiles] = useState(false);
 
@@ -44,7 +35,7 @@ function ViewProfiles() {
     setLoadingProfiles(true);
     const usersApiUrl = apiBaseUrl + "/profiles?limit=" + profilesToLoad + "&offset=" + offset;
     try {
-      axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+      axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(usersApiUrl);
       //console.log(response.data);
       setUsers(users.concat(response.data));
@@ -66,7 +57,7 @@ function ViewProfiles() {
     setLoadingUsersFollowed(true);
     const usersFollowedApiUrl = apiBaseUrl + "/profiles/" + isLoggedIn.name + "?_following=true";
     try {
-      axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+      axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(usersFollowedApiUrl);
       //console.log(response.data.following);
       if (response.status === 200) {

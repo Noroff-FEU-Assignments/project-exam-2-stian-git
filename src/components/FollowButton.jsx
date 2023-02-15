@@ -1,13 +1,13 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { toggleFollow } from "../constants/commonLib";
-import { apiBaseUrl, apiToken } from "../constants/variables";
+import { apiBaseUrl, storageKeyFollowedUsers } from "../constants/variables";
+import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 function FollowButton(props) {
-  const [usersFollowed, setUsersFollowed] = useLocalStorage("socialUsersFollowed", []);
-  const [loggedIn, setLoggedIn] = useLocalStorage("socialSessionInfo", null);
+  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+  const [loggedIn, setLoggedIn] = useContext(SessionContext);
   const [userIsFollowed, setUserIsFollowed] = useState(false);
   const [isProfilesPage, setIsProfilesPage] = useState(false);
 
@@ -63,7 +63,7 @@ function FollowButton(props) {
       followUserChangeApiUrl = apiBaseUrl + "/profiles/" + username + "/follow";
     }
     try {
-      axios.defaults.headers.common = { Authorization: `Bearer ${apiToken}` };
+      axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.put(followUserChangeApiUrl);
       if (response.status === 200) {
         const data = await response.data;
