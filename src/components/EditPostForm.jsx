@@ -5,9 +5,9 @@ import { Button, Col, Container, Form, Image } from "react-bootstrap";
 import { InputTags } from "react-bootstrap-tagsinput";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { GetSinglePost } from "../constants/commonLib";
 import { apiBaseUrl, mediaUrlSyntax } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
+import useGetSinglePost from "../hooks/useGetSinglePost";
 //
 
 //const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
@@ -30,9 +30,9 @@ export default function EditPostForm(props) {
   const [postError, setPostError] = useState(null);
   const [tags, setTags] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [oldPostData, setOldPostData] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const postId = props?.id;
+  const { postData, loading, error } = useGetSinglePost(postId);
 
   const {
     register,
@@ -43,25 +43,18 @@ export default function EditPostForm(props) {
   } = useForm({ resolver: yupResolver(schema) });
 
   useEffect(() => {
-    async function getSinglePost(id) {
-      //console.log("Props", id);
-      const getPostUrl = apiBaseUrl + "/posts/" + id;
-      try {
-        axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
-        const response = await axios(getPostUrl);
-        //console.log(response.data);
-        setOldPostData(response.data);
-        setTags(response.data.tags);
-      } catch (error) {
-        console.log("Failed to retrieve data.");
-      }
-    }
     // Make sure we only retrieve the postdata if we are editing.
     if (postId) {
+      console.log(postId);
       setIsEditMode(true);
-      GetSinglePost(postId);
+      //GetSinglePost(postId);
+      //console.log(postData.tags);
+      setTags(postData?.tags);
+      setValue("title", postData?.title);
+      setValue("body", postData?.body);
+      setValue("media", postData?.media);
     }
-  }, []);
+  }, [postData]);
 
   async function postContent(data) {
     setIsPosting(true);
@@ -108,12 +101,13 @@ export default function EditPostForm(props) {
   return (
     <Container>
       <Col md={6}>
+        {error ? <p>{error}</p> : ""}
         <Form onSubmit={handleSubmit(postContent)}>
           <Form.Group className="mb-3" controlId="edistPostFormTitle">
-            <Form.Control type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? oldPostData?.title : ""} />
+            <Form.Control type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? postData?.title : ""} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="edistPostFormBody">
-            <Form.Control as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? oldPostData?.body : ""} />
+            <Form.Control as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? postData?.body : ""} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="edistPostFormTags">
             <div className="input-group">
@@ -137,7 +131,7 @@ export default function EditPostForm(props) {
               }}
               placeholder="Image URL"
               {...register("media")}
-              defaultValue={isEditMode ? oldPostData?.media : ""}
+              defaultValue={isEditMode ? postData?.media : ""}
             />
             <Form.Text className="text-muted">
               {errors.media ? (
