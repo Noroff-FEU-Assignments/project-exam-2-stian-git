@@ -50,6 +50,7 @@ export default function EditPostForm(props) {
       //GetSinglePost(postId);
       //console.log(postData.tags);
       setTags(postData?.tags);
+      // Register existing postdata as formdata to avoid updating a post with missing data:
       setValue("title", postData?.title);
       setValue("body", postData?.body);
       setValue("media", postData?.media);
