@@ -80,8 +80,10 @@ p {
   font-family: $font-family-serif;
 }
 
-button.btn {
-  width: 200px;
+.button {
+  &__wrapper {
+    padding: 10px;
+  }
 }
 // Posts and Comments
 

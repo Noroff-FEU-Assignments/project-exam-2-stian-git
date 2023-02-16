@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Row } from "react-bootstrap";
+import { Button, Container, Row } from "react-bootstrap";
 import ShowUserDetails from "../components/ShowUserDetails";
 import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
@@ -81,7 +81,7 @@ function ViewProfiles() {
           <ShowUserDetails userprofile={profile} key={profile.name} />
         ))}
       </Row>
-      {noMoreProfiles ? <Button disabled>No more profiles</Button> : <Button onClick={getUsers}>More profiles</Button>}
+      <Container className="button__wrapper">{noMoreProfiles ? <Button disabled>No more profiles</Button> : <Button onClick={getUsers}>More profiles</Button>}</Container>
     </>
   );
 }

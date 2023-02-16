@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, CardGroup, Row } from "react-bootstrap";
+import { Button, CardGroup, Col, Container, Row } from "react-bootstrap";
 import { apiBaseUrl, postsToLoad } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import ShowPost from "./ShowPost";
@@ -60,7 +60,7 @@ function AllPosts() {
       ) : (
         "User not logged in"
       )}
-      {noMorePages ? <Button disabled>No more posts.</Button> : <Button onClick={getAllPosts}>Load more posts</Button>}
+      <Container className="button__wrapper">{noMorePages ? <Button disabled>No more posts.</Button> : <Button onClick={getAllPosts}>Load more posts</Button>}</Container>
     </>
   );
 }
