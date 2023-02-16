@@ -30,6 +30,8 @@ function ViewSingleProfile() {
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
 
+  //const { user, userLoading, userError } = useGetSingleProfile(postData?.author?.name);
+
   //getUserProfile;
   useEffect(() => {
     setLoadingProfile(true);
@@ -127,7 +129,7 @@ function ViewSingleProfile() {
       </div>
 
       <div className="follow">
-        <h1>My Followers</h1>
+        <h1>Followers</h1>
         {noFollowedUsersToShow ? <p>No users are following.</p> : ""}
         {userProfile?.followers.map((profile) => (
           <ShowUser key={`followers-${profile.name}`} user={profile} followed={usersFollowed} />

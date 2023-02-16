@@ -26,6 +26,7 @@ function FollowButton(props) {
   }, [props]);
 
   function toggleFollow(e) {
+    e.stopPropagation();
     const username = e.target.dataset.username;
     //console.log(e);
     //console.log(e.target.dataset.username);
@@ -67,6 +68,7 @@ function FollowButton(props) {
       const response = await axios.put(followUserChangeApiUrl);
       if (response.status === 200) {
         const data = await response.data;
+        //console.log(data);
         // Update localstorage with the new array.
         setUsersFollowed(data.following);
         return true;
@@ -77,7 +79,7 @@ function FollowButton(props) {
   }
 
   return (
-    <Button data-username={props.username} size="sm" variant="success" onClick={toggleFollow} className="follow__container-buttons-follow">
+    <Button data-username={props.username} size="sm" variant="success" onClick={toggleFollow} title="Toggle following" className="follow__container-buttons-follow">
       {userIsFollowed ? "Unfollow" : "Follow"}
     </Button>
   );

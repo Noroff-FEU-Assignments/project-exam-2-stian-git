@@ -11,7 +11,13 @@ function ShowUser(props) {
   }, [props]);
 
   return (
-    <div className="follow__container col" key={`followers-${user?.name}`}>
+    <div
+      className="follow__container col"
+      key={`followers-${user?.name}`}
+      onClick={(e) => {
+        window.location.href = `/profiles/${user?.name}`;
+      }}
+    >
       <div className="follow__container-info">
         <img src={user?.avatar ? user.avatar : defaultAvatar} className="follow__container-info-img" />
         <h2 className="follow__container-info-name">{user?.name}</h2>

@@ -6,6 +6,7 @@ $body-bg: #2d344d;
 $body-color: #fff;
 $footer-bg: #1e2233;
 $footer-textcolor: #7e91d9;
+$primary: #1bd277;
 
 // fonts: (add alternatives)
 $font-family-sans-serif: "Yanone Kaffeesatz", sans-serif;
@@ -25,7 +26,8 @@ $card-bg: #3c4d71;
 $card-color: white;
 // Bootstrap (imported at the end to include the above customization.
 // form:
-$input-bg: #abcdff;
+//$input-bg: #abcdff;
+$input-bg: #fff;
 $input-color: black;
 $input-placeholder-color: rgba(0, 0, 0, 0.6);
 

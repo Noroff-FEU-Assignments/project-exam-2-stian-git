@@ -43,7 +43,7 @@ function PostCommentForm(props) {
   return (
     <ListGroup.Item className="comments__form">
       <Form onSubmit={handleSubmit(addComment)}>
-        <Form.Group className="mb-3" controlId={`formComment-${props.id}`}>
+        <Form.Group className="" controlId={`formComment-${props.id}`}>
           <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" {...register("body")} />
           <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={props.id}>
             Send

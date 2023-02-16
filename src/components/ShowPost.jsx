@@ -61,6 +61,7 @@ function ShowPost(props) {
   }
 
   async function reactToPost(e) {
+    e.stopPropagation();
     const postId = e.target.closest(".post").dataset.postid;
     const reaction = e.target.innerHTML.split(" ")[0];
     const count = e.target.innerHTML.split(" ")[1];
@@ -104,94 +105,102 @@ function ShowPost(props) {
     }
   }
 
-  function showCommentsOrPost(e) {
-    //console.log("Showing post;", e);
+  function linkToPost(e) {
     const currentSitePath = document.location.pathname;
-    //console.log(currentSitePath);
-    const isProfilesPage = currentSitePath.includes("profiles");
     const isSinglePostPage = currentSitePath.includes("post");
-    //console.log(isProfilesPage);
     const postId = e.target.closest(".post").dataset.postid;
-    //console.log(postContainer.dataset.postid);
-    //console.log(postId);
-    //const navigate = useNavigate();
-    if (isProfilesPage || isSinglePostPage) {
+    if (!isSinglePostPage) {
       // show comments
-      toggleComments(e);
-    } else {
-      // forward user to /posts/postid
       window.location.href = `/post/${postId}`;
     }
   }
 
-  function toggleComments(e) {
-    const postContainer = e.target.closest(".post");
-    const areCommentsShowing = postContainer.dataset.showcomments === "true";
-    if (areCommentsShowing) {
-      postContainer.dataset.showcomments = "false";
-      // Hide comments
-      postContainer.childNodes[postContainer.childNodes.length - 2].hidden = true;
-    } else {
-      postContainer.dataset.showcomments = "true";
-      // Show comments
-      postContainer.childNodes[postContainer.childNodes.length - 2].hidden = false;
-      // concider adding a limitation here... show first 10 comments, etc?
-    }
-  }
+  // function toggleComments(e) {
+  //   const postContainer = e.target.closest(".post");
+  //   const areCommentsShowing = postContainer.dataset.showcomments === "true";
+  //   if (areCommentsShowing) {
+  //     postContainer.dataset.showcomments = "false";
+  //     // Hide comments
+  //     postContainer.childNodes[postContainer.childNodes.length - 2].hidden = true;
+  //   } else {
+  //     postContainer.dataset.showcomments = "true";
+  //     // Show comments
+  //     postContainer.childNodes[postContainer.childNodes.length - 2].hidden = false;
+  //     // concider adding a limitation here... show first 10 comments, etc?
+  //   }
+  // }
 
   return (
-    <Card key={post?.id} className="post" data-showcomments="false" data-postid={post?.id}>
-      {post?.media ? (
-        <Card.Img
-          variant="top"
-          src={post.media}
-          onError={(e) => {
-            e.target.style.display = "none";
-          }}
-        />
-      ) : (
-        ""
-      )}
-      <Card.Body onClick={showCommentsOrPost}>
-        {isPostOwner ? (
-          <Card.Text className="post__body-toolbar">
-            <Link to={`/post/${post?.id}/edit`}>
-              <i className="fa-solid fa-pen-to-square"></i>
-            </Link>
-            <i className="fa-solid fa-trash-can" data-postid={post?.id} onClick={deletePost}></i>
-          </Card.Text>
+    <>
+      <Card onClick={linkToPost} key={post?.id} className={props.showlarge ? "post large" : "post"} data-showcomments="false" data-postid={post?.id}>
+        {props.showlarge ? (
+          <Card.Title>
+            <h2 className="card-title">{post?.title}</h2>
+          </Card.Title>
         ) : (
           ""
         )}
-        <Card.Title>
-          <h2 className="card-title">{post?.title}</h2>
-        </Card.Title>
-        <Card.Text title={moment(post?.created).format("MMM Do YYYY, HH:mm:ss")} className="post__body-created">
-          <FormatTimeStamp timestamp={post?.created} /> (by{" "}
-          <a className="post__body-created-link" href={`/profiles/${post?.author?.name}`}>
-            {post?.author?.name}
-          </a>
-          )
-        </Card.Text>
-        <Card.Text className="post__body-maintext">{post?.body}</Card.Text>
-      </Card.Body>
-      <ListGroup className="list-group-flush post__comment-header" onClick={showCommentsOrPost}>
-        <p className="post__comment-count">{post?.comments ? post.comments.length : "No"} Comments </p>
-        <p className="post__comment-count">{post?.reactions ? countReactions(post.reactions) : "No"} Reactions</p>
-      </ListGroup>
-      <ListGroup className="list-group-flush comments" hidden={hideComments}>
-        <ListGroup.Item className="comments__reactions">
-          {availableEmojies.map((emoji, index) => (
-            <p key={index} className="comments__reactions-emoji" onClick={reactToPost}>
-              {emoji} {countThisEmoji(emoji, post?.reactions)}
-            </p>
-          ))}
-        </ListGroup.Item>
-        {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""}
-      </ListGroup>
+        {post?.media ? (
+          <Card.Img
+            variant="top"
+            src={post.media}
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
+        ) : (
+          ""
+        )}
+        <Card.Body>
+          {isPostOwner ? (
+            <Card.Text className="post__body-toolbar">
+              <Link to={`/post/${post?.id}/edit`}>
+                <i className="fa-solid fa-pen-to-square"></i>
+              </Link>
+              <i className="fa-solid fa-trash-can" data-postid={post?.id} onClick={deletePost}></i>
+            </Card.Text>
+          ) : (
+            ""
+          )}
+          {props.showlarge ? (
+            ""
+          ) : (
+            <Card.Title>
+              <h2 className="card-title">{post?.title}</h2>
+            </Card.Title>
+          )}
+          <Card.Text title={moment(post?.created).format("MMM Do YYYY, HH:mm:ss")} className="post__body-created">
+            <FormatTimeStamp timestamp={post?.created} /> (by{" "}
+            <a className="post__body-created-link" href={`/profiles/${post?.author?.name}`}>
+              {post?.author?.name}
+            </a>
+            )
+          </Card.Text>
+          <Card.Text className="post__body-maintext">{post?.body}</Card.Text>
+        </Card.Body>
+        <ListGroup className="list-group-flush post__comment-header">
+          <p className="post__comment-count">{post?.comments ? post.comments.length : "No"} Comments </p>
+          <p className="post__comment-count">{post?.reactions ? countReactions(post.reactions) : "No"} Reactions</p>
+        </ListGroup>
+        <ListGroup className="list-group-flush comments">
+          <ListGroup.Item className="comments__reactions">
+            {availableEmojies.map((emoji, index) => (
+              <p key={index} className="comments__reactions-emoji" onClick={reactToPost}>
+                {emoji} {countThisEmoji(emoji, post?.reactions)}
+              </p>
+            ))}
+          </ListGroup.Item>
 
-      <PostCommentForm id={post?.id} />
-    </Card>
+          {/* {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""} */}
+          {/* hidden={hideComments} */}
+        </ListGroup>
+        <ListGroup className="list-group-flush comments" hidden={hideComments}>
+          {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""}
+        </ListGroup>
+        {props.showlarge ? <PostCommentForm id={post?.id} /> : ""}
+      </Card>
+      {/* {props.showlarge ? "Showing " : "Hiding"} */}
+    </>
   );
 }
 
