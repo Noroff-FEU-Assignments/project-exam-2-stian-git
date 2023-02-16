@@ -1,3 +1,6 @@
+// TODO 16.2:
+// Tags-field got the default focus. Why?
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
@@ -103,17 +106,17 @@ export default function EditPostForm(props) {
     <Container>
       <Col md={6}>
         {error ? <p>{error}</p> : ""}
-        <Form onSubmit={handleSubmit(postContent)}>
-          <Form.Group className="mb-3" controlId="edistPostFormTitle">
-            <Form.Control type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? postData?.title : ""} />
+        <Form onSubmit={handleSubmit(postContent)} className="postform">
+          <Form.Group className="mb-3 postform-input" controlId="edistPostFormTitle">
+            <Form.Control className="postform-input-field" type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? postData?.title : ""} />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="edistPostFormBody">
-            <Form.Control as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? postData?.body : ""} />
+          <Form.Group className="mb-3 postform-input" controlId="edistPostFormBody">
+            <Form.Control className="postform-input-field" as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? postData?.body : ""} />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="edistPostFormTags">
+          <Form.Group className="mb-3 postform-input" controlId="edistPostFormTags">
             <div className="input-group">
               <InputTags
-                className="form-control"
+                className="form-control postform-input-field postform-input-field-tags"
                 values={tags}
                 onKeyDown={ignoreEnter}
                 placeholder="Tags"
@@ -124,9 +127,10 @@ export default function EditPostForm(props) {
               />
             </div>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="editPostFormMedia">
+          <Form.Group className="mb-3 postform-input" controlId="editPostFormMedia">
             <Form.Control
               type="text"
+              className="postform-input-field"
               onKeyUp={(e) => {
                 setImageUrl(e.target.value);
               }}

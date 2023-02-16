@@ -451,3 +451,19 @@ p {
     //flex-direction: row;
   }
 }
+
+// New and edit post form:
+.postform {
+  &-input {
+    &-field {
+      border: 0;
+      &-tags {
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+.form-control {
+  //padding: 0.375rem 5px;
+}
