@@ -57,8 +57,19 @@ $hover-color: #92d1b2;
 
 // Main
 
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 main {
   margin: 2em auto;
+  //display: contents;
+  display: flex;
+  flex-grow: 1;
+  width: 70vw;
+  flex-direction: column;
 }
 
 h2 {
@@ -67,6 +78,10 @@ h2 {
 }
 p {
   font-family: $font-family-serif;
+}
+
+button.btn {
+  width: 200px;
 }
 // Posts and Comments
 
@@ -340,5 +355,24 @@ p {
         width: 50px;
       }
     }
+  }
+}
+
+// Footer
+
+.footer {
+  background-color: $footer-bg;
+  display: flex;
+  justify-content: space-between;
+  padding: 2em 5%;
+  &__content {
+    &-text {
+      margin: 0;
+      font-size: 0.9em;
+      font-family: $font-family-sans-serif;
+      color: $footer-textcolor;
+    }
+    //display: flex;
+    //flex-direction: row;
   }
 }

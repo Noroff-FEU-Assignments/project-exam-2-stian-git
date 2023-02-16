@@ -8,6 +8,7 @@ import ViewSingleProfile from "./pages/ViewSingleProfile";
 import SinglePost from "./pages/SinglePost";
 import Header from "./components/Header";
 import EditPost from "./pages/EditPost";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/profiles/:username" element={<ViewSingleProfile />} />
           </Routes>
         </main>
+        <Footer />
       </BrowserRouter>
     </SessionProvider>
   );

@@ -37,7 +37,7 @@ function AllPosts() {
       console.log(response);
       if (response.status === 200) {
         //return true;
-        console.log(response.data);
+        //console.log(response.data);
         return response.data;
       } else {
         return [];
