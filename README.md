@@ -1,3 +1,36 @@
+# Social media Front-end
+
+## Intro
+
+This is a Front-end for the Social Media API provided by Noroff.
+
+## Installation
+
+- Download this repository with your preferred method.
+- If you downloaded the zip-file, please extract it.
+- Open the GIT Bash to the main folder of the project. Default name: "project-exam-2-stian-git-main".
+- To install dependencies, run the command: npm install
+- To build the front-end. run the command: npm run build
+
+### Local Test:
+
+To test the site locally, you can do the following:
+
+- Run the command: npm install -g serve
+- Then run the command: serve -s build
+
+### Publish to website:
+
+If you want to publish the site, do the following:
+
+- The previous build-command have created a new folder named "build".
+- Copy everything inside the "build"-folder and upload it to your webserver.
+- Open the site in your browser.
+  .....
+  ....
+  .... Check bug when run from a subfolder.
+  ....
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
