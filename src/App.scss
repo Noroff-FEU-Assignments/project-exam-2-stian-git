@@ -22,6 +22,13 @@ $hover-color: #92d1b2;
 }
 
 // Header
+.header {
+  position: fixed;
+  background-color: $footer-bg;
+  max-width: 100%;
+  z-index: 1;
+  border-bottom: 1px solid $footer-textcolor;
+}
 
 .navbar {
   &-brand {
@@ -64,7 +71,7 @@ $hover-color: #92d1b2;
 }
 
 main {
-  margin: 2em auto;
+  margin: 8em auto 2em auto;
   //display: contents;
   display: flex;
   flex-grow: 1;
@@ -88,9 +95,13 @@ p {
 .button {
   &__wrapper {
     padding: 10px;
+    margin: 1em;
   }
 }
 // Posts and Comments
+.postscontainer {
+  margin-right: auto;
+}
 
 .post {
   width: 18rem;
@@ -160,13 +171,13 @@ p {
     padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x) 0 var(--bs-card-spacer-x);
   }
   img {
-    max-height: unset;
-    border-radius: 10px;
-    max-width: calc(100% - 2 * var(--bs-card-spacer-x));
-    align-self: center;
-    width: unset;
-    max-height: 50vh;
-    object-fit: unset;
+    //max-height: unset;
+    //border-radius: 10px;
+    //max-width: calc(100% - 2 * var(--bs-card-spacer-x));
+    //align-self: center;
+    //width: unset;
+    //max-height: 50vh;
+    //object-fit: unset;
   }
   .comments {
     border-bottom-right-radius: 0px;
@@ -182,6 +193,7 @@ p {
   }
   .user {
     margin: 0.6em 0;
+    //Fix for viewSingleProfile:
     max-width: unset;
     border-radius: 10px;
     //padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
@@ -198,6 +210,15 @@ p {
   .post {
     &__body {
     }
+  }
+  .card-img-top {
+    border-radius: 10px;
+    max-height: unset;
+    max-width: calc(100% - 2 * var(--bs-card-spacer-x));
+    align-self: center;
+    width: unset;
+    max-height: 50vh;
+    object-fit: unset;
   }
 }
 
@@ -275,7 +296,7 @@ p {
 
 .card {
   padding: 0;
-  margin: 5px;
+  margin: 10px;
   &-title {
     margin-bottom: 0;
   }
@@ -300,7 +321,8 @@ p {
 // Profiles
 
 .user {
-  margin: 0.6em;
+  margin: 0.6em auto 0.6em 0;
+  //margin-right: auto;
   display: flex;
   background-size: cover;
   background-position-y: center;
@@ -464,6 +486,111 @@ p {
   }
 }
 
-.form-control {
-  //padding: 0.375rem 5px;
+.userform {
+  padding: 0;
+  &__form {
+    display: flex;
+    flex-direction: column;
+    &-button {
+      width: fit-content;
+      margin-left: auto;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .footer {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  h1 {
+    margin-right: unset;
+  }
+  main {
+    width: 100%;
+    padding: 10px;
+    & > div {
+      margin-bottom: 4em !important;
+    }
+  }
+  .post {
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+  .postscontainer {
+    margin: auto;
+  }
+  .postscontainer .row {
+    margin-left: unset;
+    margin-right: unset;
+  }
+
+  .follow {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    //padding: 0px;
+    text-align: center;
+  }
+
+  .userform {
+    padding: unset;
+    &__form-button {
+      width: unset;
+      margin-left: inherit;
+    }
+  }
+
+  // profiles:
+
+  .user {
+    max-width: 100%;
+    white-space: nowrap;
+    &-wrapper {
+      display: contents;
+    }
+    &__profile {
+      width: 100%;
+    }
+  }
+  .button__wrapper {
+    text-align: center;
+    button {
+      width: inherit;
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  // profiles:
+  .user {
+    &:hover {
+      .user__profile {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+    }
+    &__profile {
+      &-counts {
+        display: none;
+      }
+      &-follow {
+        display: inline-block;
+        position: absolute;
+        right: 10px;
+      }
+      &-imagecontainer-img {
+        height: 50px;
+        width: 50px;
+      }
+    }
+  }
+  .postform {
+    text-align: center;
+  }
+}
+
+@include media-breakpoint-between(md, lg) {
+  .post {
+    width: 16rem;
+  }
 }

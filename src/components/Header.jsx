@@ -21,7 +21,7 @@ export default function Header() {
   }
 
   return (
-    <Container>
+    <Container className="header">
       <Navbar collapseOnSelect expand="lg" variant="dark">
         <Navbar.Brand href="/">
           <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="/images/MyFriends-logo.png" />

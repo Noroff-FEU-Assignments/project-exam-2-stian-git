@@ -104,7 +104,7 @@ export default function EditPostForm(props) {
 
   return (
     <Container>
-      <Col md={6}>
+      <Col md={12} lg={8} xl={6}>
         {error ? <p>{error}</p> : ""}
         <Form onSubmit={handleSubmit(postContent)} className="postform">
           <Form.Group className="mb-3 postform-input" controlId="edistPostFormTitle">
@@ -156,7 +156,7 @@ export default function EditPostForm(props) {
               )}
             </Form.Text>
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" className="postform-button">
             Submit
           </Button>
         </Form>

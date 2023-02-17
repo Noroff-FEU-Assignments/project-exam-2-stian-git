@@ -109,16 +109,16 @@ function ViewSingleProfile() {
         </>
       )}
       <h1>My Posts</h1>
-      <div>
-        <CardGroup>
-          {noPostsToShow ? <p>There are no posts to show.</p> : ""}
-          <Row className="postscontainer">
-            {posts.map((post) => (
-              <ShowPost postdata={post} key={post.id} />
-            ))}
-          </Row>
-        </CardGroup>
-      </div>
+      {/* <div> */}
+      <CardGroup className="postscontainer">
+        {noPostsToShow ? <p>There are no posts to show.</p> : ""}
+        <Row>
+          {posts.map((post) => (
+            <ShowPost postdata={post} key={post.id} />
+          ))}
+        </Row>
+      </CardGroup>
+      {/* </div> */}
 
       <div className="follow">
         <h1>Followed Users</h1>

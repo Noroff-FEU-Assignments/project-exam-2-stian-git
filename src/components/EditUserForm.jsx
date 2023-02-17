@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Image } from "react-bootstrap";
+import { Button, Col, Container, Form, Image } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -49,49 +49,53 @@ function EditUserForm(props) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(updateUser)}>
-      <Form.Group className="mb-3" controlId="regUserFormAvatar">
-        <Form.Control type="text" onKeyUp={(e) => setAvatarImage(e.target.value)} placeholder="Avatar URL" {...register("avatar")} defaultValue={props.user?.avatar ? props.user.avatar : ""} />
-        <Form.Text className="text-muted">
-          {errors.avatar ? (
-            <span className="form-requirement">{errors.avatar.message}</span>
-          ) : (
-            <Image
-              className="mediaThumb"
-              src={avatarImage}
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
-              onLoad={(e) => {
-                e.target.style.display = "inline";
-              }}
-            />
-          )}
-        </Form.Text>
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="regUserFormBanner">
-        <Form.Control type="text" onKeyUp={(e) => setBannerImage(e.target.value)} placeholder="Banner URL" {...register("banner")} defaultValue={props.user?.banner ? props.user.banner : ""} />
-        <Form.Text className="text-muted">
-          {errors.banner ? (
-            <span className="form-requirement">{errors.banner.message}</span>
-          ) : (
-            <Image
-              className="mediaThumb"
-              src={bannerImage}
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
-              onLoad={(e) => {
-                e.target.style.display = "inline";
-              }}
-            />
-          )}
-        </Form.Text>
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        {isSending ? "Updating" : "Update"}
-      </Button>
-    </Form>
+    <Container className="userform">
+      <Col md={6}>
+        <Form onSubmit={handleSubmit(updateUser)} className="userform__form">
+          <Form.Group className="mb-3" controlId="regUserFormAvatar">
+            <Form.Control type="text" onKeyUp={(e) => setAvatarImage(e.target.value)} placeholder="Avatar URL" {...register("avatar")} defaultValue={props.user?.avatar ? props.user.avatar : ""} />
+            <Form.Text className="text-muted">
+              {errors.avatar ? (
+                <span className="form-requirement">{errors.avatar.message}</span>
+              ) : (
+                <Image
+                  className="mediaThumb"
+                  src={avatarImage}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                  onLoad={(e) => {
+                    e.target.style.display = "inline";
+                  }}
+                />
+              )}
+            </Form.Text>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="regUserFormBanner">
+            <Form.Control type="text" onKeyUp={(e) => setBannerImage(e.target.value)} placeholder="Banner URL" {...register("banner")} defaultValue={props.user?.banner ? props.user.banner : ""} />
+            <Form.Text className="text-muted">
+              {errors.banner ? (
+                <span className="form-requirement">{errors.banner.message}</span>
+              ) : (
+                <Image
+                  className="mediaThumb"
+                  src={bannerImage}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                  onLoad={(e) => {
+                    e.target.style.display = "inline";
+                  }}
+                />
+              )}
+            </Form.Text>
+          </Form.Group>
+          <Button variant="primary" type="submit" className="userform__form-button">
+            {isSending ? "Updating" : "Update Profile"}
+          </Button>
+        </Form>
+      </Col>
+    </Container>
   );
 }
 
