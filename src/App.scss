@@ -92,6 +92,13 @@ p {
   font-family: $font-family-serif;
 }
 
+.link {
+  cursor: pointer;
+  &:hover {
+    color: $hover-color;
+  }
+}
+
 .button {
   &__wrapper {
     padding: 10px;
@@ -593,4 +600,27 @@ p {
   .post {
     width: 16rem;
   }
+}
+
+//Profile Search:
+
+.searchform {
+  position: absolute;
+  right: 10px;
+  top: 5em;
+  &__name {
+    display: flex;
+    &-input {
+    }
+    &-submitbutton {
+    }
+  }
+}
+
+.error {
+  font-size: 2em;
+  color: black;
+  background-color: $red;
+  padding: 10px;
+  border-radius: 10px;
 }

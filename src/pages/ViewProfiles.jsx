@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
+import SearchUser from "../components/SearchUser";
 import ShowUserDetails from "../components/ShowUserDetails";
 import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
@@ -33,7 +34,7 @@ function ViewProfiles() {
 
   async function getUsers() {
     setLoadingProfiles(true);
-    const usersApiUrl = apiBaseUrl + "/profiles?limit=" + profilesToLoad + "&offset=" + offset;
+    const usersApiUrl = apiBaseUrl + "/profiles?sortOrder=asc&limit=" + profilesToLoad + "&offset=" + offset;
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(usersApiUrl);
@@ -76,6 +77,7 @@ function ViewProfiles() {
   // example banner: https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg
   return (
     <>
+      <SearchUser />
       <Row className="user-wrapper">
         {users.map((profile) => (
           <ShowUserDetails userprofile={profile} key={profile.name} />

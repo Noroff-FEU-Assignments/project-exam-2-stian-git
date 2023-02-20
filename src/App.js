@@ -9,6 +9,7 @@ import SinglePost from "./pages/SinglePost";
 import Header from "./components/Header";
 import EditPost from "./pages/EditPost";
 import Footer from "./components/Footer";
+import Test from "./pages/Test";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/test" element={<Test />} />
             <Route path="/post" element={<Post />} />
             <Route path="/post/:postid" element={<SinglePost />} />
             <Route path="/post/:postid/edit" element={<EditPost />} />

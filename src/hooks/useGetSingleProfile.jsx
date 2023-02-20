@@ -24,7 +24,7 @@ export default function useGetSingleProfile(username) {
           if (response.status === 200) {
             //return true;
             const data = await response.data;
-            //console.log(data);
+            console.log(data);
             setUserData(data);
           } else {
             setError("An error occured retrieving the user.");
