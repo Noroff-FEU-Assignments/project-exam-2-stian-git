@@ -618,9 +618,13 @@ p {
 }
 
 .error {
-  font-size: 2em;
+  margin: 5px 0;
+  //font-size: 2em;
   color: black;
   background-color: $red;
   padding: 10px;
   border-radius: 10px;
+  &-large {
+    font-size: 2em;
+  }
 }

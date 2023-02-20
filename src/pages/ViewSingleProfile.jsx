@@ -105,7 +105,7 @@ function ViewSingleProfile() {
     <>
       {error ? (
         <>
-          <p className="error">{error}</p>
+          <p className="error error-large">{error}</p>
           <p
             className="link"
             onClick={() => {
