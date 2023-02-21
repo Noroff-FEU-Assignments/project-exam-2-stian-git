@@ -115,21 +115,6 @@ function ShowPost(props) {
     }
   }
 
-  // function toggleComments(e) {
-  //   const postContainer = e.target.closest(".post");
-  //   const areCommentsShowing = postContainer.dataset.showcomments === "true";
-  //   if (areCommentsShowing) {
-  //     postContainer.dataset.showcomments = "false";
-  //     // Hide comments
-  //     postContainer.childNodes[postContainer.childNodes.length - 2].hidden = true;
-  //   } else {
-  //     postContainer.dataset.showcomments = "true";
-  //     // Show comments
-  //     postContainer.childNodes[postContainer.childNodes.length - 2].hidden = false;
-  //     // concider adding a limitation here... show first 10 comments, etc?
-  //   }
-  // }
-
   return (
     <>
       <Card onClick={linkToPost} key={post?.id} className={props.showlarge ? "post large" : "post"} data-showcomments="false" data-postid={post?.id}>
@@ -178,6 +163,13 @@ function ShowPost(props) {
           </Card.Text>
           <Card.Text className="post__body-maintext">{post?.body}</Card.Text>
         </Card.Body>
+        <ListGroup className="list-group-flush post__tags">
+          {post?.tags?.map((tag, index) => (
+            <p className="post__tags-tag" key={`tagid-` + index}>
+              {tag}
+            </p>
+          ))}
+        </ListGroup>
         <ListGroup className="list-group-flush post__comment-header">
           <p className="post__comment-count">{post?.comments ? post.comments.length : "No"} Comments </p>
           <p className="post__comment-count">{post?.reactions ? countReactions(post.reactions) : "No"} Reactions</p>
