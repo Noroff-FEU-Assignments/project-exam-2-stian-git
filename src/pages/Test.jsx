@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { tagsToShow } from "../constants/variables";
 const testData = [
   {
     title: "Just a test from mobile screen",
@@ -82,7 +83,8 @@ const testData = [
 
 function Test() {
   const [allTags, setAllTags] = useState([]);
-  const tagsToShow = 10;
+  //const tagsToShow = 10;
+
   useEffect(() => {
     function countTags() {
       let cummulatedTags = [];

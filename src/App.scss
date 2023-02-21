@@ -87,6 +87,7 @@ h1 {
 h2 {
   color: $h2-color;
   font-size: 1.7em;
+  margin: 1em 0 0.2em 0;
 }
 p {
   font-family: $font-family-serif;
@@ -626,5 +627,44 @@ p {
   border-radius: 10px;
   &-large {
     font-size: 2em;
+  }
+}
+
+.posttypeform {
+  display: flex;
+  width: 50%;
+  margin-bottom: 2em;
+  &__section {
+    max-width: 100%;
+
+    &:first-child {
+      margin-right: 20%;
+    }
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .posttypeform {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .posttypeform {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .posttypeform {
+    width: 80%;
+    justify-content: center;
+    flex-direction: column;
+    &__section {
+      &:first-child {
+        margin-right: unset;
+      }
+    }
   }
 }

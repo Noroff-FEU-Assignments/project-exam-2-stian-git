@@ -6,6 +6,7 @@ export const apiToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMyLCJuYW
 export const storageKeyFollowedUsers = "socialUsersFollowed";
 export const storageKeySessionInfo = "socialSessionInfo";
 //export const
+export const tagsToShow = 5;
 
 //RegEx used to identify a valid URL for media. Notice how filetypes can be changed by adding |.ext inside the parenthesis.
 export const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?|^$/;
