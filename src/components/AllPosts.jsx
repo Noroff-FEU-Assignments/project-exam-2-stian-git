@@ -126,14 +126,14 @@ function AllPosts() {
           <Form.Check type="radio" value={"valuefollowed"} label="Only Followed" name="posttypeselection" id="typefollowed" className="posttypeform__section-item" />
         </div>
         <div className="posttypeform__section">
-          <h2 className="posttypeform__section-item-h2">Filter by tag:</h2>
+          <h2 className="posttypeform__section-item-h2">Trending tags:</h2>
           {allTags.map((tag, index) => (
             <Form.Check type="radio" value={tag[0]} label={`# ${tag[0]} (${tag[1]})`} name="posttypeselection" id={`tag-${index}`} key={`tag-${index}`} className="posttypeform__section-item" />
           ))}
         </div>
       </Form>
       {isLoggedIn ? (
-        <CardGroup>
+        <CardGroup className="postscontainer-wrapper">
           <Row className="postscontainer">
             {posts.map((post) => (
               <ShowPost postdata={post} key={post.id} />
