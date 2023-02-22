@@ -48,11 +48,10 @@ function ViewSingleProfile() {
           console.log(response.data);
           //console.log(response.data.following);
           setUserProfile(data);
+          setUsersFollowed(data.following);
           // If this is the owner the view will be slightly different.
           if (username === loggedIn.name) {
             setIsOwner(true);
-            // Make sure we reload the followed users array if this is the owners page:
-            setUsersFollowed(data.following);
           }
           if (data.following.length === 0) {
             console.log("No followings");
