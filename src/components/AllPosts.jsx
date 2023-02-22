@@ -1,10 +1,16 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, CardGroup, Col, Container, Form, Row } from "react-bootstrap";
-import { apiBaseUrl, postsToLoad, tagsToShow } from "../constants/variables";
+import { allowedUserNameRegex, apiBaseUrl, postsToLoad, tagsToShow } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import ShowPost from "./ShowPost";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 
+const schema = yup.object().shape({
+  value: yup.string().required("ID or tag is required."),
+});
 function AllPosts() {
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
   const [posts, setPosts] = useState([]);
@@ -13,6 +19,12 @@ function AllPosts() {
   const [postsType, setPostsType] = useState();
   const [allTags, setAllTags] = useState([]);
   const [loadTags, setLoadTags] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
 
   useEffect(() => {
     getAllPosts();
@@ -103,9 +115,30 @@ function AllPosts() {
     setPostsType(e.target.value);
   }
 
+  function doSearch(data) {
+    // forward to post id if it's a int, otherwise: use the value as a tag and sort :
+    if (parseInt(data.value)) {
+      window.location.href = "/post/" + data.value;
+    } else {
+      // Make an object to support the existing changePostsType-function.
+      const tagObject = {};
+      tagObject.target = data;
+      changePostsType(tagObject);
+    }
+  }
+
   return (
     <>
+      <Form onSubmit={handleSubmit(doSearch)} className="searchform">
+        <Form.Group className="searchform__post" controlId={`formPostSearch`}>
+          <Form.Control placeholder="Post ID or Tag Search" className="searchform__post-input" {...register("value")} />
+          <Button variant="primary" type="submit" className="searchform__post-submitbutton">
+            Search
+          </Button>
+        </Form.Group>
+      </Form>
       <h1 className="posttypeform__section-h1">Posts</h1>
+
       <Form onChange={changePostsType} className="posttypeform">
         <div className="posttypeform__section">
           <h2 className="posttypeform__section-item-h2">Filter posts:</h2>
