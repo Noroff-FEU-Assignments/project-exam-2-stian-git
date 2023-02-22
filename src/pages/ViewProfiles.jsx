@@ -78,6 +78,7 @@ function ViewProfiles() {
   return (
     <>
       <SearchUser />
+      <h1>Profiles</h1>
       <Row className="user-wrapper">
         {users.map((profile) => (
           <ShowUserDetails userprofile={profile} key={profile.name} />

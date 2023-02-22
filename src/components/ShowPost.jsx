@@ -28,6 +28,7 @@ function ShowPost(props) {
   }, [props]);
 
   async function deletePost(e) {
+    e.stopPropagation();
     const postId = e.target.dataset.postid;
     const deletePostApiUrl = apiBaseUrl + "/posts/" + postId;
 

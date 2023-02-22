@@ -77,6 +77,14 @@ export default function EditPostForm(props) {
       //console.log(response);
       if (response.status === 200) {
         console.log("Your post was saved!");
+        if (!isEditMode) {
+          // reset form
+          document.querySelector("form").reset();
+          // reset tagsfield
+          setTags([]);
+          // reset yup
+          reset();
+        }
       }
     } catch (error) {
       console.log(error);

@@ -4,7 +4,12 @@ import EditPostForm from "../components/EditPostForm.jsx";
 
 function EditPost() {
   const { postid } = useParams();
-  return <EditPostForm id={postid} />;
+  return (
+    <>
+      <h1>Edit Post</h1>
+      <EditPostForm id={postid} />
+    </>
+  );
 }
 
 export default EditPost;
