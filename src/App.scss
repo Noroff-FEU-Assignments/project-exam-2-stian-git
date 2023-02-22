@@ -636,7 +636,8 @@ p {
   position: absolute;
   right: 10px;
   top: 5em;
-  &__name {
+  &__name,
+  &__post {
     display: flex;
     &-input {
     }
