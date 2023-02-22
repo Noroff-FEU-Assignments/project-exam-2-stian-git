@@ -2,7 +2,7 @@
 import axios from "axios";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
-import { Card, ListGroup } from "react-bootstrap";
+import { Button, Card, ListGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { apiBaseUrl, availableEmojies } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
@@ -16,6 +16,7 @@ function ShowPost(props) {
   const [post, setPost] = useState(null);
   const [hideComments, setHideComments] = useState(true);
   const [deleteError, setDeleteError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setPost(props.postdata);
@@ -121,6 +122,7 @@ function ShowPost(props) {
           <Card.Img
             variant="top"
             src={post.media}
+            onClick={() => setShowModal(true)}
             onError={(e) => {
               e.target.style.display = "none";
             }}
@@ -180,6 +182,18 @@ function ShowPost(props) {
         </ListGroup>
         {props.showlarge ? <PostCommentForm id={post?.id} /> : ""}
       </Card>
+      <Modal show={showModal} onHide={() => setShowModal(false)} aria-labelledby="imageModal" onClick={() => setShowModal(false)} centered fullscreen>
+        <Modal.Body>
+          <Card.Img
+            className="modal-body-img"
+            src={post?.media}
+            onClick={() => setShowModal(false)}
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+          />
+        </Modal.Body>
+      </Modal>
     </>
   );
 }
