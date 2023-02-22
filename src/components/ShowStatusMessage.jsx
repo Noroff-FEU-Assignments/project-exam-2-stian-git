@@ -7,8 +7,8 @@ export default function ShowStatusMessage(props) {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    console.log(props);
-    console.log(props.display);
+    //console.log(props);
+    //console.log(props.display);
     if (props.display) {
       //console.log("Display is present");
       setShow(true);

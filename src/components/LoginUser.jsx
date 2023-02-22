@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Button, Form } from "react-bootstrap";
 import SessionContext from "../context/SessionContext";
+import ShowStatusMessage from "./ShowStatusMessage";
 
 const loginUrl = apiBaseUrl + "/auth/login";
 
@@ -63,8 +64,8 @@ function LoginUser() {
             <Form.Text className="text-muted">{errors.password && <span className="form-requirement">{errors.password.message}</span>}</Form.Text>
           </Form.Group>
           <Button type="submit">{isAuthenticating ? "Logging in" : "Login"}</Button>
-          {loginError ? <p className="error error-small">{loginError}</p> : ""}
         </fieldset>
+        <ShowStatusMessage display={loginError} text={"Login failed. Please check username and password."} />
       </Form>
     </>
   );
