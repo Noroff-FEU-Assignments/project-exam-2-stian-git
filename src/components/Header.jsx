@@ -12,7 +12,12 @@ export default function Header() {
   const [socialUsers, setSocialUsers] = useLocalStorage(storageKeyFollowedUsers, null);
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
   const [activePage, setActivePage] = useState("home");
+  const [showMenu, setShowMenu] = useState(false);
   const history = useNavigate();
+
+  function menuClick() {
+    setShowMenu(false);
+  }
 
   function doLogout() {
     setIsLoggedIn(null);
@@ -26,24 +31,30 @@ export default function Header() {
         <Navbar.Brand href="/">
           <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="/images/MyFriends-logo.png" />
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          onClick={() => {
+            setShowMenu(true);
+          }}
+        />
+
+        <div id="responsive-navbar-nav" className={`collapse navbar-collapse ${showMenu ? "show" : ""}`}>
           <Nav className="me-auto">
-            <NavLink to="/" className="nav-link">
+            <NavLink to="/" className="nav-link" onClick={menuClick}>
               <i className="fa-solid fa-house-chimney navbar-link-icon"></i>
               <p className="navbar-link-text">Home</p>
             </NavLink>
             {isLoggedIn ? (
               <>
-                <NavLink to="/profiles" className="nav-link" end>
+                <NavLink to="/profiles" className="nav-link" end onClick={menuClick}>
                   <i className="fa-solid fa-users navbar-link-icon"></i>
                   <p className="navbar-link-text">Profiles</p>
                 </NavLink>
-                <NavLink to="/post" className="nav-link" end>
+                <NavLink to="/post" className="nav-link" end onClick={menuClick}>
                   <i className="fa-solid fa-pen-to-square navbar-link-icon"></i>
                   <p className="navbar-link-text">New Post</p>
                 </NavLink>
-                <NavLink to={`/profiles/${isLoggedIn.name}`} className="nav-link">
+                <NavLink to={`/profiles/${isLoggedIn.name}`} className="nav-link" onClick={menuClick}>
                   <i className="fa-solid fa-circle-user navbar-link-icon"></i>
                   {/* concider profile image instead? */}
                   <p className="navbar-link-text">My Activity</p>
@@ -63,7 +74,7 @@ export default function Header() {
           ) : (
             ""
           )}
-        </Navbar.Collapse>
+        </div>
       </Navbar>
     </Container>
   );
