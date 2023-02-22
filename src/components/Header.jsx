@@ -29,12 +29,12 @@ export default function Header() {
     <Container className="header">
       <Navbar collapseOnSelect expand="lg" variant="dark">
         <Navbar.Brand href="/">
-          <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="/images/MyFriends-logo.png" />
+          <img className="navbar-brand-logo" title="Myfriends Logo" alt="MyFriends Logo" aria-label="MyFriends Logo" src="/images/MyFriends-logo.png" onClick={menuClick} />
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
           onClick={() => {
-            setShowMenu(true);
+            setShowMenu(!showMenu);
           }}
         />
 
@@ -66,7 +66,7 @@ export default function Header() {
           </Nav>
           {isLoggedIn ? (
             <Nav>
-              <NavLink to="/" className="nav-link" onClick={doLogout}>
+              <NavLink to="/" className="nav-link navbar-link-logout" onClick={doLogout}>
                 <i className="fa-solid fa-right-from-bracket navbar-link-icon"></i>
                 <p className="navbar-link-text">Logout ({isLoggedIn.name})</p>
               </NavLink>
