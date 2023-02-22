@@ -1,4 +1,5 @@
 // TODO 22.2: Add success/error messages
+// Started. Success is okey, but error shows up after removing it. (when clicking into another thing)
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
@@ -10,6 +11,7 @@ import * as yup from "yup";
 import { apiBaseUrl, mediaUrlSyntax } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useGetSinglePost from "../hooks/useGetSinglePost";
+import ShowStatusMessage from "./ShowStatusMessage";
 
 const postApiUrl = apiBaseUrl + "/posts/";
 
@@ -77,7 +79,7 @@ export default function EditPostForm(props) {
     } catch (error) {
       // 400 : media url cannot be accessed.
       if (error.response?.status === 400) {
-        setPostError("Saving post failed: " + error);
+        setPostError("Saving post failed. Maybe the media url is wrong?");
       } else {
         setPostError("Saving post failed: " + error);
       }
@@ -152,6 +154,8 @@ export default function EditPostForm(props) {
           <Button variant="primary" type="submit" className="postform-button">
             Submit
           </Button>
+          <ShowStatusMessage display={postError} text={postError} />
+          <ShowStatusMessage display={postSuccess} text={postSuccess} isSuccess={true} />
         </Form>
       </Col>
     </Container>
