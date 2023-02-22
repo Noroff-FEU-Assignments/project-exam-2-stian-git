@@ -10,7 +10,7 @@ export default function useGetSingleProfile(username) {
   const [loading, setLoading] = useState(null);
 
   useEffect(() => {
-    async function fetchPost() {
+    async function fetchProfile() {
       if (username) {
         //console.log("ID for hook:", postid);
         try {
@@ -38,7 +38,7 @@ export default function useGetSingleProfile(username) {
         }
       }
     }
-    fetchPost();
+    fetchProfile();
   }, [username]);
   return { userData, loading, error };
 }
