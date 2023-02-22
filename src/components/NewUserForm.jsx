@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Form, Image } from "react-bootstrap";
 import axios from "axios";
+import ShowStatusMessage from "./ShowStatusMessage";
 
 const regUserApiUrl = apiBaseUrl + "/auth/register";
 
@@ -40,6 +41,7 @@ function NewUserForm() {
 
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
@@ -49,8 +51,10 @@ function NewUserForm() {
 
     try {
       const response = await axios.post(regUserApiUrl, data);
-      if (response.status === 200) {
+      console.log(response.status);
+      if (response.status === 200 || response.status === 201) {
         setRegSuccess(true);
+        reset();
       }
     } catch (error) {
       setRegFailed(error);
@@ -130,6 +134,9 @@ function NewUserForm() {
       <Button variant="primary" type="submit">
         {isSending ? "Submitting" : "Submit"}
       </Button>
+      {/* {regFailed ? <ShowStatusMessage text={"Registration failed. Maybe your username or email is already registered?"} /> : ""} */}
+      <ShowStatusMessage display={regFailed} text={"Registration failed. Maybe your username or email is already registered?"} />
+      <ShowStatusMessage display={regSuccess} text={`User registration success. Please login above.`} isSuccess={true} />
     </Form>
   );
 }
