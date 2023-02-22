@@ -12,7 +12,7 @@ function ShowUserDetails(props) {
   useEffect(() => {
     function isFollowed(name) {
       //const result = usersFollowed?.some((user) => user.name === name);
-      const result = usersFollowed.some((user) => user.name === name);
+      const result = usersFollowed?.some((user) => user.name === name);
       //console.log(name, result);
       //console.log(name, result, "Followed:", usersFollowed);
       setUserIsFollowed(result);

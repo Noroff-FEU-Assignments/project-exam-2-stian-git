@@ -15,7 +15,7 @@ const schema = yup.object().shape({
     .string()
     .email()
     .required("A valid email is required.")
-    .test("Domain check", "Email domain is not accepted", function (email) {
+    .test("Domain check", `Email domain not accepted. (Valid: ${validEmailDomains.map((domain, index) => `${domain}${index === validEmailDomains.length - 1 ? "." : ""}`)}) `, function (email) {
       const enteredDomain = email.split("@")[1]?.toLowerCase();
       return validEmailDomains.includes(enteredDomain);
     }),
