@@ -48,26 +48,22 @@ function AllPosts() {
     }
     if (loadTags == true) {
       countTags();
-      console.log("Loaded tags...");
       setLoadTags(false);
     }
   }, [posts]);
-  //console.log(isLoggedIn.accessToken);
-  // style the posts for equal height.
   async function getAllPosts() {
     const data = await getPosts(postsToLoad, offset, postsType);
     // check if data count is correct;
     setPosts(posts.concat(data));
     setOffset(offset + postsToLoad);
-
     if (data.length < postsToLoad) {
-      console.log("There are no more posts to load...removing button.");
       setNoMorePages(true);
     }
   }
 
   async function getPosts(qty = 20, offset = 0, type = "valueall") {
     let postsApiUrl;
+    // Add a check against the postsType/tag to set the URL.
     switch (type) {
       case "valueall":
         postsApiUrl = apiBaseUrl + "/posts?_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
@@ -78,24 +74,15 @@ function AllPosts() {
 
         break;
       default:
-        //console.log(type);
         postsApiUrl = apiBaseUrl + "/posts?_tag=" + type + "&_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
         break;
     }
-    // Add a check against the postsType to set the URL and reset offset.
-    console.log("Type:", postsType);
 
-    console.log("Retrieving " + qty + " posts, skipping: " + offset);
-    //const allPostsApiUrl = apiBaseUrl + "/posts?_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
-    //const allPostsApiUrl = "https://nf-api.onrender.com/api/v1/social/posts?_tag=winter&_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
-    //const allPostsApiUrl = "https://nf-api.onrender.com/api/v1/social/posts/following?_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(postsApiUrl);
-      console.log(response);
       if (response.status === 200) {
         //return true;
-        //console.log(response.data);
         return response.data;
       } else {
         return [];
@@ -104,8 +91,8 @@ function AllPosts() {
       return [];
     }
   }
+  // Resets when post filter is changed:
   function changePostsType(e) {
-    console.log(e.target.value);
     // Clear previous posts:
     setPosts([]);
     // Reset offset:

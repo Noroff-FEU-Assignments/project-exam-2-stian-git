@@ -31,10 +31,8 @@ function ViewSingleProfile() {
   const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
+  const [postsError, setPostsError] = useState(null);
 
-  //const { user, userLoading, userError } = useGetSingleProfile(postData?.author?.name);
-
-  //getUserProfile;
   useEffect(() => {
     setLoadingProfile(true);
     // get all userinfo
@@ -45,8 +43,6 @@ function ViewSingleProfile() {
         const response = await axios(getProfileApiUrl);
         if (response.status === 200) {
           const data = await response.data;
-          console.log(response.data);
-          //console.log(response.data.following);
           setUserProfile(data);
           // If this is the owner the view will be slightly different.
           if (username === loggedIn.name) {
@@ -55,20 +51,17 @@ function ViewSingleProfile() {
             setUsersFollowed(data.following);
           }
           if (data.following.length === 0) {
-            console.log("No followings");
             setNoFollowingsToShow(true);
           }
           if (data.followers.length === 0) {
-            console.log("No followed users");
             setNoFollowedUsersToShow(true);
           }
 
           return response.data;
         } else {
-          console.log("Something went wrong retrieving profile");
+          setError("Failed to retrieve profile. Please try again.");
         }
       } catch (error) {
-        //console.log("Retrieving profile failed: ", error);
         setError("User not found.");
       } finally {
         setLoadingProfile(false);
@@ -83,18 +76,16 @@ function ViewSingleProfile() {
         axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
         const response = await axios(getUsersPostsApiUrl);
         if (response.status === 200) {
-          //console.log(response.data);
           const data = await response.data;
-          //console.log(data);
           setPosts(data);
           if (response.data.length === 0) {
             setNoPostsToShow(true);
           }
         } else {
-          console.log("Something went wrong retrieving posts");
+          setPostsError("Failed to retrieve posts. Please try again.");
         }
       } catch (error) {
-        console.log("Retrieving posts failed: ", error);
+        setPostsError(`Failed to retrieve posts. Please try again.(${error})`);
       } finally {
         setLoadingPosts(false);
       }

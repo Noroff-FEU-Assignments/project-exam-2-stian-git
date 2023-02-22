@@ -30,23 +30,18 @@ function LoginUser() {
   });
 
   async function doLogin(data) {
-    //console.log("FormData", data);
     setIsAuthenticating(true);
     setLoginError(null);
     try {
       const response = await axios.post(loginUrl, data);
-      console.log(response.data);
       setIsLoggedIn(response.data);
     } catch (error) {
-      console.log(error);
-      console.log(error.response.status);
+      // handle error code: 401 (wrong username or password)
       if (error.response.status == 401) {
         setLoginError("Login failed. Please try again.");
       } else {
         setLoginError("Login failed: " + error);
       }
-
-      // handle error code: 401 (wrong username or password)
     } finally {
       setIsAuthenticating(false);
     }

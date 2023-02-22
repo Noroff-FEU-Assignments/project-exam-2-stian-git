@@ -1,3 +1,5 @@
+// Todo 22.2: Inform user of next step if successfully registered?
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { allowedUserNameRegex, apiBaseUrl, mediaUrlSyntax, minPasswordLength, validEmailDomains } from "../constants/variables";
@@ -30,6 +32,7 @@ const schema = yup.object().shape({
 function NewUserForm() {
   const [isSending, setIsSending] = useState(false);
   const [regFailed, setRegFailed] = useState(null);
+  const [regSuccess, setRegSuccess] = useState(null);
   const [avatarError, setAvatarError] = useState(null);
   const [bannerError, setBannerError] = useState(null);
   const [avatarImage, setAvatarImage] = useState(null);
@@ -42,17 +45,14 @@ function NewUserForm() {
   } = useForm({ resolver: yupResolver(schema) });
 
   async function registerUser(data) {
-    console.log(data);
     setIsSending(true);
 
     try {
       const response = await axios.post(regUserApiUrl, data);
-      console.log(response);
       if (response.status === 200) {
-        console.log("User successfully registered!");
+        setRegSuccess(true);
       }
     } catch (error) {
-      console.log("Registration failed: " + error);
       setRegFailed(error);
     } finally {
       setIsSending(false);

@@ -11,10 +11,7 @@ function ShowUserDetails(props) {
 
   useEffect(() => {
     function isFollowed(name) {
-      //const result = usersFollowed?.some((user) => user.name === name);
       const result = usersFollowed?.some((user) => user.name === name);
-      //console.log(name, result);
-      //console.log(name, result, "Followed:", usersFollowed);
       setUserIsFollowed(result);
     }
     // Checks the current username against the array of followed users.
@@ -30,7 +27,6 @@ function ShowUserDetails(props) {
       }}
       style={{ backgroundImage: `url(${profile?.banner ? profile.banner : "none"})` }}
     >
-      {/* <NavLink to={"./" + profile.name} className="user-link"> */}
       <div className="user__profile-imagecontainer">
         <img src={profile?.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" />
       </div>
@@ -63,7 +59,6 @@ function ShowUserDetails(props) {
           <FollowButton username={profile?.name} followed={usersFollowed} />
         </div>
       </div>
-      {/* </NavLink> */}
     </Col>
   );
 }

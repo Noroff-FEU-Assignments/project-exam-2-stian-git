@@ -10,7 +10,6 @@ export const SessionProvider = (props) => {
   const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
 
   useEffect(() => {
-    console.log("Loggedin", loggedIn?.name);
     async function setFollowedUsers() {
       const getProfileApiUrl = apiBaseUrl + "/profiles/" + loggedIn.name + "?_following=true&_followers=true";
       try {
@@ -18,7 +17,6 @@ export const SessionProvider = (props) => {
         const response = await axios(getProfileApiUrl);
         if (response.status === 200) {
           const data = await response.data;
-          console.log(response.data);
           setUsersFollowed(data.following);
         }
       } catch (error) {

@@ -1,5 +1,4 @@
-// TODO 16.2:
-// Tags-field got the default focus. Why?
+// TODO 22.2: Add success/error messages
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
@@ -11,19 +10,12 @@ import * as yup from "yup";
 import { apiBaseUrl, mediaUrlSyntax } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useGetSinglePost from "../hooks/useGetSinglePost";
-//
 
-//const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
-
-// When editing without making changes, the image shows, but is not shown as a valid url.
-
-// }
 const postApiUrl = apiBaseUrl + "/posts/";
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is a required field"),
   body: yup.string(),
-  //media: yup.string().when().nullable(yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"), ),
   media: yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"),
 });
 
@@ -31,6 +23,7 @@ export default function EditPostForm(props) {
   const [loggedIn, setLoggedIn] = useContext(SessionContext);
   const [isPosting, setIsPosting] = useState(false);
   const [postError, setPostError] = useState(null);
+  const [postSuccess, setPostSuccess] = useState(null);
   const [tags, setTags] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -48,10 +41,7 @@ export default function EditPostForm(props) {
   useEffect(() => {
     // Make sure we only retrieve the postdata if we are editing.
     if (postId) {
-      console.log(postId);
       setIsEditMode(true);
-      //GetSinglePost(postId);
-      //console.log(postData.tags);
       setTags(postData?.tags);
       // Register existing postdata as formdata to avoid updating a post with missing data:
       setValue("title", postData?.title);
@@ -62,7 +52,6 @@ export default function EditPostForm(props) {
 
   async function postContent(data) {
     setIsPosting(true);
-    console.log(data);
     try {
       // is this the right way to add headers? (it works though, but defaults?)
       axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
@@ -74,9 +63,8 @@ export default function EditPostForm(props) {
         response = await axios.post(postApiUrl, data);
       }
 
-      //console.log(response);
       if (response.status === 200) {
-        console.log("Your post was saved!");
+        setPostSuccess(true);
         if (!isEditMode) {
           // reset form
           document.querySelector("form").reset();
@@ -87,13 +75,10 @@ export default function EditPostForm(props) {
         }
       }
     } catch (error) {
-      console.log(error);
-      // 400 : if media url cannot be accessed. Used for other things?
+      // 400 : media url cannot be accessed.
       if (error.response?.status === 400) {
         setPostError("Saving post failed: " + error);
-        console.log("Image not found.");
       } else {
-        console.log("Something went wrong...");
         setPostError("Saving post failed: " + error);
       }
       // What if the token has expired or is wrong?
@@ -172,13 +157,3 @@ export default function EditPostForm(props) {
     </Container>
   );
 }
-
-//export default EditPostForm;
-
-// Object needs to look like this:
-// {
-//     "title": "Test Title 3",
-//     "body": "This is some strange text put in the body, <br> with a HTML-tag inside it too.",
-//     "tags": [],
-//     "media": ""
-//   }

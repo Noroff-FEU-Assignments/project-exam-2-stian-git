@@ -1,3 +1,4 @@
+// Add successmessage
 import React, { useEffect, useState } from "react";
 import { Button, Form, ListGroup } from "react-bootstrap";
 import * as yup from "yup";
@@ -11,8 +12,8 @@ const schema = yup.object().shape({
 });
 
 function PostCommentForm(props) {
-  //console.log(props.id);
   const [isSending, setIsSending] = useState(false);
+  const [commentError, setCommentError] = useState(null);
 
   const {
     register,
@@ -21,20 +22,17 @@ function PostCommentForm(props) {
   } = useForm({ resolver: yupResolver(schema) });
 
   async function addComment(data) {
-    console.log(data);
     setIsSending(true);
     const addCommentApiUrl = apiBaseUrl + "/posts/" + props.id + "/comment";
     try {
       const response = await axios.post(addCommentApiUrl, data);
-      console.log(response);
       if (response.status === 200) {
         console.log("Comment successfully added!");
         //Clear the input field.
         //Add a success message below the button?
       }
     } catch (error) {
-      console.log("Registration failed: " + error);
-      //setUpdateFailed(error);
+      setCommentError("Commenting failed: " + error);
     } finally {
       setIsSending(false);
     }

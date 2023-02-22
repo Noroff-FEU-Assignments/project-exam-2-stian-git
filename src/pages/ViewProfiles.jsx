@@ -7,9 +7,6 @@ import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constant
 import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 
-//const myUserName = "smg_testuser";
-//console.log("Username: ", myUserName);
-
 const bannerTest = "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg";
 
 function ViewProfiles() {
@@ -21,8 +18,6 @@ function ViewProfiles() {
   const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [offset, setOffset] = useState(0);
   const [noMoreProfiles, setNoMoreProfiles] = useState(false);
-
-  //console.log("Logged in user:", isLoggedIn.name);
 
   useEffect(() => {
     getUsers();
@@ -38,13 +33,9 @@ function ViewProfiles() {
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(usersApiUrl);
-      //console.log(response.data);
       setUsers(users.concat(response.data));
       setOffset(offset + profilesToLoad);
-      //console.log("New offset:", offset);
-      //console.log("Number of users: " + response.data.length);
       if (response.data.length < profilesToLoad) {
-        console.log("There ar eno more posts to load...disable button.");
         setNoMoreProfiles(true);
       }
     } catch (error) {
@@ -60,21 +51,17 @@ function ViewProfiles() {
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(usersFollowedApiUrl);
-      //console.log(response.data.following);
       if (response.status === 200) {
         const data = await response.data;
         setUsersFollowed(data.following);
       }
     } catch (error) {
-      //console.log(error);
       setError("Failed to retrieve users followed: " + error);
     } finally {
       setLoadingUsersFollowed(false);
     }
   }
 
-  // Add users banner on Stats?
-  // example banner: https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg
   return (
     <>
       <SearchUser />

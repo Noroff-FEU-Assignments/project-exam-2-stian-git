@@ -7,7 +7,6 @@ function ShowComment(props) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    //console.log(props);
     setData(props.commentData);
   }, [props]);
 

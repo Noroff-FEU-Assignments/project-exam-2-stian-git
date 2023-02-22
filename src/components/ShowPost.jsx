@@ -1,3 +1,4 @@
+// Handle errors when reactions fail?
 import axios from "axios";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
@@ -14,16 +15,15 @@ function ShowPost(props) {
   const [loggedIn, setLoggedIn] = useContext(SessionContext);
   const [post, setPost] = useState(null);
   const [hideComments, setHideComments] = useState(true);
+  const [deleteError, setDeleteError] = useState(null);
+
   useEffect(() => {
     setPost(props.postdata);
     if (props.comments === false) {
       setHideComments(false);
     }
-    //console.log(props);
     if (props?.postdata?.author?.name === loggedIn.name) {
-      //console.log("This is the owner!");
       setIsPostOwner(true);
-      //console.log(props);
     }
   }, [props]);
 
@@ -31,8 +31,6 @@ function ShowPost(props) {
     e.stopPropagation();
     const postId = e.target.dataset.postid;
     const deletePostApiUrl = apiBaseUrl + "/posts/" + postId;
-
-    //console.log("Deleting: " + e.target.dataset.postid);
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.delete(deletePostApiUrl);
@@ -42,9 +40,11 @@ function ShowPost(props) {
         setTimeout(() => {
           postContentContainer.parentElement.remove();
         }, 4000);
+      } else {
+        setDeleteError(`Failed to delete post.`);
       }
     } catch (error) {
-      console.log("An error occured deleting post: ", error);
+      setDeleteError(`Failed to delete post: ${error}`);
     }
   }
 
@@ -66,36 +66,27 @@ function ShowPost(props) {
     const postId = e.target.closest(".post").dataset.postid;
     const reaction = e.target.innerHTML.split(" ")[0];
     const count = e.target.innerHTML.split(" ")[1];
-    //console.log(reaction);
-    //console.log("Reacting to: " + postId);
-    //console.log(e.target.innerHTML);
 
     // Make API Call.
     const isEmojiAdded = await addReaction(postId, reaction);
-    //const isEmojiAdded = true;
+
     // Update counter if success
     if (isEmojiAdded) {
-      //console.log("Emoji has been added");
       e.target.innerHTML = `${reaction} ${parseInt(count) + 1}`;
-    } else {
-      // handle error?
     }
   }
   function countThisEmoji(emoji, reactions) {
     const currentEmoji = reactions?.find((reaction) => reaction.symbol === emoji);
-    //console.log(currentEmoji?.count);
     if (currentEmoji) {
       return currentEmoji.count;
     }
     return 0;
   }
   async function addReaction(id, emoji) {
-    console.log("Adding " + emoji + " to " + id);
     const addReactionUrl = apiBaseUrl + "/posts/" + id + "/react/" + emoji;
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.put(addReactionUrl);
-      console.log(response);
       if (response.status === 200) {
         console.log("Reaction added");
         return true;
@@ -183,16 +174,12 @@ function ShowPost(props) {
               </p>
             ))}
           </ListGroup.Item>
-
-          {/* {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""} */}
-          {/* hidden={hideComments} */}
         </ListGroup>
         <ListGroup className="list-group-flush comments" hidden={hideComments}>
           {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""}
         </ListGroup>
         {props.showlarge ? <PostCommentForm id={post?.id} /> : ""}
       </Card>
-      {/* {props.showlarge ? "Showing " : "Hiding"} */}
     </>
   );
 }

@@ -1,3 +1,4 @@
+// Add error and success message ?
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Image } from "react-bootstrap";
 import * as yup from "yup";
@@ -15,6 +16,7 @@ function EditUserForm(props) {
   // props should be a user object incl. name, email, banner, avatar, followers, following, _count
   const [isSending, setIsSending] = useState(false);
   const [updateFailed, setUpdateFailed] = useState(null);
+  const [editSuccess, setEditSuccess] = useState(null);
   const [avatarImage, setAvatarImage] = useState(null);
   const [bannerImage, setBannerImage] = useState(null);
 
@@ -35,13 +37,11 @@ function EditUserForm(props) {
     const updateUserApiUrl = apiBaseUrl + "/profiles/" + props.user.name + "/media";
     try {
       const response = await axios.put(updateUserApiUrl, data);
-      console.log(response);
       if (response.status === 200) {
-        console.log("User successfully updated!");
+        setEditSuccess(true);
         // Add a success message below the button?
       }
     } catch (error) {
-      console.log("Registration failed: " + error);
       setUpdateFailed(error);
     } finally {
       setIsSending(false);

@@ -12,25 +12,18 @@ export default function useGetSinglePost(postid) {
   useEffect(() => {
     async function fetchPost() {
       if (postid) {
-        //console.log("ID for hook:", postid);
         try {
           setLoading(true);
-          //console.log("Retrieving post ID from Hook: " + postid);
           const singlePostApiUrl = apiBaseUrl + "/posts/" + postid + "?_author=true&_comments=true&_reactions=true";
           axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
           const response = await axios.get(singlePostApiUrl);
-          //console.log(response);
           if (response.status === 200) {
-            //return true;
             const data = await response.data;
-            console.log(data);
             setPostData(data);
           } else {
             setError("An error occured retrieving the post.");
-            //return [];
           }
         } catch (error) {
-          //return [];
           setError("An error occured retrieving the post: ", error);
         } finally {
           setLoading(false);

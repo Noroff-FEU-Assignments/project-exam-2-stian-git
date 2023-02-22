@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-//import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import ShowPost from "../components/ShowPost";
 import ShowUserDetails from "../components/ShowUserDetails";
@@ -12,10 +11,6 @@ function SinglePost() {
   const { postid } = useParams();
   const { postData, loading, error } = useGetSinglePost(postid);
   const { userData, userLoading, userError } = useGetSingleProfile(postData?.author?.name);
-  //const { userData, userLoading, userError } = useGetSingleProfile(undefined);
-  //console.log(postData?.author?.name);
-  // Show userProfile next to it.
-  // Concider tags?
 
   return (
     <>
