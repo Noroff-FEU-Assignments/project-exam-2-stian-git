@@ -7,6 +7,8 @@ import ShowPost from "./ShowPost";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import ShowStatusMessage from "./ShowStatusMessage";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
   value: yup.string().required("ID or tag is required."),
@@ -19,6 +21,9 @@ function AllPosts() {
   const [postsType, setPostsType] = useState();
   const [allTags, setAllTags] = useState([]);
   const [loadTags, setLoadTags] = useState(false);
+  const [error, setError] = useState(null);
+
+  const history = useNavigate();
 
   const {
     register,
@@ -97,9 +102,11 @@ function AllPosts() {
         //return true;
         return response.data;
       } else {
+        //setError(true);
         return [];
       }
     } catch (error) {
+      setError(true);
       return [];
     }
   }
@@ -129,41 +136,52 @@ function AllPosts() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(doSearch)} className="searchform">
-        <Form.Group className="searchform__post" controlId={`formPostSearch`}>
-          <Form.Control placeholder="Post ID or Tag Search" className="searchform__post-input" {...register("value")} />
-          <Button variant="primary" type="submit" className="searchform__post-submitbutton">
-            Search
-          </Button>
-        </Form.Group>
-      </Form>
-      <h1 className="posttypeform__section-h1">Posts</h1>
-
-      <Form onChange={changePostsType} className="posttypeform">
-        <div className="posttypeform__section">
-          <h2 className="posttypeform__section-item-h2">Filter posts:</h2>
-          <Form.Check type="radio" value={"valueall"} label="Show All" name="posttypeselection" id="typeall1" defaultChecked className="posttypeform__section-item" />
-          <Form.Check type="radio" value={"valuefollowed"} label="Only Followed" name="posttypeselection" id="typefollowed" className="posttypeform__section-item" />
-        </div>
-        <div className="posttypeform__section">
-          <h2 className="posttypeform__section-item-h2">Trending tags:</h2>
-          {allTags.map((tag, index) => (
-            <Form.Check type="radio" value={tag[0]} label={`# ${tag[0]} (${tag[1]})`} name="posttypeselection" id={`tag-${index}`} key={`tag-${index}`} className="posttypeform__section-item" />
-          ))}
-        </div>
-      </Form>
-      {isLoggedIn ? (
-        <CardGroup className="postscontainer-wrapper">
-          <Row className="postscontainer">
-            {posts.map((post) => (
-              <ShowPost postdata={post} key={post.id} />
-            ))}
-          </Row>
-        </CardGroup>
+      {error ? (
+        <>
+          <ShowStatusMessage display={error} text={`Loading posts failed. Please try again.`} />
+          <p
+            className="link"
+            onClick={() => {
+              history(-1);
+            }}>
+            Click here to go back.
+          </p>
+        </>
       ) : (
-        "User not logged in"
+        <>
+          <Form onSubmit={handleSubmit(doSearch)} className="searchform">
+            <Form.Group className="searchform__post" controlId={`formPostSearch`}>
+              <Form.Control placeholder="Post ID or Tag Search" className="searchform__post-input" {...register("value")} />
+              <Button variant="primary" type="submit" className="searchform__post-submitbutton">
+                Search
+              </Button>
+            </Form.Group>
+          </Form>
+          <h1 className="posttypeform__section-h1">Posts</h1>
+
+          <Form onChange={changePostsType} className="posttypeform">
+            <div className="posttypeform__section">
+              <h2 className="posttypeform__section-item-h2">Filter posts:</h2>
+              <Form.Check type="radio" value={"valueall"} label="Show All" name="posttypeselection" id="typeall1" defaultChecked className="posttypeform__section-item" />
+              <Form.Check type="radio" value={"valuefollowed"} label="Only Followed" name="posttypeselection" id="typefollowed" className="posttypeform__section-item" />
+            </div>
+            <div className="posttypeform__section">
+              <h2 className="posttypeform__section-item-h2">Trending tags:</h2>
+              {allTags.map((tag, index) => (
+                <Form.Check type="radio" value={tag[0]} label={`# ${tag[0]} (${tag[1]})`} name="posttypeselection" id={`tag-${index}`} key={`tag-${index}`} className="posttypeform__section-item" />
+              ))}
+            </div>
+          </Form>
+          <CardGroup className="postscontainer-wrapper">
+            <Row className="postscontainer">
+              {posts.map((post) => (
+                <ShowPost postdata={post} key={post.id} />
+              ))}
+            </Row>
+          </CardGroup>
+          <Container className="button__wrapper">{noMorePages ? <Button disabled>No more posts.</Button> : <Button onClick={getAllPosts}>Load more posts</Button>}</Container>
+        </>
       )}
-      <Container className="button__wrapper">{noMorePages ? <Button disabled>No more posts.</Button> : <Button onClick={getAllPosts}>Load more posts</Button>}</Container>
     </>
   );
 }

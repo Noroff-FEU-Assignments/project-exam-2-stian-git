@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
 import SearchUser from "../components/SearchUser";
+import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUserDetails from "../components/ShowUserDetails";
 import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
@@ -56,7 +57,7 @@ function ViewProfiles() {
         setUsersFollowed(data.following);
       }
     } catch (error) {
-      setError("Failed to retrieve users followed: " + error);
+      // Ignoring this error because it's not that important.
     } finally {
       setLoadingUsersFollowed(false);
     }
@@ -65,13 +66,19 @@ function ViewProfiles() {
   return (
     <>
       <SearchUser />
-      <h1>Profiles</h1>
-      <Row className="user-wrapper">
-        {users.map((profile) => (
-          <ShowUserDetails userprofile={profile} key={profile.name} />
-        ))}
-      </Row>
-      <Container className="button__wrapper">{noMoreProfiles ? <Button disabled>No more profiles</Button> : <Button onClick={getUsers}>More profiles</Button>}</Container>
+      {error ? (
+        <ShowStatusMessage display={true} text={`Unable to retrieve user profiles. Please reload the page to try again.`} />
+      ) : (
+        <>
+          <h1>Profiles</h1>
+          <Row className="user-wrapper">
+            {users.map((profile) => (
+              <ShowUserDetails userprofile={profile} key={profile.name} />
+            ))}
+          </Row>
+          <Container className="button__wrapper">{noMoreProfiles ? <Button disabled>No more profiles</Button> : <Button onClick={getUsers}>More profiles</Button>}</Container>
+        </>
+      )}
     </>
   );
 }
