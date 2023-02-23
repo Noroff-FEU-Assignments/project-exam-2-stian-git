@@ -1,6 +1,5 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import { apiBaseUrl, storageKeyFollowedUsers, storageKeySessionInfo } from "../constants/variables";
+import React from "react";
+import { storageKeySessionInfo } from "../constants/variables";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 const SessionContext = React.createContext([null, () => {}]);

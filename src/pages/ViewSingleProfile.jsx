@@ -8,9 +8,9 @@ import ShowSpinner from "../components/ShowSpinner";
 import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUser from "../components/ShowUser";
 import ShowUserDetails from "../components/ShowUserDetails";
-import { apiBaseUrl } from "../constants/variables";
+import { apiBaseUrl, storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
-import useUsersFollowed from "../hooks/useUsersFollowed";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 function ViewSingleProfile() {
   // retrieve username from url:
@@ -28,9 +28,8 @@ function ViewSingleProfile() {
   const [noPostsToShow, setNoPostsToShow] = useState(false);
   const [noFollowingsToShow, setNoFollowingsToShow] = useState(false);
   const [noFollowedUsersToShow, setNoFollowedUsersToShow] = useState(false);
-  //const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
-  //const [usersFollowed] = useState([]);
-  const [usersFollowed] = useUsersFollowed(userProfile);
+  const [usersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
   const [postsError, setPostsError] = useState(null);
@@ -41,9 +40,9 @@ function ViewSingleProfile() {
   //     setIsOwner(true);
   //     console.log("Owner!");
   //     // Make sure we reload the followed users array if this is the owners page:
-  //     setUsersFollowed(userProfile?.following);
+  //     setUsersFolowed(userProfile?.following);
   //   }
-  // }, [setUsersFollowed]);
+  // }, [setUsersFolowed]);
   useEffect(() => {
     // get all userinfo
     async function getUserProfile() {
@@ -61,9 +60,8 @@ function ViewSingleProfile() {
             setIsOwner(true);
             // Make sure we reload the followed users array if this is the owners page:
             //setUsersFollowed(data.following);
-            //setUsersFollowed(followed);
-            //updateFollowed(data.following);
-            //useUsersFollowed(data.following);
+            console.log("Adding:", data.following);
+            window.localStorage.setItem(storageKeyFollowedUsers, JSON.stringify(data.following));
           }
           if (data.following.length === 0) {
             setNoFollowingsToShow(true);
@@ -106,12 +104,8 @@ function ViewSingleProfile() {
       }
     }
     getUsersPosts();
-    //return () => updateFollowed();
   }, [username, loggedIn]);
 
-  // useEffect(() => {
-
-  // }, [userProfile, setUsersFollowed])
   useEffect(() => {
     if (loadingProfile && loadingPosts) {
       setLoading(true);
@@ -120,13 +114,6 @@ function ViewSingleProfile() {
     }
   }, [loadingPosts, loadingProfile]);
 
-  // function updateFollowed(data) {
-  //   //setUsersFollowed(data);
-  //   const saveFollowed = useCallback(() => {
-  //     setUsersFollowed(data);
-  //   }, []);
-  //   return () => {};
-  // }
   return (
     <>
       {loading ? (

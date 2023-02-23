@@ -12,6 +12,7 @@ function FollowButton(props) {
   const [isProfilesPage, setIsProfilesPage] = useState(false);
 
   useEffect(() => {
+    //console.log(usersFollowed);
     function isFollowed(name) {
       const result = props.followed?.some((user) => user.name === name);
       setUserIsFollowed(result);

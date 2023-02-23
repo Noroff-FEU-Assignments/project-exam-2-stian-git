@@ -7,36 +7,45 @@ import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUserDetails from "../components/ShowUserDetails";
 import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
-import useLocalStorage from "../hooks/useLocalStorage";
 
 function ViewProfiles() {
   const [isLoggedIn] = useContext(SessionContext);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
-  //const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
-  const [loadingUsers, setLoadingUsersFollowed] = useState(false);
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
-  //const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
-  const [setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState(profilesToLoad);
   const [noMoreProfiles, setNoMoreProfiles] = useState(false);
 
   useEffect(() => {
+    async function getUsers() {
+      setLoadingProfiles(true);
+      const usersApiUrl = apiBaseUrl + "/profiles?sortOrder=asc&limit=" + profilesToLoad;
+      try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
+        const response = await axios.get(usersApiUrl);
+        setUsers(response.data);
+        //console.log("Profiles", response.data);
+        if (response.data.length < profilesToLoad) {
+          setNoMoreProfiles(true);
+        }
+        //return data;
+      } catch (error) {
+        setError("Retrieving profiles failed: ", error);
+      } finally {
+        setLoadingProfiles(false);
+      }
+    }
     getUsers();
-  }, []);
+  }, [isLoggedIn]);
 
-  useEffect(() => {
-    getUsersFollowed();
-  }, []);
-
-  async function getUsers() {
+  async function getMoreUsers() {
     setLoadingProfiles(true);
     const usersApiUrl = apiBaseUrl + "/profiles?sortOrder=asc&limit=" + profilesToLoad + "&offset=" + offset;
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(usersApiUrl);
-      setUsers(users.concat(response.data));
-      setOffset(offset + profilesToLoad);
+      const newUsers = users.concat(response.data);
+      setUsers(newUsers);
       if (response.data.length < profilesToLoad) {
         setNoMoreProfiles(true);
       }
@@ -47,22 +56,22 @@ function ViewProfiles() {
     }
   }
 
-  async function getUsersFollowed() {
-    setLoadingUsersFollowed(true);
-    const usersFollowedApiUrl = apiBaseUrl + "/profiles/" + isLoggedIn.name + "?_following=true";
-    try {
-      axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
-      const response = await axios.get(usersFollowedApiUrl);
-      if (response.status === 200) {
-        const data = await response.data;
-        setUsersFollowed(data.following);
+  useEffect(() => {
+    async function getUsersFollowed() {
+      const usersFollowedApiUrl = apiBaseUrl + "/profiles/" + isLoggedIn.name + "?_following=true";
+      try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
+        const response = await axios.get(usersFollowedApiUrl);
+        if (response.status === 200) {
+          const data = await response.data;
+          window.localStorage.setItem(storageKeyFollowedUsers, JSON.stringify(data.following));
+        }
+      } catch (error) {
+        // Ignoring this error because it's not that important.
       }
-    } catch (error) {
-      // Ignoring this error because it's not that important.
-    } finally {
-      setLoadingUsersFollowed(false);
     }
-  }
+    getUsersFollowed();
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -73,12 +82,25 @@ function ViewProfiles() {
         <>
           <h1>Profiles</h1>
           <Row className="user-wrapper">
-            {users.map((profile) => (
-              <ShowUserDetails userprofile={profile} key={profile.name} />
+            {users.map((profile, index) => (
+              <ShowUserDetails userprofile={profile} key={index} />
             ))}
           </Row>
           {loadingProfiles ? <ShowSpinner /> : ""}
-          <Container className="button__wrapper">{noMoreProfiles ? <Button disabled>No more profiles</Button> : <Button onClick={getUsers}>More profiles</Button>}</Container>
+          <Container className="button__wrapper">
+            {noMoreProfiles ? (
+              <Button disabled>No more profiles</Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  setOffset(offset + profilesToLoad);
+                  getMoreUsers();
+                  console.log("Click");
+                }}>
+                More profiles
+              </Button>
+            )}
+          </Container>
         </>
       )}
     </>
