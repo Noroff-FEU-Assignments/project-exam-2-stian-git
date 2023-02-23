@@ -8,14 +8,13 @@ $h2-color: $yellow;
 $hover-color: #92d1b2;
 
 // icons
-.fa-trash-can {
-  color: $red;
-  &:hover {
-    color: $hover-color;
+.actionicon {
+  &-delete {
+    color: $red;
   }
-}
-.fa-pen-to-square {
-  color: $yellow;
+  &-edit {
+    color: $yellow;
+  }
   &:hover {
     color: $hover-color;
   }
@@ -734,4 +733,10 @@ p {
 
 .alert {
   margin: 1em 0;
+}
+
+.badge {
+  align-self: center;
+  //font-weight: 600;
+  font-family: $font-family-serif;
 }

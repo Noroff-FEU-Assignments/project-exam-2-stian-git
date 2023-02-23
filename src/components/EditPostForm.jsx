@@ -4,7 +4,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Col, Container, Form, Image } from "react-bootstrap";
+import { Button, Col, Container, Form, Image, Spinner } from "react-bootstrap";
 import { InputTags } from "react-bootstrap-tagsinput";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -66,6 +66,7 @@ export default function EditPostForm(props) {
       }
 
       if (response.status === 200) {
+        setPostError(null);
         setPostSuccess(true);
         if (!isEditMode) {
           // reset form
@@ -80,8 +81,10 @@ export default function EditPostForm(props) {
       // 400 : media url cannot be accessed.
       if (error.response?.status === 400) {
         setPostError("Saving post failed. Maybe the media url is wrong?");
+        setPostSuccess(null);
       } else {
         setPostError("Saving post failed: " + error);
+        setPostSuccess(null);
       }
       // What if the token has expired or is wrong?
     } finally {
@@ -104,6 +107,7 @@ export default function EditPostForm(props) {
         <Form onSubmit={handleSubmit(postContent)} className="postform">
           <Form.Group className="mb-3 postform-input" controlId="edistPostFormTitle">
             <Form.Control className="postform-input-field" type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? postData?.title : ""} />
+            <Form.Text className="text-muted">{errors.title ? <span className="form-requirement">{errors.title.message}</span> : ""}</Form.Text>
           </Form.Group>
           <Form.Group className="mb-3 postform-input" controlId="edistPostFormBody">
             <Form.Control className="postform-input-field" as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? postData?.body : ""} />
@@ -152,10 +156,17 @@ export default function EditPostForm(props) {
             </Form.Text>
           </Form.Group>
           <Button variant="primary" type="submit" className="postform-button">
-            Submit
+            {isPosting ? (
+              <>
+                <span className="">Saving...</span>
+                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+              </>
+            ) : (
+              "Save Post"
+            )}
           </Button>
           <ShowStatusMessage display={postError} text={postError} />
-          <ShowStatusMessage display={postSuccess} text={postSuccess} isSuccess={true} />
+          <ShowStatusMessage display={postSuccess} isSuccess={true} />
         </Form>
       </Col>
     </Container>

@@ -120,9 +120,9 @@ function ShowPost(props) {
           {isPostOwner ? (
             <Card.Text className="post__body-toolbar">
               <Link to={`/post/${post?.id}/edit`}>
-                <i className="fa-solid fa-pen-to-square"></i>
+                <i className="fa-solid fa-pen-to-square actionicon actionicon-edit"></i>
               </Link>
-              <i className="fa-solid fa-trash-can" data-postid={post?.id} onClick={deletePost}></i>
+              <i className="fa-solid fa-trash-can actionicon actionicon-delete" data-postid={post?.id} onClick={deletePost}></i>
             </Card.Text>
           ) : (
             ""
