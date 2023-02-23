@@ -19,7 +19,6 @@ const schema = yup.object().shape({
 function LoginUser() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [loginError, setLoginError] = useState(null);
-  //const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
 
   const {
@@ -47,9 +46,6 @@ function LoginUser() {
       setIsAuthenticating(false);
     }
   }
-
-  // Add spinner when logging in.
-  // Show login error
 
   return (
     <>
