@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { apiBaseUrl } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 
 export default function useGetSingleProfile(username) {
-  const [loggedIn, setLoggedIn] = useContext(SessionContext);
+  const [loggedIn] = useContext(SessionContext);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -15,7 +15,7 @@ export default function useGetSingleProfile(username) {
         try {
           setLoading(true);
           const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
-          axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
+          axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn?.accessToken}` };
           const response = await axios.get(getProfileApiUrl);
           if (response.status === 200) {
             //return true;
@@ -32,6 +32,6 @@ export default function useGetSingleProfile(username) {
       }
     }
     fetchProfile();
-  }, [username]);
+  }, [username, loggedIn]);
   return { userData, loading, error };
 }

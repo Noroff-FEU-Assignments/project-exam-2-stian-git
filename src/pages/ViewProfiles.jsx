@@ -9,10 +9,8 @@ import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constant
 import SessionContext from "../context/SessionContext";
 import useLocalStorage from "../hooks/useLocalStorage";
 
-const bannerTest = "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1476&q=80.jpg";
-
 function ViewProfiles() {
-  const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
+  const [isLoggedIn] = useContext(SessionContext);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
   const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
   const [users, setUsers] = useState([]);

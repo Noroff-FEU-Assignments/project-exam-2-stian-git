@@ -7,7 +7,7 @@ import { validEmailDomains } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 
 function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
+  const [isLoggedIn] = useContext(SessionContext);
   return (
     <>
       {isLoggedIn ? (

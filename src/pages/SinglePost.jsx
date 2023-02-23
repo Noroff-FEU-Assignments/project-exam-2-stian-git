@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ShowPost from "../components/ShowPost";
@@ -12,7 +12,7 @@ import useGetSingleProfile from "../hooks/useGetSingleProfile";
 function SinglePost() {
   const { postid } = useParams();
   const { postData, loading, error } = useGetSinglePost(postid);
-  const { userData, userLoading, userError } = useGetSingleProfile(postData?.author?.name);
+  const { userData, userLoading } = useGetSingleProfile(postData?.author?.name);
   const history = useNavigate();
 
   return (

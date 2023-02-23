@@ -1,5 +1,3 @@
-// TODO 13.2: Adding profiles of followers are next.
-
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { CardGroup, Row } from "react-bootstrap";
@@ -10,9 +8,9 @@ import ShowSpinner from "../components/ShowSpinner";
 import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUser from "../components/ShowUser";
 import ShowUserDetails from "../components/ShowUserDetails";
-import { apiBaseUrl, storageKeyFollowedUsers } from "../constants/variables";
+import { apiBaseUrl } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
-import useLocalStorage from "../hooks/useLocalStorage";
+import useUsersFollowed from "../hooks/useUsersFollowed";
 
 function ViewSingleProfile() {
   // retrieve username from url:
@@ -20,7 +18,7 @@ function ViewSingleProfile() {
 
   const { username } = useParams();
 
-  const [loggedIn, setLoggedIn] = useContext(SessionContext);
+  const [loggedIn] = useContext(SessionContext);
 
   // should profile be null or array?
   const [userProfile, setUserProfile] = useState(null);
@@ -30,11 +28,22 @@ function ViewSingleProfile() {
   const [noPostsToShow, setNoPostsToShow] = useState(false);
   const [noFollowingsToShow, setNoFollowingsToShow] = useState(false);
   const [noFollowedUsersToShow, setNoFollowedUsersToShow] = useState(false);
-  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+  //const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+  //const [usersFollowed] = useState([]);
+  const [usersFollowed] = useUsersFollowed(userProfile);
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
   const [postsError, setPostsError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // useEffect(() => {
+  //   if (userProfile?.username === loggedIn.name) {
+  //     setIsOwner(true);
+  //     console.log("Owner!");
+  //     // Make sure we reload the followed users array if this is the owners page:
+  //     setUsersFollowed(userProfile?.following);
+  //   }
+  // }, [setUsersFollowed]);
   useEffect(() => {
     // get all userinfo
     async function getUserProfile() {
@@ -48,9 +57,13 @@ function ViewSingleProfile() {
           setUserProfile(data);
           // If this is the owner the view will be slightly different.
           if (username === loggedIn.name) {
+            //const followed = data.following;
             setIsOwner(true);
             // Make sure we reload the followed users array if this is the owners page:
-            setUsersFollowed(data.following);
+            //setUsersFollowed(data.following);
+            //setUsersFollowed(followed);
+            //updateFollowed(data.following);
+            //useUsersFollowed(data.following);
           }
           if (data.following.length === 0) {
             setNoFollowingsToShow(true);
@@ -93,8 +106,12 @@ function ViewSingleProfile() {
       }
     }
     getUsersPosts();
-  }, [username]);
+    //return () => updateFollowed();
+  }, [username, loggedIn]);
 
+  // useEffect(() => {
+
+  // }, [userProfile, setUsersFollowed])
   useEffect(() => {
     if (loadingProfile && loadingPosts) {
       setLoading(true);
@@ -103,6 +120,13 @@ function ViewSingleProfile() {
     }
   }, [loadingPosts, loadingProfile]);
 
+  // function updateFollowed(data) {
+  //   //setUsersFollowed(data);
+  //   const saveFollowed = useCallback(() => {
+  //     setUsersFollowed(data);
+  //   }, []);
+  //   return () => {};
+  // }
   return (
     <>
       {loading ? (

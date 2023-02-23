@@ -4,7 +4,7 @@ import FollowButton from "./FollowButton";
 
 function ShowUser(props) {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
 
   useEffect(() => {
     setUser(props.user);
@@ -16,10 +16,9 @@ function ShowUser(props) {
       key={`followers-${user?.name}`}
       onClick={(e) => {
         window.location.href = `/profiles/${user?.name}`;
-      }}
-    >
+      }}>
       <div className="follow__container-info">
-        <img src={user?.avatar ? user.avatar : defaultAvatar} className="follow__container-info-img" />
+        <img src={user?.avatar ? user.avatar : defaultAvatar} className="follow__container-info-img" alt={`Profile image of ${user?.name}`} title={`Profile image of ${user?.name}`} />
         <h2 className="follow__container-info-name">{user?.name}</h2>
       </div>
       <div className="follow__container-buttons">
