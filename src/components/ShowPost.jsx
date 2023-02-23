@@ -4,15 +4,14 @@ import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Form, ListGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { apiBaseUrl, availableEmojies } from "../constants/variables";
+import { apiBaseUrl } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import FormatTimeStamp from "./FormatTimeStamp";
-
 import ShowComment from "./ShowComment";
-
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import ReactToPost from "./ReactToPost";
 
 const schema = yup.object().shape({
   body: yup.string().min(3, "Need 3 characters").required("Please enter a comment before sending."),
@@ -63,61 +62,6 @@ function ShowPost(props) {
       }
     } catch (error) {
       setDeleteError(`Failed to delete post: ${error}`);
-    }
-  }
-
-  function countReactions(allReactions) {
-    let counter = 0;
-    // filter out emojies to display only the ones available for this site. (other frontends may use other reactions)
-    const filteredArray = allReactions.filter((reaction) => {
-      return availableEmojies.includes(reaction.symbol);
-    });
-    // Counts the total number of reactions for each available emoji.
-    filteredArray.forEach((element) => {
-      counter = counter + element.count;
-    });
-    return counter;
-  }
-
-  async function reactToPost(e) {
-    e.stopPropagation();
-    const postId = e.target.closest(".post").dataset.postid;
-    const reaction = e.target.innerHTML.split(" ")[0];
-    const count = e.target.innerHTML.split(" ")[1];
-
-    // Make API Call.
-    const isEmojiAdded = await addReaction(postId, reaction);
-
-    // Update counter if success
-    if (isEmojiAdded) {
-      e.target.innerHTML = `${reaction} ${parseInt(count) + 1}`;
-    } else {
-      // Marks the failed emoji temporarily to indicate an error has occured.
-      e.target.classList.add("comments__reactions-emoji-error");
-      setTimeout(() => {
-        e.target.classList.remove("comments__reactions-emoji-error");
-      }, 2000);
-    }
-  }
-  function countThisEmoji(emoji, reactions) {
-    const currentEmoji = reactions?.find((reaction) => reaction.symbol === emoji);
-    if (currentEmoji) {
-      return currentEmoji.count;
-    }
-    return 0;
-  }
-  async function addReaction(id, emoji) {
-    const addReactionUrl = apiBaseUrl + "/posts/" + id + "/react/" + emoji;
-    try {
-      axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
-      const response = await axios.put(addReactionUrl);
-      if (response.status === 200) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      return false;
     }
   }
 
@@ -206,25 +150,11 @@ function ShowPost(props) {
             </p>
           ))}
         </ListGroup>
-        <ListGroup className="list-group-flush post__comment-header">
-          <p className="post__comment-count">{post?.comments ? post.comments.length : "No"} Comments </p>
-          <p className="post__comment-count">{post?.reactions ? countReactions(post.reactions) : "No"} Reactions</p>
-        </ListGroup>
-        <ListGroup className="list-group-flush comments">
-          <ListGroup.Item className="comments__reactions">
-            {availableEmojies.map((emoji, index) => (
-              <p key={index} className="comments__reactions-emoji" onClick={reactToPost}>
-                {emoji} {countThisEmoji(emoji, post?.reactions)}
-              </p>
-            ))}
-          </ListGroup.Item>
-        </ListGroup>
-
+        <ReactToPost data={post} />
         {/* Comments: */}
         <ListGroup className="list-group-flush comments" hidden={hideComments}>
           {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""}
         </ListGroup>
-        {/* {props.showlarge ? <PostCommentForm id={post?.id} /> : ""} */}
         {props.showlarge ? (
           <ListGroup.Item className="comments__form">
             <Form onSubmit={handleSubmit(addComment)}>
