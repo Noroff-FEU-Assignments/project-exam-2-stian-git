@@ -11,7 +11,10 @@ export const tagsToShow = 5;
 export const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?|^$/;
 export const mediaUrlSyntax_old = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
 // Below regex works, but has not been tested against the API. Does it support all of these?
-export const allowedUserNameRegex = /^[\w\d\!\%\@\$\+\&\~\#\^\*\=\|]*$/;
+
+export const allowedUserNameRegex = /^[\w\d]*$/;
+//export const allowedUserNameRegex = /^[\w\d\!\%\@\$\+\&\~\#\^\*\=\|]*$/;
+
 export const validEmailDomains = ["stud.noroff.no", "noroff.no"];
 
 export const defaultAvatar = "\\images\\default_avatar_60pst opacity.png";

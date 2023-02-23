@@ -6,7 +6,7 @@ import FollowButton from "./FollowButton";
 
 function ShowUserDetails(props) {
   const [profile, setProfile] = useState(null);
-  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+  const [usersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [userIsFollowed, setUserIsFollowed] = useState(false);
 
   useEffect(() => {
@@ -18,17 +18,16 @@ function ShowUserDetails(props) {
     isFollowed(props.userprofile?.name);
 
     setProfile(props?.userprofile);
-  }, [props]);
+  }, [props, usersFollowed]);
   return (
     <Col
       className={userIsFollowed ? "user user-isfollowed" : "user"}
       onClick={() => {
         window.location.href = `/profiles/${profile?.name}`;
       }}
-      style={{ backgroundImage: `url(${profile?.banner ? profile.banner : "none"})` }}
-    >
+      style={{ backgroundImage: `url(${profile?.banner ? profile.banner : "none"})` }}>
       <div className="user__profile-imagecontainer">
-        <img src={profile?.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" />
+        <img src={profile?.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" alt={`${profile?.name}'s Avatar`} title={`${profile?.name}'s Avatar`} />
       </div>
 
       <div className="user__profile">
@@ -36,8 +35,7 @@ function ShowUserDetails(props) {
           className="user__profile-details"
           onClick={() => {
             window.location.href = `/profiles/${profile?.name}`;
-          }}
-        >
+          }}>
           <h2 className="user__profile-details-name">{profile?.name}</h2>
           <p
             className="user__profile-details-email"
@@ -45,8 +43,7 @@ function ShowUserDetails(props) {
             onClick={(e) => {
               e.stopPropagation();
               window.location.href = `mailto:${profile?.email}`;
-            }}
-          >
+            }}>
             {profile?.email}
           </p>
         </div>

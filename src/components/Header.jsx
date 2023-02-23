@@ -11,7 +11,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 export default function Header() {
   const [socialUsers, setSocialUsers] = useLocalStorage(storageKeyFollowedUsers, null);
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
-  const [activePage, setActivePage] = useState("home");
+  //const [activePage, setActivePage] = useState("home");
   const [showMenu, setShowMenu] = useState(false);
   const history = useNavigate();
 

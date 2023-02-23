@@ -34,8 +34,6 @@ function NewUserForm() {
   const [isSending, setIsSending] = useState(false);
   const [regFailed, setRegFailed] = useState(null);
   const [regSuccess, setRegSuccess] = useState(null);
-  const [avatarError, setAvatarError] = useState(null);
-  const [bannerError, setBannerError] = useState(null);
   const [avatarImage, setAvatarImage] = useState(null);
   const [bannerImage, setBannerImage] = useState(null);
 
@@ -101,7 +99,7 @@ function NewUserForm() {
           ) : (
             <Image
               className="mediaThumb"
-              src={document.querySelector("#regUserFormAvatar")?.value}
+              src={avatarImage}
               onError={(e) => {
                 e.target.style.display = "none";
               }}
@@ -120,7 +118,7 @@ function NewUserForm() {
           ) : (
             <Image
               className="mediaThumb"
-              src={document.querySelector("#regUserFormBanner")?.value}
+              src={bannerImage}
               onError={(e) => {
                 e.target.style.display = "none";
               }}

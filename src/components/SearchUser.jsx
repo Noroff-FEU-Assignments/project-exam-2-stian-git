@@ -27,6 +27,7 @@ function SearchUser() {
           Search
         </Button>
       </Form.Group>
+      <Form.Text className="text-muted">{errors.searchstring ? <span className="form-requirement">{errors.searchstring.message}</span> : ""}</Form.Text>
     </Form>
   );
 }

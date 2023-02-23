@@ -7,7 +7,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 
 function FollowButton(props) {
   const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
-  const [loggedIn, setLoggedIn] = useContext(SessionContext);
+  const [loggedIn] = useContext(SessionContext);
   const [userIsFollowed, setUserIsFollowed] = useState(false);
   const [isProfilesPage, setIsProfilesPage] = useState(false);
 
@@ -20,7 +20,7 @@ function FollowButton(props) {
     isFollowed(props.username);
     const currentSitePath = document.location.pathname;
     setIsProfilesPage(currentSitePath.includes("profiles"));
-  }, [props]);
+  }, [props, usersFollowed]);
 
   function toggleFollow(e) {
     e.stopPropagation();

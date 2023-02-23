@@ -5,7 +5,7 @@ import { apiBaseUrl, availableEmojies } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 
 function ReactToPost(props) {
-  const [loggedIn, setLoggedIn] = useContext(SessionContext);
+  const [loggedIn] = useContext(SessionContext);
   const [post, setPost] = useState(null);
 
   useEffect(() => {

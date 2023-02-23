@@ -15,7 +15,7 @@ const schema = yup.object().shape({
   value: yup.string().required("ID or tag is required."),
 });
 function AllPosts() {
-  const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
+  const [isLoggedIn] = useContext(SessionContext);
   const [posts, setPosts] = useState([]);
   const [offset, setOffset] = useState(0);
   const [noMorePages, setNoMorePages] = useState(false);
@@ -65,7 +65,7 @@ function AllPosts() {
       // Sets the allTags-state with the data that will be presented.
       setAllTags(filteredArray);
     }
-    if (loadTags == true) {
+    if (loadTags === true) {
       countTags();
       setLoadTags(false);
     }
@@ -160,6 +160,7 @@ function AllPosts() {
                 Search
               </Button>
             </Form.Group>
+            <Form.Text className="text-muted">{errors.value ? <span className="form-requirement">{errors.value.message}</span> : ""}</Form.Text>
           </Form>
           <h1 className="posttypeform__section-h1">Posts</h1>
 

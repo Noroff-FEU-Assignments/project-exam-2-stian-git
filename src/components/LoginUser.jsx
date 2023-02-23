@@ -37,10 +37,10 @@ function LoginUser() {
       setIsLoggedIn(response.data);
     } catch (error) {
       // handle error code: 401 (wrong username or password)
-      if (error.response.status == 401) {
-        setLoginError("Login failed. Please try again.");
+      if (error.response.status === 401) {
+        setLoginError(true);
       } else {
-        setLoginError("Login failed: " + error);
+        setLoginError(true);
       }
     } finally {
       setIsAuthenticating(false);
