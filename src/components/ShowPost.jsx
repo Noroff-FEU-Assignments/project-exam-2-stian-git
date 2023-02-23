@@ -2,7 +2,7 @@
 import axios from "axios";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Form, ListGroup, Modal } from "react-bootstrap";
+import { Button, Card, Form, ListGroup, Modal, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { apiBaseUrl } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
@@ -163,7 +163,14 @@ function ShowPost(props) {
                   <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" {...register("body")} />
                   {commentError ? <ShowStatusMessage display={true} text={`Failed to save comment. Please try again.`} /> : ""}
                   <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post?.id}>
-                    Send
+                    {isSending ? (
+                      <>
+                        <span className="">Saving...</span>
+                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                      </>
+                    ) : (
+                      "Save Comment"
+                    )}
                   </Button>
                 </Form.Group>
               </Form>

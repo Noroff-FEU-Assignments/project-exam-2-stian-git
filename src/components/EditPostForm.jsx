@@ -1,6 +1,3 @@
-// TODO 22.2: Add success/error messages
-// Started. Success is okey, but error shows up after removing it. (when clicking into another thing)
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
@@ -22,13 +19,13 @@ const schema = yup.object().shape({
 });
 
 export default function EditPostForm(props) {
-  const [loggedIn, setLoggedIn] = useContext(SessionContext);
+  const [loggedIn] = useContext(SessionContext);
   const [isPosting, setIsPosting] = useState(false);
   const [postError, setPostError] = useState(null);
   const [postSuccess, setPostSuccess] = useState(null);
   const [tags, setTags] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
+  //const [imageUrl, setImageUrl] = useState(null);
   const postId = props?.id;
   const { postData, loading, error } = useGetSinglePost(postId);
 
@@ -51,7 +48,6 @@ export default function EditPostForm(props) {
       setValue("media", postData?.media);
     }
   }, [postData]);
-
   async function postContent(data) {
     setIsPosting(true);
     try {
@@ -81,9 +77,18 @@ export default function EditPostForm(props) {
       // 400 : media url cannot be accessed.
       if (error.response?.status === 400) {
         setPostError("Saving post failed. Maybe the media url is wrong?");
+        // Remove posterror to avoid error to reappear after closing:
+        setTimeout(() => {
+          setPostError(null);
+        }, 3000);
+
         setPostSuccess(null);
       } else {
         setPostError("Saving post failed: " + error);
+        // Remove posterror to avoid error to reappear after closing:
+        setTimeout(() => {
+          setPostError(null);
+        }, 3000);
         setPostSuccess(null);
       }
       // What if the token has expired or is wrong?
@@ -130,9 +135,9 @@ export default function EditPostForm(props) {
             <Form.Control
               type="text"
               className="postform-input-field"
-              onKeyUp={(e) => {
-                setImageUrl(e.target.value);
-              }}
+              //onKeyUp={(e) => {
+              //setImageUrl(e.target.value);
+              //}}
               placeholder="Image URL"
               {...register("media")}
               defaultValue={isEditMode ? postData?.media : ""}
@@ -165,9 +170,9 @@ export default function EditPostForm(props) {
               "Save Post"
             )}
           </Button>
-          <ShowStatusMessage display={postError} text={postError} />
-          <ShowStatusMessage display={postSuccess} isSuccess={true} />
         </Form>
+        <ShowStatusMessage display={postError} text={postError} />
+        <ShowStatusMessage display={postSuccess} isSuccess={true} />
       </Col>
     </Container>
   );
