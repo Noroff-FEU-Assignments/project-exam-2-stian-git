@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
 import SearchUser from "../components/SearchUser";
+import ShowSpinner from "../components/ShowSpinner";
 import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUserDetails from "../components/ShowUserDetails";
 import { apiBaseUrl, profilesToLoad, storageKeyFollowedUsers } from "../constants/variables";
@@ -76,6 +77,7 @@ function ViewProfiles() {
               <ShowUserDetails userprofile={profile} key={profile.name} />
             ))}
           </Row>
+          {loadingProfiles ? <ShowSpinner /> : ""}
           <Container className="button__wrapper">{noMoreProfiles ? <Button disabled>No more profiles</Button> : <Button onClick={getUsers}>More profiles</Button>}</Container>
         </>
       )}

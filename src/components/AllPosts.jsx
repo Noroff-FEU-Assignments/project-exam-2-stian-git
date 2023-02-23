@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, CardGroup, Col, Container, Form, Row } from "react-bootstrap";
-import { allowedUserNameRegex, apiBaseUrl, postsToLoad, tagsToShow } from "../constants/variables";
+import { Button, CardGroup, Container, Form, Row } from "react-bootstrap";
+import { apiBaseUrl, postsToLoad, tagsToShow } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import ShowPost from "./ShowPost";
 import * as yup from "yup";
@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import ShowStatusMessage from "./ShowStatusMessage";
 import { useNavigate } from "react-router-dom";
+import ShowSpinner from "./ShowSpinner";
 
 const schema = yup.object().shape({
   value: yup.string().required("ID or tag is required."),
@@ -22,6 +23,7 @@ function AllPosts() {
   const [allTags, setAllTags] = useState([]);
   const [loadTags, setLoadTags] = useState(false);
   const [error, setError] = useState(null);
+  const [loadingPosts, setLoadingPosts] = useState(false);
 
   const history = useNavigate();
 
@@ -69,6 +71,7 @@ function AllPosts() {
     }
   }, [posts]);
   async function getAllPosts() {
+    setLoadingPosts(true);
     const data = await getPosts(postsToLoad, offset, postsType);
     // check if data count is correct;
     setPosts(posts.concat(data));
@@ -76,6 +79,7 @@ function AllPosts() {
     if (data.length < postsToLoad) {
       setNoMorePages(true);
     }
+    setLoadingPosts(false);
   }
 
   async function getPosts(qty = 20, offset = 0, type = "valueall") {
@@ -179,6 +183,7 @@ function AllPosts() {
               ))}
             </Row>
           </CardGroup>
+          {loadingPosts ? <ShowSpinner /> : ""}
           <Container className="button__wrapper">{noMorePages ? <Button disabled>No more posts.</Button> : <Button onClick={getAllPosts}>Load more posts</Button>}</Container>
         </>
       )}
