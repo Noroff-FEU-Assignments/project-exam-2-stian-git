@@ -6,6 +6,7 @@ import { CardGroup, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
 import ShowPost from "../components/ShowPost";
+import ShowSpinner from "../components/ShowSpinner";
 import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUser from "../components/ShowUser";
 import ShowUserDetails from "../components/ShowUserDetails";
@@ -33,11 +34,11 @@ function ViewSingleProfile() {
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
   const [postsError, setPostsError] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoadingProfile(true);
     // get all userinfo
     async function getUserProfile() {
+      setLoadingProfile(true);
       const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
       try {
         axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
@@ -94,61 +95,75 @@ function ViewSingleProfile() {
     getUsersPosts();
   }, [username]);
 
+  useEffect(() => {
+    if (loadingProfile && loadingPosts) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [loadingPosts, loadingProfile]);
+
   return (
     <>
-      {error ? (
-        <>
-          <ShowStatusMessage text={error} display={true} />
-          {/* <p className="error error-large">{error}</p> */}
-          <p
-            className="link"
-            onClick={() => {
-              history(-1);
-            }}>
-            Click here to go back.
-          </p>
-        </>
+      {loading ? (
+        <ShowSpinner />
       ) : (
         <>
-          <h1>User: {userProfile?.name}</h1>
-          <ShowUserDetails userprofile={userProfile} />
-          {/* {error ? <p>{error}</p> : <ShowUserDetails userprofile={userProfile} />} */}
-
-          <h1>My Posts</h1>
-          {/* <div> */}
-          <ShowStatusMessage display={postsError} text={postsError} />
-          <CardGroup className="postscontainer">
-            {noPostsToShow ? <p>There are no posts to show.</p> : ""}
-            <Row>
-              {posts.map((post) => (
-                <ShowPost postdata={post} key={post.id} />
-              ))}
-            </Row>
-          </CardGroup>
-          {/* </div> */}
-
-          <div className="follow">
-            <h1>Followed Users</h1>
-            {noFollowingsToShow ? <p>No users followed.</p> : ""}
-            {userProfile?.following.map((followedProfile) => (
-              <ShowUser key={`followed-${followedProfile.name}`} user={followedProfile} followed={usersFollowed} />
-            ))}
-          </div>
-
-          <div className="follow">
-            <h1>Followers</h1>
-            {noFollowedUsersToShow ? <p>No users are following.</p> : ""}
-            {userProfile?.followers.map((profile) => (
-              <ShowUser key={`followers-${profile.name}`} user={profile} followed={usersFollowed} />
-            ))}
-          </div>
-          {isOwner ? (
+          {error ? (
             <>
-              <h1>Edit Profile</h1>
-              <EditUserForm user={userProfile} />
+              <ShowStatusMessage text={error} display={true} />
+              {/* <p className="error error-large">{error}</p> */}
+              <p
+                className="link"
+                onClick={() => {
+                  history(-1);
+                }}>
+                Click here to go back.
+              </p>
             </>
           ) : (
-            ""
+            <>
+              <h1>User: {userProfile?.name}</h1>
+              <ShowUserDetails userprofile={userProfile} />
+              {/* {error ? <p>{error}</p> : <ShowUserDetails userprofile={userProfile} />} */}
+
+              <h1>My Posts</h1>
+              {/* <div> */}
+              <ShowStatusMessage display={postsError} text={postsError} />
+              <CardGroup className="postscontainer">
+                {noPostsToShow ? <p>There are no posts to show.</p> : ""}
+                <Row>
+                  {posts.map((post) => (
+                    <ShowPost postdata={post} key={post.id} />
+                  ))}
+                </Row>
+              </CardGroup>
+              {/* </div> */}
+
+              <div className="follow">
+                <h1>Followed Users</h1>
+                {noFollowingsToShow ? <p>No users followed.</p> : ""}
+                {userProfile?.following.map((followedProfile) => (
+                  <ShowUser key={`followed-${followedProfile.name}`} user={followedProfile} followed={usersFollowed} />
+                ))}
+              </div>
+
+              <div className="follow">
+                <h1>Followers</h1>
+                {noFollowedUsersToShow ? <p>No users are following.</p> : ""}
+                {userProfile?.followers.map((profile) => (
+                  <ShowUser key={`followers-${profile.name}`} user={profile} followed={usersFollowed} />
+                ))}
+              </div>
+              {isOwner ? (
+                <>
+                  <h1>Edit Profile</h1>
+                  <EditUserForm user={userProfile} />
+                </>
+              ) : (
+                ""
+              )}
+            </>
           )}
         </>
       )}
