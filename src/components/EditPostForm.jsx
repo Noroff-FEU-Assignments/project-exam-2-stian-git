@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { apiBaseUrl, mediaUrlSyntax } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useGetSinglePost from "../hooks/useGetSinglePost";
+import ShowSpinner from "./ShowSpinner";
 import ShowStatusMessage from "./ShowStatusMessage";
 
 const postApiUrl = apiBaseUrl + "/posts/";
@@ -47,7 +48,7 @@ export default function EditPostForm(props) {
       setValue("body", postData?.body);
       setValue("media", postData?.media);
     }
-  }, [postData]);
+  }, [postData, postId, setValue]);
   async function postContent(data) {
     setIsPosting(true);
     try {
@@ -106,74 +107,80 @@ export default function EditPostForm(props) {
   // Add function to add a new tag using tabs. (avoid unsaved tag to be ignored)
 
   return (
-    <Container>
-      <Col md={12} lg={8} xl={6}>
-        {error ? <p>{error}</p> : ""}
-        <Form onSubmit={handleSubmit(postContent)} className="postform">
-          <Form.Group className="mb-3 postform-input" controlId="edistPostFormTitle">
-            <Form.Control className="postform-input-field" type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? postData?.title : ""} />
-            <Form.Text className="text-muted">{errors.title ? <span className="form-requirement">{errors.title.message}</span> : ""}</Form.Text>
-          </Form.Group>
-          <Form.Group className="mb-3 postform-input" controlId="edistPostFormBody">
-            <Form.Control className="postform-input-field" as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? postData?.body : ""} />
-          </Form.Group>
-          <Form.Group className="mb-3 postform-input" controlId="edistPostFormTags">
-            <div className="input-group">
-              <InputTags
-                className="form-control postform-input-field postform-input-field-tags"
-                values={tags}
-                onKeyDown={ignoreEnter}
-                placeholder="Tags"
-                onTags={(value) => {
-                  setTags(value.values);
-                  setValue("tags", value.values);
-                }}
-              />
-            </div>
-          </Form.Group>
-          <Form.Group className="mb-3 postform-input" controlId="editPostFormMedia">
-            <Form.Control
-              type="text"
-              className="postform-input-field"
-              //onKeyUp={(e) => {
-              //setImageUrl(e.target.value);
-              //}}
-              placeholder="Image URL"
-              {...register("media")}
-              defaultValue={isEditMode ? postData?.media : ""}
-            />
-            <Form.Text className="text-muted">
-              {errors.media ? (
-                <span className="form-requirement">{errors.media.message}</span>
-              ) : (
-                <Image
-                  className="mediaThumb"
-                  src={document.querySelector("#editPostFormMedia")?.value}
-                  onError={(e) => {
-                    e.target.style.display = "none";
-                  }}
-                  onLoad={(e) => {
-                    e.target.style.display = "inline";
-                  }}
-                  thumbnail
+    <>
+      {loading ? (
+        <ShowSpinner />
+      ) : (
+        <Container>
+          <Col md={12} lg={8} xl={6}>
+            {error ? <p>{error}</p> : ""}
+            <Form onSubmit={handleSubmit(postContent)} className="postform">
+              <Form.Group className="mb-3 postform-input" controlId="edistPostFormTitle">
+                <Form.Control className="postform-input-field" type="text" placeholder="Title" {...register("title")} defaultValue={isEditMode ? postData?.title : ""} />
+                <Form.Text className="text-muted">{errors.title ? <span className="form-requirement">{errors.title.message}</span> : ""}</Form.Text>
+              </Form.Group>
+              <Form.Group className="mb-3 postform-input" controlId="edistPostFormBody">
+                <Form.Control className="postform-input-field" as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? postData?.body : ""} />
+              </Form.Group>
+              <Form.Group className="mb-3 postform-input" controlId="edistPostFormTags">
+                <div className="input-group">
+                  <InputTags
+                    className="form-control postform-input-field postform-input-field-tags"
+                    values={tags}
+                    onKeyDown={ignoreEnter}
+                    placeholder="Tags"
+                    onTags={(value) => {
+                      setTags(value.values);
+                      setValue("tags", value.values);
+                    }}
+                  />
+                </div>
+              </Form.Group>
+              <Form.Group className="mb-3 postform-input" controlId="editPostFormMedia">
+                <Form.Control
+                  type="text"
+                  className="postform-input-field"
+                  //onKeyUp={(e) => {
+                  //setImageUrl(e.target.value);
+                  //}}
+                  placeholder="Image URL"
+                  {...register("media")}
+                  defaultValue={isEditMode ? postData?.media : ""}
                 />
-              )}
-            </Form.Text>
-          </Form.Group>
-          <Button variant="primary" type="submit" className="postform-button">
-            {isPosting ? (
-              <>
-                <span className="">Saving...</span>
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-              </>
-            ) : (
-              "Save Post"
-            )}
-          </Button>
-        </Form>
-        <ShowStatusMessage display={postError} text={postError} />
-        <ShowStatusMessage display={postSuccess} isSuccess={true} />
-      </Col>
-    </Container>
+                <Form.Text className="text-muted">
+                  {errors.media ? (
+                    <span className="form-requirement">{errors.media.message}</span>
+                  ) : (
+                    <Image
+                      className="mediaThumb"
+                      src={document.querySelector("#editPostFormMedia")?.value}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                      onLoad={(e) => {
+                        e.target.style.display = "inline";
+                      }}
+                      thumbnail
+                    />
+                  )}
+                </Form.Text>
+              </Form.Group>
+              <Button variant="primary" type="submit" className="postform-button">
+                {isPosting ? (
+                  <>
+                    <span className="">Saving...</span>
+                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                  </>
+                ) : (
+                  "Save Post"
+                )}
+              </Button>
+            </Form>
+            <ShowStatusMessage display={postError} text={postError} />
+            <ShowStatusMessage display={postSuccess} isSuccess={true} />
+          </Col>
+        </Container>
+      )}
+    </>
   );
 }
