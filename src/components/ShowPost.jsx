@@ -12,6 +12,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import ReactToPost from "./ReactToPost";
+import ShowStatusMessage from "./ShowStatusMessage";
 
 const schema = yup.object().shape({
   body: yup.string().min(3, "Need 3 characters").required("Please enter a comment before sending."),
@@ -83,9 +84,8 @@ function ShowPost(props) {
       if (response.status === 200) {
         const data = await response.data;
         post.comments.push(data);
+        setCommentError(null);
         reset();
-
-        //Add a success message below the button?
       }
     } catch (error) {
       setCommentError("Commenting failed: " + error);
@@ -156,16 +156,19 @@ function ShowPost(props) {
           {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""}
         </ListGroup>
         {props.showlarge ? (
-          <ListGroup.Item className="comments__form">
-            <Form onSubmit={handleSubmit(addComment)}>
-              <Form.Group className="" controlId={`formComment-${post?.id}`}>
-                <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" {...register("body")} />
-                <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post?.id}>
-                  Send
-                </Button>
-              </Form.Group>
-            </Form>
-          </ListGroup.Item>
+          <>
+            <ListGroup.Item className="comments__form">
+              <Form onSubmit={handleSubmit(addComment)}>
+                <Form.Group className="" controlId={`formComment-${post?.id}`}>
+                  <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" {...register("body")} />
+                  {commentError ? <ShowStatusMessage display={true} text={`Failed to save comment. Please try again.`} /> : ""}
+                  <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post?.id}>
+                    Send
+                  </Button>
+                </Form.Group>
+              </Form>
+            </ListGroup.Item>
+          </>
         ) : (
           ""
         )}
