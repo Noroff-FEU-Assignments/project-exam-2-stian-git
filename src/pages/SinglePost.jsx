@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import ShowPost from "../components/ShowPost";
+import ShowSpinner from "../components/ShowSpinner";
 import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUserDetails from "../components/ShowUserDetails";
 
@@ -16,31 +17,36 @@ function SinglePost() {
 
   return (
     <>
-      {" "}
-      {error ? (
-        <>
-          <ShowStatusMessage text={`Post ID: ${postid} could not be loaded and probably do not exist.`} display={true} />
-          <p
-            className="link"
-            onClick={() => {
-              history(-1);
-            }}>
-            Click here to go back.
-          </p>
-        </>
+      {loading ? (
+        <ShowSpinner />
       ) : (
         <>
-          <ShowPost postdata={postData} comments={false} showlarge={true} />
-          {userData ? (
-            <Container className="large">
-              <h1>Published by</h1>
-              <ShowUserDetails userprofile={userData} />
-            </Container>
+          {error ? (
+            <>
+              <ShowStatusMessage text={`Post ID: ${postid} could not be loaded and probably do not exist.`} display={true} />
+              <p
+                className="link"
+                onClick={() => {
+                  history(-1);
+                }}>
+                Click here to go back.
+              </p>
+            </>
           ) : (
-            ""
-          )}
+            <>
+              <ShowPost postdata={postData} comments={false} showlarge={true} />
+              {userData ? (
+                <Container className="large">
+                  <h1>Published by</h1>
+                  <ShowUserDetails userprofile={userData} />
+                </Container>
+              ) : (
+                ""
+              )}
 
-          {userLoading ? <p>Loading</p> : ""}
+              {userLoading ? <p>Loading</p> : ""}
+            </>
+          )}
         </>
       )}
     </>
