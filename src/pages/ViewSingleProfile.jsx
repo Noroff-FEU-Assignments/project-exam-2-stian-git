@@ -45,6 +45,7 @@ function ViewSingleProfile() {
   // }, [setUsersFolowed]);
   useEffect(() => {
     // get all userinfo
+    console.log("Viewing profile", username);
     async function getUserProfile() {
       setLoadingProfile(true);
       const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";

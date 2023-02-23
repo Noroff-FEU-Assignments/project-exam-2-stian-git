@@ -25,11 +25,19 @@ If you want to publish the site, do the following:
 
 - The previous build-command have created a new folder named "build".
 - Copy everything inside the "build"-folder and upload it to your webserver.
+- The build is configured to expect the site to be hosted at root folder. (Check out hos to use the homepage-field in the package.json if you need to run in in a subfolder.)
 - Open the site in your browser.
   .....
   ....
   .... Check bug when run from a subfolder.
   ....
+
+## Publish from GitHub
+
+- Clone Repo
+- Create a new site on Netlify and choose "Import an existing project"
+- Locate the repo with the site and use the default settings before deploying.
+- Shortly the Website will be available.
 
 # Getting Started with Create React App
 
