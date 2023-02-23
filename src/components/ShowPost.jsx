@@ -2,13 +2,21 @@
 import axios from "axios";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, ListGroup, Modal } from "react-bootstrap";
+import { Button, Card, Form, ListGroup, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { apiBaseUrl, availableEmojies } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import FormatTimeStamp from "./FormatTimeStamp";
-import PostCommentForm from "./PostCommentForm";
+
 import ShowComment from "./ShowComment";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+
+const schema = yup.object().shape({
+  body: yup.string().min(3, "Need 3 characters").required("Please enter a comment before sending."),
+});
 
 function ShowPost(props) {
   const [isPostOwner, setIsPostOwner] = useState(false);
@@ -17,6 +25,15 @@ function ShowPost(props) {
   const [hideComments, setHideComments] = useState(true);
   const [deleteError, setDeleteError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [commentError, setCommentError] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
 
   useEffect(() => {
     setPost(props.postdata);
@@ -114,6 +131,25 @@ function ShowPost(props) {
     }
   }
 
+  async function addComment(data) {
+    setIsSending(true);
+    const addCommentApiUrl = apiBaseUrl + "/posts/" + post.id + "/comment";
+    try {
+      const response = await axios.post(addCommentApiUrl, data);
+      if (response.status === 200) {
+        const data = await response.data;
+        post.comments.push(data);
+        reset();
+
+        //Add a success message below the button?
+      }
+    } catch (error) {
+      setCommentError("Commenting failed: " + error);
+    } finally {
+      setIsSending(false);
+    }
+  }
+
   return (
     <>
       <Card onClick={linkToPost} key={post?.id} className={props.showlarge ? "post large" : "post"} data-showcomments="false" data-postid={post?.id}>
@@ -183,11 +219,29 @@ function ShowPost(props) {
             ))}
           </ListGroup.Item>
         </ListGroup>
+
+        {/* Comments: */}
         <ListGroup className="list-group-flush comments" hidden={hideComments}>
           {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""}
         </ListGroup>
-        {props.showlarge ? <PostCommentForm id={post?.id} /> : ""}
+        {/* {props.showlarge ? <PostCommentForm id={post?.id} /> : ""} */}
+        {props.showlarge ? (
+          <ListGroup.Item className="comments__form">
+            <Form onSubmit={handleSubmit(addComment)}>
+              <Form.Group className="" controlId={`formComment-${post?.id}`}>
+                <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" {...register("body")} />
+                <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post?.id}>
+                  Send
+                </Button>
+              </Form.Group>
+            </Form>
+          </ListGroup.Item>
+        ) : (
+          ""
+        )}
       </Card>
+
+      {/* ImageModal: */}
       <Modal show={showModal} onHide={() => setShowModal(false)} aria-labelledby="imageModal" onClick={() => setShowModal(false)} centered fullscreen>
         <Modal.Body>
           <Card.Img
