@@ -6,6 +6,7 @@ import { CardGroup, Row } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
 import ShowPost from "../components/ShowPost";
+import ShowStatusMessage from "../components/ShowStatusMessage";
 import ShowUser from "../components/ShowUser";
 import ShowUserDetails from "../components/ShowUserDetails";
 import { apiBaseUrl, storageKeyFollowedUsers } from "../constants/variables";
@@ -85,7 +86,7 @@ function ViewSingleProfile() {
           setPostsError("Failed to retrieve posts. Please try again.");
         }
       } catch (error) {
-        setPostsError(`Failed to retrieve posts. Please try again.(${error})`);
+        setPostsError(`Failed to retrieve posts. Please try again.(Code: ${error.response.status})`);
       } finally {
         setLoadingPosts(false);
       }
@@ -97,13 +98,13 @@ function ViewSingleProfile() {
     <>
       {error ? (
         <>
-          <p className="error error-large">{error}</p>
+          <ShowStatusMessage text={error} display={true} />
+          {/* <p className="error error-large">{error}</p> */}
           <p
             className="link"
             onClick={() => {
               history(-1);
-            }}
-          >
+            }}>
             Click here to go back.
           </p>
         </>
@@ -115,6 +116,7 @@ function ViewSingleProfile() {
 
           <h1>My Posts</h1>
           {/* <div> */}
+          <ShowStatusMessage display={postsError} text={postsError} />
           <CardGroup className="postscontainer">
             {noPostsToShow ? <p>There are no posts to show.</p> : ""}
             <Row>

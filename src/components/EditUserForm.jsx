@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { apiBaseUrl, mediaUrlSyntax } from "../constants/variables";
 import axios from "axios";
+import ShowStatusMessage from "./ShowStatusMessage";
 
 const schema = yup.object().shape({
   avatar: yup.string().matches(mediaUrlSyntax, { message: "Please enter a valid url to an image", excludeEmptyString: true }),
@@ -39,10 +40,12 @@ function EditUserForm(props) {
       const response = await axios.put(updateUserApiUrl, data);
       if (response.status === 200) {
         setEditSuccess(true);
+        setUpdateFailed(null);
         // Add a success message below the button?
       }
     } catch (error) {
       setUpdateFailed(error);
+      setEditSuccess(null);
     } finally {
       setIsSending(false);
     }
@@ -93,6 +96,8 @@ function EditUserForm(props) {
           <Button variant="primary" type="submit" className="userform__form-button">
             {isSending ? "Updating" : "Update Profile"}
           </Button>
+          <ShowStatusMessage display={updateFailed} text={"Update failed. Please check inputs an try again."} />
+          <ShowStatusMessage display={editSuccess} text={`Update successful.`} isSuccess={true} />
         </Form>
       </Col>
     </Container>
