@@ -6,12 +6,9 @@ import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useNavigate } from "react-router-dom";
 import { storageKeyFollowedUsers } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
-import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Header() {
-  const [socialUsers, setSocialUsers] = useLocalStorage(storageKeyFollowedUsers, null);
   const [isLoggedIn, setIsLoggedIn] = useContext(SessionContext);
-  //const [activePage, setActivePage] = useState("home");
   const [showMenu, setShowMenu] = useState(false);
   const history = useNavigate();
 
@@ -21,7 +18,7 @@ export default function Header() {
 
   function doLogout() {
     setIsLoggedIn(null);
-    setSocialUsers(null);
+    localStorage.removeItem(storageKeyFollowedUsers);
     history("/");
   }
 
