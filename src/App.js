@@ -25,6 +25,7 @@ function App() {
             <Route path="/post/:postid/edit" element={<EditPost />} />
             <Route path="/profiles" element={<ViewProfiles />} />
             <Route path="/profiles/:username" element={<ViewSingleProfile />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </main>
         <Footer />
