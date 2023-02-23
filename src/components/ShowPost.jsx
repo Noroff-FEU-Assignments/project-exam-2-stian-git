@@ -74,6 +74,12 @@ function ShowPost(props) {
     // Update counter if success
     if (isEmojiAdded) {
       e.target.innerHTML = `${reaction} ${parseInt(count) + 1}`;
+    } else {
+      // Marks the failed emoji temporarily to indicate an error has occured.
+      e.target.classList.add("comments__reactions-emoji-error");
+      setTimeout(() => {
+        e.target.classList.remove("comments__reactions-emoji-error");
+      }, 2000);
     }
   }
   function countThisEmoji(emoji, reactions) {
@@ -89,11 +95,11 @@ function ShowPost(props) {
       axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.put(addReactionUrl);
       if (response.status === 200) {
-        console.log("Reaction added");
         return true;
+      } else {
+        return false;
       }
     } catch (error) {
-      console.log("An error occured adding reaction." + error);
       return false;
     }
   }

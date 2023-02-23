@@ -292,8 +292,16 @@ p {
     &-emoji {
       margin: 0;
       &:hover {
-        border-radius: 100px;
+        border-radius: 10px;
         background-color: $hover-color;
+        cursor: pointer;
+      }
+      &-error {
+        background-color: $red;
+        border-radius: 10px;
+        &:hover {
+          background-color: $red;
+        }
       }
     }
   }
