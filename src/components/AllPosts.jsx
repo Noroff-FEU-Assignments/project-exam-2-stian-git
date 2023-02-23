@@ -17,11 +17,10 @@ const schema = yup.object().shape({
 function AllPosts() {
   const [isLoggedIn] = useContext(SessionContext);
   const [posts, setPosts] = useState([]);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState(postsToLoad);
   const [noMorePages, setNoMorePages] = useState(false);
-  const [postsType, setPostsType] = useState();
+  const [postsType, setPostsType] = useState("valueall");
   const [allTags, setAllTags] = useState([]);
-  const [loadTags, setLoadTags] = useState(false);
   const [error, setError] = useState(null);
   const [loadingPosts, setLoadingPosts] = useState(false);
 
@@ -34,8 +33,42 @@ function AllPosts() {
   } = useForm({ resolver: yupResolver(schema) });
 
   useEffect(() => {
+    async function getAllPosts() {
+      setLoadingPosts(true);
+      let postsApiUrl;
+      switch (postsType) {
+        case "valueall":
+          postsApiUrl = apiBaseUrl + "/posts?_author=true&_comments=true&_reactions=true&limit=" + postsToLoad;
+          break;
+        case "valuefollowed":
+          postsApiUrl = apiBaseUrl + "/posts/following?_author=true&_comments=true&_reactions=true&limit=" + postsToLoad;
+
+          break;
+        default:
+          postsApiUrl = apiBaseUrl + "/posts?_tag=" + postsType + "&_author=true&_comments=true&_reactions=true&limit=" + postsToLoad;
+          break;
+      }
+
+      try {
+        axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
+        const response = await axios.get(postsApiUrl);
+        if (response.status === 200) {
+          const data = await response.data;
+          console.log(response);
+          setPosts(data);
+          if (data.length < postsToLoad) {
+            setNoMorePages(true);
+          }
+        }
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoadingPosts(false);
+      }
+    }
+
     getAllPosts();
-  }, [postsType]);
+  }, [postsType, isLoggedIn]);
 
   useEffect(() => {
     function countTags() {
@@ -65,54 +98,43 @@ function AllPosts() {
       // Sets the allTags-state with the data that will be presented.
       setAllTags(filteredArray);
     }
-    if (loadTags === true) {
-      countTags();
-      setLoadTags(false);
-    }
+    countTags();
   }, [posts]);
-  async function getAllPosts() {
+
+  async function getMorePosts() {
     setLoadingPosts(true);
-    const data = await getPosts(postsToLoad, offset, postsType);
-    // check if data count is correct;
-    setPosts(posts.concat(data));
-    setOffset(offset + postsToLoad);
-    if (data.length < postsToLoad) {
-      setNoMorePages(true);
-    }
-    setLoadingPosts(false);
-  }
-
-  async function getPosts(qty = 20, offset = 0, type = "valueall") {
-    let postsApiUrl;
-    // Add a check against the postsType/tag to set the URL.
-    switch (type) {
-      case "valueall":
-        postsApiUrl = apiBaseUrl + "/posts?_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
-        setLoadTags(true);
-        break;
-      case "valuefollowed":
-        postsApiUrl = apiBaseUrl + "/posts/following?_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
-
-        break;
-      default:
-        postsApiUrl = apiBaseUrl + "/posts?_tag=" + type + "&_author=true&_comments=true&_reactions=true&limit=" + qty + "&offset=" + offset;
-        break;
-    }
-
+    let postsApiUrl = getUrl();
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
       const response = await axios.get(postsApiUrl);
       if (response.status === 200) {
-        //return true;
-        return response.data;
-      } else {
-        //setError(true);
-        return [];
+        const data = await response.data;
+        setPosts(posts.concat(data));
+        if (data.length < postsToLoad) {
+          setNoMorePages(true);
+        }
       }
     } catch (error) {
       setError(true);
-      return [];
+    } finally {
+      setLoadingPosts(false);
     }
+  }
+
+  function getUrl() {
+    let postsApiUrl;
+    switch (postsType) {
+      case "valueall":
+        postsApiUrl = apiBaseUrl + "/posts?_author=true&_comments=true&_reactions=true&limit=" + postsToLoad + "&offset=" + offset;
+        break;
+      case "valuefollowed":
+        postsApiUrl = apiBaseUrl + "/posts/following?_author=true&_comments=true&_reactions=true&limit=" + postsToLoad + "&offset=" + offset;
+        break;
+      default:
+        postsApiUrl = apiBaseUrl + "/posts?_tag=" + postsType + "&_author=true&_comments=true&_reactions=true&limit=" + postsToLoad + "&offset=" + offset;
+        break;
+    }
+    return postsApiUrl;
   }
   // Resets when post filter is changed:
   function changePostsType(e) {
@@ -185,7 +207,19 @@ function AllPosts() {
             </Row>
           </CardGroup>
           {loadingPosts ? <ShowSpinner /> : ""}
-          <Container className="button__wrapper">{noMorePages ? <Button disabled>No more posts.</Button> : <Button onClick={getAllPosts}>Load more posts</Button>}</Container>
+          <Container className="button__wrapper">
+            {noMorePages ? (
+              <Button disabled>No more posts.</Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  setOffset(offset + postsToLoad);
+                  getMorePosts();
+                }}>
+                Load more posts
+              </Button>
+            )}
+          </Container>
         </>
       )}
     </>

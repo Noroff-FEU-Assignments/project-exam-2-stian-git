@@ -48,7 +48,7 @@ function ShowPost(props) {
   async function deletePost(e) {
     e.stopPropagation();
     const postId = e.target.dataset.postid;
-    const deletePostApiUrl = apiBaseUrl + "/pposts/" + postId;
+    const deletePostApiUrl = apiBaseUrl + "/posts/" + postId;
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.delete(deletePostApiUrl);

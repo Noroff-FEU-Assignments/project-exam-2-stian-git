@@ -20,6 +20,6 @@ export const validEmailDomains = ["stud.noroff.no", "noroff.no"];
 export const defaultAvatar = "\\images\\default_avatar_60pst opacity.png";
 
 export const availableEmojies = ["❤️", "😂", "😢", "👿"];
-export const postsToLoad = 100;
+export const postsToLoad = 3;
 export const profilesToLoad = 3;
 export const minPasswordLength = 8;
