@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Button, Form } from "react-bootstrap";
 import { allowedUserNameRegex } from "../constants/variables";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
   searchstring: yup.string().required("Username is required.").matches(allowedUserNameRegex, "Please avoid punctuation marks."),
@@ -16,8 +17,10 @@ function SearchUser() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
+  const navigateTo = useNavigate();
   function doSearch(data) {
-    window.location.href = "/profiles/" + data.searchstring;
+    //window.location.href = "/profiles/" + data.searchstring;
+    navigateTo(`/profiles/${data.searchstring}`);
   }
   return (
     <Form onSubmit={handleSubmit(doSearch)} className="searchform">

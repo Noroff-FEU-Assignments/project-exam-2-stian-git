@@ -3,7 +3,7 @@ import axios from "axios";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Form, ListGroup, Modal, Spinner } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { apiBaseUrl } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import FormatTimeStamp from "./FormatTimeStamp";
@@ -27,6 +27,7 @@ function ShowPost(props) {
   const [showModal, setShowModal] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [commentError, setCommentError] = useState(null);
+  const navigateTo = useNavigate();
 
   const {
     register,
@@ -78,7 +79,8 @@ function ShowPost(props) {
     const postId = e.target.closest(".post").dataset.postid;
     if (!isSinglePostPage) {
       // show comments
-      window.location.href = `/post/${postId}`;
+      //window.location.href = `/post/${postId}`;
+      navigateTo(`/post/${postId}`);
     }
   }
 
@@ -142,9 +144,17 @@ function ShowPost(props) {
           )}
           <Card.Text title={moment(post?.created).format("MMM Do YYYY, HH:mm:ss")} className="post__body-created">
             <FormatTimeStamp timestamp={post?.created} /> (by{" "}
-            <a className="post__body-created-link" href={`/profiles/${post?.author?.name}`}>
+            <Link
+              className="post__body-created-link"
+              to={`/profiles/${post?.author?.name}`}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}>
               {post?.author?.name}
-            </a>
+            </Link>
+            {/* <a className="post__body-created-link" href={`/profiles/${post?.author?.name}`}>
+              {post?.author?.name}
+            </a> */}
             )
           </Card.Text>
           <Card.Text className="post__body-maintext">{post?.body}</Card.Text>

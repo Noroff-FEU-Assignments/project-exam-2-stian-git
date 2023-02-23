@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { defaultAvatar, storageKeyFollowedUsers } from "../constants/variables";
 import useLocalStorage from "../hooks/useLocalStorage";
 import FollowButton from "./FollowButton";
@@ -8,6 +9,7 @@ function ShowUserDetails(props) {
   const [profile, setProfile] = useState(null);
   const [usersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [userIsFollowed, setUserIsFollowed] = useState(false);
+  const navigateTo = useNavigate();
 
   useEffect(() => {
     function isFollowed(name) {
@@ -23,7 +25,8 @@ function ShowUserDetails(props) {
     <Col
       className={userIsFollowed ? "user user-isfollowed" : "user"}
       onClick={() => {
-        window.location.href = `/profiles/${profile?.name}`;
+        //window.location.href = `/profiles/${profile?.name}`;
+        navigateTo(`/profiles/${profile?.name}`);
       }}
       style={{ backgroundImage: `url(${profile?.banner ? profile.banner : "none"})` }}>
       <div className="user__profile-imagecontainer">
@@ -34,7 +37,8 @@ function ShowUserDetails(props) {
         <div
           className="user__profile-details"
           onClick={() => {
-            window.location.href = `/profiles/${profile?.name}`;
+            //window.location.href = `/profiles/${profile?.name}`;
+            navigateTo(`/profiles/${profile?.name}`);
           }}>
           <h2 className="user__profile-details-name">{profile?.name}</h2>
           <p
