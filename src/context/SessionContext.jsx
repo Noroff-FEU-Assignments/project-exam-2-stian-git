@@ -7,7 +7,7 @@ const SessionContext = React.createContext([null, () => {}]);
 
 export const SessionProvider = (props) => {
   const [loggedIn, setLoggedIn] = useLocalStorage(storageKeySessionInfo, null);
-  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+  const [setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
 
   useEffect(() => {
     async function setFollowedUsers() {
@@ -26,7 +26,7 @@ export const SessionProvider = (props) => {
     if (loggedIn) {
       setFollowedUsers();
     }
-  }, [loggedIn]);
+  }, [loggedIn, setUsersFollowed]);
   return <SessionContext.Provider value={[loggedIn, setLoggedIn]}>{props.children}</SessionContext.Provider>;
 };
 

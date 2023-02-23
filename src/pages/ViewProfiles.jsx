@@ -12,10 +12,12 @@ import useLocalStorage from "../hooks/useLocalStorage";
 function ViewProfiles() {
   const [isLoggedIn] = useContext(SessionContext);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
-  const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
+  //const [loadingUsersFollowed, setLoadingUsersFollowed] = useState(false);
+  const [loadingUsers, setLoadingUsersFollowed] = useState(false);
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
-  const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+  //const [usersFollowed, setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
+  const [setUsersFollowed] = useLocalStorage(storageKeyFollowedUsers, []);
   const [offset, setOffset] = useState(0);
   const [noMoreProfiles, setNoMoreProfiles] = useState(false);
 

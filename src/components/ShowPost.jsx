@@ -20,7 +20,7 @@ const schema = yup.object().shape({
 
 function ShowPost(props) {
   const [isPostOwner, setIsPostOwner] = useState(false);
-  const [loggedIn, setLoggedIn] = useContext(SessionContext);
+  const [loggedIn] = useContext(SessionContext);
   const [post, setPost] = useState(null);
   const [hideComments, setHideComments] = useState(true);
   const [deleteError, setDeleteError] = useState(null);
@@ -43,12 +43,12 @@ function ShowPost(props) {
     if (props?.postdata?.author?.name === loggedIn.name) {
       setIsPostOwner(true);
     }
-  }, [props]);
+  }, [props, loggedIn]);
 
   async function deletePost(e) {
     e.stopPropagation();
     const postId = e.target.dataset.postid;
-    const deletePostApiUrl = apiBaseUrl + "/posts/" + postId;
+    const deletePostApiUrl = apiBaseUrl + "/pposts/" + postId;
     try {
       axios.defaults.headers.common = { Authorization: `Bearer ${loggedIn.accessToken}` };
       const response = await axios.delete(deletePostApiUrl);
@@ -60,9 +60,15 @@ function ShowPost(props) {
         }, 4000);
       } else {
         setDeleteError(`Failed to delete post.`);
+        setTimeout(() => {
+          setDeleteError(null);
+        }, 3000);
       }
     } catch (error) {
       setDeleteError(`Failed to delete post: ${error}`);
+      setTimeout(() => {
+        setDeleteError(null);
+      }, 3000);
     }
   }
 
@@ -142,6 +148,7 @@ function ShowPost(props) {
             )
           </Card.Text>
           <Card.Text className="post__body-maintext">{post?.body}</Card.Text>
+          {deleteError ? <ShowStatusMessage display={deleteError} text={`Failed to delete post. Please try again.`} /> : ""}
         </Card.Body>
         <ListGroup className="list-group-flush post__tags">
           {post?.tags?.map((tag, index) => (
@@ -161,6 +168,7 @@ function ShowPost(props) {
               <Form onSubmit={handleSubmit(addComment)}>
                 <Form.Group className="" controlId={`formComment-${post?.id}`}>
                   <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" {...register("body")} />
+                  <Form.Text className="text-muted">{errors.body ? <span className="form-requirement">{errors.body.message}</span> : ""}</Form.Text>
                   {commentError ? <ShowStatusMessage display={true} text={`Failed to save comment. Please try again.`} /> : ""}
                   <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post?.id}>
                     {isSending ? (

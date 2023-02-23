@@ -18,7 +18,7 @@ function ShowUser(props) {
         window.location.href = `/profiles/${user?.name}`;
       }}>
       <div className="follow__container-info">
-        <img src={user?.avatar ? user.avatar : defaultAvatar} className="follow__container-info-img" alt={`Profile image of ${user?.name}`} title={`Profile image of ${user?.name}`} />
+        <img src={user?.avatar ? user.avatar : defaultAvatar} className="follow__container-info-img" alt={`Avatar of ${user?.name}`} title={`Avatar of ${user?.name}`} />
         <h2 className="follow__container-info-name">{user?.name}</h2>
       </div>
       <div className="follow__container-buttons">
