@@ -219,7 +219,7 @@ function ShowPost(props) {
                     replyInfoField.dataset.replytoid = "";
                     // remove reply to id
                   }}>
-                  <i class="fa-solid fa-circle-xmark replyto-message-cancel fa-xl"></i> Reply to: <span className="replyto-message-text"></span>
+                  <i className="fa-solid fa-circle-xmark replyto-message-cancel fa-xl"></i> Reply to: <span className="replyto-message-text"></span>
                 </p>
               </Form>
             </ListGroup.Item>

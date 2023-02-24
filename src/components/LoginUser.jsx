@@ -30,6 +30,7 @@ function LoginUser() {
   });
 
   async function doLogin(data) {
+    console.log("Logging in,", data);
     setIsAuthenticating(true);
     setLoginError(null);
     try {

@@ -50,7 +50,7 @@ function ShowComment(props) {
       </p>
 
       <p className="comments__body-text">
-        {data?.body} <i class="fa-solid fa-reply fa-xl replyto-icon"></i>
+        {data?.body} <i className="fa-solid fa-reply fa-xl replyto-icon"></i>
       </p>
     </ListGroup.Item>
   );
