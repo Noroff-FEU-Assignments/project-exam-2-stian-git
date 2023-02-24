@@ -212,7 +212,8 @@ function ShowPost(props) {
                   className="replyto-message"
                   data-replytoid=""
                   hidden={true}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     // hide message
                     const replyInfoField = document.querySelector(".replyto-message");
                     replyInfoField.hidden = true;
