@@ -5,9 +5,22 @@
 This is a Front-end for the Social Media API provided by Noroff.
 It is a part of the delivery for Project Exam 2.
 
+Some features:
+
+- User authentication
+- Post Messages.
+- Edit and delete your own posts.
+- React and comment to posts.
+- Reply to others comments.
+- Follow/Unfollow users.
+- Update user profile.
+- Image modal.
+
 ## How to get started
 
-Register a user on the system and get started.
+Just register a user on the system and get started.
+Site is hosted on the following url for testing purposes:
+[https://quiet-pavlova-2a196b.netlify.app/][https://quiet-pavlova-2a196b.netlify.app/]
 
 ### Customization
 
