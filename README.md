@@ -24,6 +24,12 @@ It should be quite easy to get started and get the hang of it, once you are logg
 This site is hosted on the following url for testing purposes:
 [https://quiet-pavlova-2a196b.netlify.app/][https://quiet-pavlova-2a196b.netlify.app/]
 
+If you need a testuser, you can use one that I have created:
+username: first.lastname@stud.noroff.no
+Password: Password123!
+
+It's worth mentioning that supported image extensions may differ from what the backend supports. It's controlled through regex and will inform the user upon saving.
+
 ### Customization options
 
 In the variables-file we can, among other things, control:
@@ -65,6 +71,6 @@ If you want to publish the site in alternative ways, do the following:
 - The build expects the site to be hosted at root folder. (Check out how to use the homepage-field in the package.json if you need to run it in a subfolder.)
 - Open the site in your browser.
 
-#####
+####
 
 by Stian Martinsen-Stormyr - February 2023
