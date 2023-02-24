@@ -650,10 +650,6 @@ p {
   &__name,
   &__post {
     display: flex;
-    &-input {
-    }
-    &-submitbutton {
-    }
   }
 }
 
@@ -725,7 +721,6 @@ p {
       max-height: 100%;
       width: auto;
       height: auto;
-      //max-height: 100%;
       align-self: center;
     }
   }
