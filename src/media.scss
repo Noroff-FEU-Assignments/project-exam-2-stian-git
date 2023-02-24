@@ -1,0 +1,132 @@
+@include media-breakpoint-up(lg) {
+  .navbar {
+    &-collapse {
+      padding-left: 5em;
+    }
+    &-link {
+      &-text {
+        display: none;
+      }
+      &-icon {
+        margin-left: 1em;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .posttypeform {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .footer {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  h1 {
+    margin-right: unset;
+  }
+  main {
+    width: 100%;
+    padding: 10px;
+    align-items: unset;
+    & > div {
+      margin-bottom: 4em !important;
+    }
+  }
+  .post {
+    width: 100%;
+    margin: 0 0 10px 0;
+  }
+  .postscontainer {
+    margin: auto;
+  }
+  .postscontainer .row {
+    margin-left: unset;
+    margin-right: unset;
+  }
+
+  .follow {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    //padding: 0px;
+    text-align: center;
+  }
+
+  .userform {
+    padding: unset;
+    &__form-button {
+      width: unset;
+      margin-left: inherit;
+    }
+  }
+
+  // profiles:
+
+  .user {
+    max-width: 100%;
+    white-space: nowrap;
+    &-wrapper {
+      display: contents;
+    }
+    &__profile {
+      width: 100%;
+    }
+  }
+  .button__wrapper {
+    text-align: center;
+    button {
+      width: inherit;
+    }
+  }
+  .posttypeform {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .posttypeform {
+    width: 80%;
+    justify-content: center;
+    flex-direction: column;
+    &__section {
+      &:first-child {
+        margin-right: unset;
+      }
+    }
+  }
+  .user {
+    &:hover {
+      .user__profile {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+    }
+    &__profile {
+      &-counts {
+        display: none;
+      }
+      &-follow {
+        display: inline-block;
+        position: absolute;
+        right: 10px;
+      }
+      &-imagecontainer-img {
+        height: 50px;
+        width: 50px;
+      }
+    }
+  }
+  .postform {
+    text-align: center;
+  }
+}
+
+@include media-breakpoint-between(md, lg) {
+  .post {
+    width: 16rem;
+  }
+}

@@ -33,4 +33,11 @@ $input-bg: #fff;
 $input-color: black;
 $input-placeholder-color: rgba(0, 0, 0, 0.6);
 
+// Own variables:
+$yellow: #fff7ac;
+$red: #eb6b6b;
+
+$h2-color: $yellow;
+$hover-color: #92d1b2;
+
 @import "~bootstrap/scss/bootstrap";
