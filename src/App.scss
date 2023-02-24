@@ -218,6 +218,7 @@ p {
     &__body {
       &-writtenby {
         text-align: right;
+        margin-bottom: 0;
       }
       &-text {
         margin-bottom: 0;
@@ -261,12 +262,14 @@ p {
   border-bottom-left-radius: 10px;
   &__body {
     background-color: #7e91d9;
+    margin-bottom: 5px;
     &-writtenby {
       font-size: 0.8em;
       opacity: 0.8;
       &-link {
         color: black;
         opacity: 0.8;
+        font-weight: bold;
         &:hover {
           opacity: 1;
           color: $hover-color;
@@ -314,6 +317,11 @@ p {
     }
     &-commentfield {
       height: 35px;
+    }
+    &-counter {
+      font-size: 14px;
+      margin: 2px 10px;
+      float: right;
     }
   }
 }
@@ -528,6 +536,43 @@ p {
       width: auto;
       height: auto;
       align-self: center;
+    }
+  }
+}
+
+// replies
+
+.replyto {
+  &-message {
+    background-color: $footer-bg;
+    padding: 4px 10px;
+    font-size: 0.7em;
+    &-cancel {
+      color: $red;
+      &:hover {
+        color: $hover-color;
+      }
+    }
+    &-origin {
+      float: left;
+      margin-bottom: 15px;
+      &-body {
+        //font-weight: bold;
+      }
+    }
+    &-text {
+      font-size: 1.1em;
+      //font-weight: bold;
+      color: $yellow;
+    }
+    &-author {
+    }
+  }
+  &-icon {
+    float: right;
+    margin-top: 15px;
+    &:hover {
+      cursor: pointer;
     }
   }
 }

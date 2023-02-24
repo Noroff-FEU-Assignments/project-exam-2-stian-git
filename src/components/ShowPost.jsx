@@ -4,7 +4,7 @@ import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Form, ListGroup, Modal, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { apiBaseUrl } from "../constants/variables";
+import { apiBaseUrl, maxCommentLength, minCommentlength } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import FormatTimeStamp from "./FormatTimeStamp";
 import ShowComment from "./ShowComment";
@@ -15,7 +15,7 @@ import ReactToPost from "./ReactToPost";
 import ShowStatusMessage from "./ShowStatusMessage";
 
 const schema = yup.object().shape({
-  body: yup.string().min(3, "Need 3 characters").required("Please enter a comment before sending."),
+  body: yup.string().min(minCommentlength, "Need 3 characters").max(maxCommentLength, `Max ${maxCommentLength} characters.`).required("Please enter a comment before sending."),
 });
 
 function ShowPost(props) {
@@ -27,11 +27,13 @@ function ShowPost(props) {
   const [showModal, setShowModal] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [commentError, setCommentError] = useState(null);
+  const [commentCharsLeft, setCommentCharsLeft] = useState(maxCommentLength);
   const navigateTo = useNavigate();
 
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
@@ -85,6 +87,16 @@ function ShowPost(props) {
 
   async function addComment(data) {
     setIsSending(true);
+    // check for reply or not:
+    const replyInfoField = document.querySelector(".replyto-message");
+    const replyID = replyInfoField.dataset.replytoid;
+    if (replyID !== "") {
+      console.log("We got an id:" + replyID);
+      setValue("replyToId", parseInt(replyID));
+      console.log("Data to send:", data);
+    }
+    //return;
+    //
     const addCommentApiUrl = apiBaseUrl + "/posts/" + post.id + "/comment";
     try {
       const response = await axios.post(addCommentApiUrl, data);
@@ -93,6 +105,9 @@ function ShowPost(props) {
         post.comments.push(data);
         setCommentError(null);
         reset();
+        replyInfoField.dataset.replytoid = "";
+        replyInfoField.hidden = true;
+        setCommentCharsLeft(maxCommentLength);
       }
     } catch (error) {
       setCommentError("Commenting failed: " + error);
@@ -166,14 +181,24 @@ function ShowPost(props) {
         <ReactToPost data={post} />
         {/* Comments: */}
         <ListGroup className="list-group-flush comments" hidden={hideComments}>
-          {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} />) : ""}
+          {post?.comments ? post.comments.map((comment) => <ShowComment key={comment?.id} commentData={comment} allComments={post.comments} />) : ""}
         </ListGroup>
         {props.showlarge ? (
           <>
             <ListGroup.Item className="comments__form">
               <Form onSubmit={handleSubmit(addComment)}>
                 <Form.Group className="" controlId={`formComment-${post?.id}`}>
-                  <Form.Control as="textarea" placeholder="Write Comment" className="comments__form-commentfield" {...register("body")} />
+                  <i className="comments__form-counter">{commentCharsLeft} characters left.</i>
+                  <Form.Control
+                    onKeyUp={() => {
+                      setCommentCharsLeft(maxCommentLength - document.querySelector("textarea").value.length);
+                    }}
+                    as="textarea"
+                    placeholder="Write Comment"
+                    className="comments__form-commentfield"
+                    {...register("body")}
+                  />
+
                   <Form.Text className="text-muted">{errors.body ? <span className="form-requirement">{errors.body.message}</span> : ""}</Form.Text>
                   {commentError ? <ShowStatusMessage display={true} text={`Failed to save comment. Please try again.`} /> : ""}
                   <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post?.id}>
@@ -187,6 +212,19 @@ function ShowPost(props) {
                     )}
                   </Button>
                 </Form.Group>
+                <p
+                  className="replyto-message"
+                  data-replytoid=""
+                  hidden={true}
+                  onClick={() => {
+                    // hide message
+                    const replyInfoField = document.querySelector(".replyto-message");
+                    replyInfoField.hidden = true;
+                    replyInfoField.dataset.replytoid = "";
+                    // remove reply to id
+                  }}>
+                  <i class="fa-solid fa-circle-xmark replyto-message-cancel fa-xl"></i> Reply to: <span className="replyto-message-text"></span>
+                </p>
               </Form>
             </ListGroup.Item>
           </>

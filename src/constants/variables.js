@@ -20,3 +20,6 @@ export const profilesToLoad = 25;
 export const minPasswordLength = 8;
 
 export const maxTagsInpost = 8;
+
+export const minCommentlength = 3;
+export const maxCommentLength = 280;
