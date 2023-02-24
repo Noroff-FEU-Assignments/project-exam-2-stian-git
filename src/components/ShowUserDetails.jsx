@@ -18,7 +18,6 @@ function ShowUserDetails(props) {
     }
     // Checks the current username against the array of followed users.
     isFollowed(props.userprofile?.name);
-
     setProfile(props?.userprofile);
   }, [props, usersFollowed]);
   return (
@@ -27,7 +26,7 @@ function ShowUserDetails(props) {
       onClick={() => {
         navigateTo(`/profiles/${profile?.name}`);
       }}
-      style={{ backgroundImage: `url(${profile?.banner ? profile.banner : "none"})` }}>
+      style={{ backgroundImage: `url(${profile?.banner ? profile.banner : ""})` }}>
       <div className="user__profile-imagecontainer">
         <img src={profile?.avatar ? profile.avatar : defaultAvatar} className="user__profile-imagecontainer-img" alt={`${profile?.name}'s Avatar`} title={`${profile?.name}'s Avatar`} />
       </div>
