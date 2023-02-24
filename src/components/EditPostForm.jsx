@@ -4,8 +4,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Container, Form, Image, Spinner } from "react-bootstrap";
 import { InputTags } from "react-bootstrap-tagsinput";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
-import { apiBaseUrl, mediaUrlSyntax } from "../constants/variables";
+import { apiBaseUrl, maxTagsInpost, mediaUrlSyntax } from "../constants/variables";
 import SessionContext from "../context/SessionContext";
 import useGetSinglePost from "../hooks/useGetSinglePost";
 import ShowSpinner from "./ShowSpinner";
@@ -16,6 +17,7 @@ const postApiUrl = apiBaseUrl + "/posts/";
 const schema = yup.object().shape({
   title: yup.string().required("Title is a required field"),
   body: yup.string(),
+  tags: yup.array().max(maxTagsInpost, `Max ${maxTagsInpost} tags allowed.`),
   media: yup.string().matches(mediaUrlSyntax, "Please enter a valid url to an image"),
 });
 
@@ -26,8 +28,9 @@ export default function EditPostForm(props) {
   const [postSuccess, setPostSuccess] = useState(null);
   const [tags, setTags] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  const postId = props?.id;
+  let postId = props?.id;
   const { postData, loading, error } = useGetSinglePost(postId);
+  const [newPostId, setNewPostId] = useState(null);
 
   const {
     register,
@@ -72,6 +75,7 @@ export default function EditPostForm(props) {
           // reset yup
           reset();
         }
+        setNewPostId(response.data.id);
       }
     } catch (error) {
       // 400 : media url cannot be accessed.
@@ -103,6 +107,17 @@ export default function EditPostForm(props) {
     }
   }
 
+  function handleTagError() {
+    setTimeout(() => {
+      const numberOfTags = document.querySelectorAll(".badge").length;
+      if (errors.tags && numberOfTags <= maxTagsInpost) {
+        errors.tags = {};
+      } else {
+        errors.tags = { message: `Max ${maxTagsInpost} tags allowed.`, type: "max", ref: undefined };
+      }
+    }, 2000);
+  }
+
   // Add function to add a new tag using tabs. (avoid unsaved tag to be ignored)
 
   return (
@@ -122,7 +137,7 @@ export default function EditPostForm(props) {
                 <Form.Control className="postform-input-field" as="textarea" rows={3} placeholder="Body" {...register("body")} defaultValue={isEditMode ? postData?.body : ""} />
               </Form.Group>
               <Form.Group className="mb-3 postform-input" controlId="edistPostFormTags">
-                <div className="input-group">
+                <div className="input-group" onKeyUp={handleTagError} onClick={handleTagError}>
                   <InputTags
                     className="form-control postform-input-field postform-input-field-tags"
                     values={tags}
@@ -134,18 +149,10 @@ export default function EditPostForm(props) {
                     }}
                   />
                 </div>
+                <Form.Text className="text-muted">{errors.tags ? <span className="form-requirement">{errors.tags.message}</span> : ""}</Form.Text>
               </Form.Group>
               <Form.Group className="mb-3 postform-input" controlId="editPostFormMedia">
-                <Form.Control
-                  type="text"
-                  className="postform-input-field"
-                  //onKeyUp={(e) => {
-                  //setImageUrl(e.target.value);
-                  //}}
-                  placeholder="Image URL"
-                  {...register("media")}
-                  defaultValue={isEditMode ? postData?.media : ""}
-                />
+                <Form.Control type="text" className="postform-input-field" placeholder="Image URL" {...register("media")} defaultValue={isEditMode ? postData?.media : ""} />
                 <Form.Text className="text-muted">
                   {errors.media ? (
                     <span className="form-requirement">{errors.media.message}</span>
@@ -177,6 +184,7 @@ export default function EditPostForm(props) {
             </Form>
             <ShowStatusMessage display={postError} text={postError} />
             <ShowStatusMessage display={postSuccess} isSuccess={true} />
+            {postSuccess ? <Link to={`/post/${newPostId}`}>Click here to view the post</Link> : ""}
           </Col>
         </Container>
       )}

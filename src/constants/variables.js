@@ -18,3 +18,5 @@ export const availableEmojies = ["❤️", "😂", "😢", "👿"];
 export const postsToLoad = 25;
 export const profilesToLoad = 25;
 export const minPasswordLength = 8;
+
+export const maxTagsInpost = 8;
