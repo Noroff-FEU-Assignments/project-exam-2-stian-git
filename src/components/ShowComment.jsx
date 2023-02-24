@@ -11,13 +11,9 @@ function ShowComment(props) {
 
   useEffect(() => {
     setData(props.commentData);
-    //console.log(props);
     const replyToId = props.commentData.replyToId;
     if (replyToId) {
-      console.log("Reply to: " + replyToId);
       const originComment = props.allComments.filter((comment) => comment.id === replyToId);
-      console.log(props.allComments);
-      console.log(originComment);
       setIsReply(true);
       setCommentRepliedTo(originComment);
     }
@@ -29,12 +25,10 @@ function ShowComment(props) {
       className="comments__body"
       data-commentid={data?.id}
       onClick={(e) => {
-        console.log(e);
         const replyInfoField = document.querySelector(".replyto-message");
         document.querySelector(".replyto-message-text").innerHTML = ` ${data?.owner} - ${data?.body}`;
         replyInfoField.hidden = false;
         replyInfoField.dataset.replytoid = data?.id;
-        //show
       }}>
       <p className="comments__body-writtenby" title={moment(data?.created).format("MMM Do YYYY, HH:mm:ss")}>
         {isReply ? (

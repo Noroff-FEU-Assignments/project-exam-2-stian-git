@@ -556,16 +556,10 @@ p {
     &-origin {
       float: left;
       margin-bottom: 15px;
-      &-body {
-        //font-weight: bold;
-      }
     }
     &-text {
       font-size: 1.1em;
-      //font-weight: bold;
       color: $yellow;
-    }
-    &-author {
     }
   }
   &-icon {

@@ -91,12 +91,8 @@ function ShowPost(props) {
     const replyInfoField = document.querySelector(".replyto-message");
     const replyID = replyInfoField.dataset.replytoid;
     if (replyID !== "") {
-      console.log("We got an id:" + replyID);
       setValue("replyToId", parseInt(replyID));
-      console.log("Data to send:", data);
     }
-    //return;
-    //
     const addCommentApiUrl = apiBaseUrl + "/posts/" + post.id + "/comment";
     try {
       const response = await axios.post(addCommentApiUrl, data);
