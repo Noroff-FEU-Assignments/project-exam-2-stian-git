@@ -79,7 +79,6 @@ function ShowPost(props) {
     const postId = e.target.closest(".post").dataset.postid;
     if (!isSinglePostPage) {
       // show comments
-      //window.location.href = `/post/${postId}`;
       navigateTo(`/post/${postId}`);
     }
   }
@@ -152,9 +151,6 @@ function ShowPost(props) {
               }}>
               {post?.author?.name}
             </Link>
-            {/* <a className="post__body-created-link" href={`/profiles/${post?.author?.name}`}>
-              {post?.author?.name}
-            </a> */}
             )
           </Card.Text>
           <Card.Text className="post__body-maintext">{post?.body}</Card.Text>

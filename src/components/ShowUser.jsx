@@ -16,7 +16,6 @@ function ShowUser(props) {
       className="follow__container col"
       key={`followers-${user?.name}`}
       onClick={(e) => {
-        //window.location.href = `/profiles/${user?.name}`;
         navigateTo(`/profiles/${user?.name}`);
       }}>
       <div className="follow__container-info">

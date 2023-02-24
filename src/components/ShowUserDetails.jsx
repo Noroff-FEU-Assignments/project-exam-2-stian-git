@@ -25,7 +25,6 @@ function ShowUserDetails(props) {
     <Col
       className={userIsFollowed ? "user user-isfollowed" : "user"}
       onClick={() => {
-        //window.location.href = `/profiles/${profile?.name}`;
         navigateTo(`/profiles/${profile?.name}`);
       }}
       style={{ backgroundImage: `url(${profile?.banner ? profile.banner : "none"})` }}>
@@ -37,7 +36,6 @@ function ShowUserDetails(props) {
         <div
           className="user__profile-details"
           onClick={() => {
-            //window.location.href = `/profiles/${profile?.name}`;
             navigateTo(`/profiles/${profile?.name}`);
           }}>
           <h2 className="user__profile-details-name">{profile?.name}</h2>

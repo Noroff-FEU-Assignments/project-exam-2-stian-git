@@ -49,7 +49,6 @@ function NewUserForm() {
 
     try {
       const response = await axios.post(regUserApiUrl, data);
-      console.log(response.status);
       if (response.status === 200 || response.status === 201) {
         setRegSuccess(true);
         reset();

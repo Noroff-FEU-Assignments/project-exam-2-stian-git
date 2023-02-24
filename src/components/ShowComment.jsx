@@ -22,9 +22,6 @@ function ShowComment(props) {
           }}>
           {data?.owner}
         </Link>{" "}
-        {/* <a className="comments__body-writtenby-link" href={`/profiles/${data?.owner}`}>
-          {data?.owner}
-        </a>{" "} */}
         @ <FormatTimeStamp timestamp={data?.created} />
       </p>
       <p className="comments__body-text">{data?.body}</p>

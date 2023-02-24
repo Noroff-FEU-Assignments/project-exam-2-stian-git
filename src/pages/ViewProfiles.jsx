@@ -24,7 +24,6 @@ function ViewProfiles() {
         axios.defaults.headers.common = { Authorization: `Bearer ${isLoggedIn.accessToken}` };
         const response = await axios.get(usersApiUrl);
         setUsers(response.data);
-        //console.log("Profiles", response.data);
         if (response.data.length < profilesToLoad) {
           setNoMoreProfiles(true);
         }
@@ -95,7 +94,6 @@ function ViewProfiles() {
                 onClick={() => {
                   setOffset(offset + profilesToLoad);
                   getMoreUsers();
-                  console.log("Click");
                 }}>
                 More profiles
               </Button>

@@ -54,7 +54,6 @@ function AllPosts() {
         const response = await axios.get(postsApiUrl);
         if (response.status === 200) {
           const data = await response.data;
-          console.log(response);
           setPosts(data);
           if (data.length < postsToLoad) {
             setNoMorePages(true);
@@ -151,7 +150,6 @@ function AllPosts() {
   function doSearch(data) {
     // forward to post id if it's a int, otherwise: use the value as a tag and sort :
     if (parseInt(data.value)) {
-      //window.location.href = "/post/" + data.value;
       history(`/post/${data.value}`);
     } else {
       // Make an object to support the existing changePostsType-function.

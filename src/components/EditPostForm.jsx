@@ -26,7 +26,6 @@ export default function EditPostForm(props) {
   const [postSuccess, setPostSuccess] = useState(null);
   const [tags, setTags] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
-  //const [imageUrl, setImageUrl] = useState(null);
   const postId = props?.id;
   const { postData, loading, error } = useGetSinglePost(postId);
 

@@ -35,17 +35,8 @@ function ViewSingleProfile() {
   const [postsError, setPostsError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (userProfile?.username === loggedIn.name) {
-  //     setIsOwner(true);
-  //     console.log("Owner!");
-  //     // Make sure we reload the followed users array if this is the owners page:
-  //     setUsersFolowed(userProfile?.following);
-  //   }
-  // }, [setUsersFolowed]);
   useEffect(() => {
     // get all userinfo
-    console.log("Viewing profile", username);
     async function getUserProfile() {
       setLoadingProfile(true);
       const getProfileApiUrl = apiBaseUrl + "/profiles/" + username + "?_following=true&_followers=true";
@@ -61,7 +52,6 @@ function ViewSingleProfile() {
             setIsOwner(true);
             // Make sure we reload the followed users array if this is the owners page:
             //setUsersFollowed(data.following);
-            console.log("Adding:", data.following);
             window.localStorage.setItem(storageKeyFollowedUsers, JSON.stringify(data.following));
           }
           if (data.following.length === 0) {

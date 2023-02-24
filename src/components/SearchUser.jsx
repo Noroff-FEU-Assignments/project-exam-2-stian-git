@@ -19,7 +19,6 @@ function SearchUser() {
 
   const navigateTo = useNavigate();
   function doSearch(data) {
-    //window.location.href = "/profiles/" + data.searchstring;
     navigateTo(`/profiles/${data.searchstring}`);
   }
   return (
