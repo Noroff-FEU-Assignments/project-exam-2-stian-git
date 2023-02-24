@@ -197,7 +197,14 @@ function ShowPost(props) {
 
                   <Form.Text className="text-muted">{errors.body ? <span className="form-requirement">{errors.body.message}</span> : ""}</Form.Text>
                   {commentError ? <ShowStatusMessage display={true} text={`Failed to save comment. Please try again.`} /> : ""}
-                  <Button variant="primary" type="submit" className="comments__form-submitbutton" data-postid={post?.id}>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    variant="primary"
+                    type="submit"
+                    className="comments__form-submitbutton"
+                    data-postid={post?.id}>
                     {isSending ? (
                       <>
                         <span className="">Saving...</span>
