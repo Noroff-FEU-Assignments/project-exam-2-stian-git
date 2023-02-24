@@ -9,8 +9,6 @@ export const tagsToShow = 5;
 
 //RegEx used to identify a valid URL for media. Notice how filetypes can be changed by adding |.ext inside the parenthesis.
 export const mediaUrlSyntax = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?|^$/;
-export const mediaUrlSyntax_old = /((http|https):\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg)(\?[^\s[",><]*)?/;
-// Below regex works, but has not been tested against the API. Does it support all of these?
 
 export const allowedUserNameRegex = /^[\w\d]*$/;
 
