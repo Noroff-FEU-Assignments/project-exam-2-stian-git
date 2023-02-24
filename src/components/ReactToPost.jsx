@@ -12,6 +12,7 @@ function ReactToPost(props) {
     setPost(props.data);
   }, [props]);
 
+  // Total counter:
   function countReactions(allReactions) {
     let counter = 0;
     // filter out emojies to display only the ones available for this site. (other frontends may use other reactions)
@@ -45,6 +46,7 @@ function ReactToPost(props) {
       }, 2000);
     }
   }
+  // Counts a single emoji
   function countThisEmoji(emoji, reactions) {
     const currentEmoji = reactions?.find((reaction) => reaction.symbol === emoji);
     if (currentEmoji) {
@@ -52,6 +54,7 @@ function ReactToPost(props) {
     }
     return 0;
   }
+
   async function addReaction(id, emoji) {
     const addReactionUrl = apiBaseUrl + "/posts/" + id + "/react/" + emoji;
     try {

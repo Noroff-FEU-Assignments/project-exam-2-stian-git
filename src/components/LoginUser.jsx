@@ -10,7 +10,7 @@ import ShowStatusMessage from "./ShowStatusMessage";
 
 const loginUrl = apiBaseUrl + "/auth/login";
 
-//check for a valid email address?
+// Additional checks are not required at the login as it is controlled upon registration.
 const schema = yup.object().shape({
   email: yup.string().required("Please enter your email address"),
   password: yup.string().required("Please enter your password"),

@@ -1,5 +1,3 @@
-// Todo 22.2: Inform user of next step if successfully registered?
-
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { allowedUserNameRegex, apiBaseUrl, mediaUrlSyntax, minPasswordLength, validEmailDomains } from "../constants/variables";
@@ -12,6 +10,7 @@ import ShowStatusMessage from "./ShowStatusMessage";
 
 const regUserApiUrl = apiBaseUrl + "/auth/register";
 
+// Notice that we control things like email domain and image extensions here, which can be customized in the variables.
 const schema = yup.object().shape({
   name: yup.string().required("Username is required.").matches(allowedUserNameRegex, "Please avoid punctuation marks."),
   email: yup
@@ -30,6 +29,7 @@ const schema = yup.object().shape({
   avatar: yup.string().matches(mediaUrlSyntax, { message: "Please enter a valid url to an image", excludeEmptyString: true }),
   banner: yup.string().matches(mediaUrlSyntax, { message: "Please enter a valid url to an image", excludeEmptyString: true }),
 });
+
 function NewUserForm() {
   const [isSending, setIsSending] = useState(false);
   const [regFailed, setRegFailed] = useState(null);
@@ -46,7 +46,6 @@ function NewUserForm() {
 
   async function registerUser(data) {
     setIsSending(true);
-
     try {
       const response = await axios.post(regUserApiUrl, data);
       if (response.status === 200 || response.status === 201) {

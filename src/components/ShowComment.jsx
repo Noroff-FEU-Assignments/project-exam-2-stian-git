@@ -10,6 +10,7 @@ function ShowComment(props) {
   const [commentRepliedTo, setCommentRepliedTo] = useState([]);
 
   useEffect(() => {
+    // Checks if the comment is a reply to another comment.
     setData(props.commentData);
     const replyToId = props.commentData.replyToId;
     if (replyToId) {

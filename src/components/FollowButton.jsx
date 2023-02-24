@@ -33,7 +33,6 @@ function FollowButton(props) {
         e.target.innerText = "Unfollow";
       }
       profileContainer.classList.add("user-isfollowed");
-      // Do we need error handling?
     } else {
       // Unfollow:
       const userIsRemoved = saveFollowedUserChange(username);

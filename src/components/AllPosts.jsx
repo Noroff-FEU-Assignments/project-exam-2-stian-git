@@ -23,7 +23,6 @@ function AllPosts() {
   const [allTags, setAllTags] = useState([]);
   const [error, setError] = useState(null);
   const [loadingPosts, setLoadingPosts] = useState(false);
-
   const history = useNavigate();
 
   const {
@@ -33,6 +32,7 @@ function AllPosts() {
   } = useForm({ resolver: yupResolver(schema) });
 
   useEffect(() => {
+    // get Initial posts
     async function getAllPosts() {
       setLoadingPosts(true);
       let postsApiUrl;
@@ -120,6 +120,7 @@ function AllPosts() {
     }
   }
 
+  //Helper function to identify the correct url to use
   function getUrl() {
     let postsApiUrl;
     switch (postsType) {

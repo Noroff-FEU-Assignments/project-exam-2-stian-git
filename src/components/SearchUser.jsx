@@ -18,6 +18,7 @@ function SearchUser() {
   } = useForm({ resolver: yupResolver(schema) });
 
   const navigateTo = useNavigate();
+  // Search function is simply transfering to the expected users profile address. Errors are handled by the profile-page.
   function doSearch(data) {
     navigateTo(`/profiles/${data.searchstring}`);
   }

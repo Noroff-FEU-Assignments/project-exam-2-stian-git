@@ -1,4 +1,3 @@
-// Handle errors when reactions fail?
 import axios from "axios";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
@@ -80,7 +79,7 @@ function ShowPost(props) {
     const isSinglePostPage = currentSitePath.includes("post");
     const postId = e.target.closest(".post").dataset.postid;
     if (!isSinglePostPage) {
-      // show comments
+      // show comments by fowarding the user there
       navigateTo(`/post/${postId}`);
     }
   }

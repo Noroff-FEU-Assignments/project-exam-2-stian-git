@@ -12,11 +12,11 @@ function ShowUserDetails(props) {
   const navigateTo = useNavigate();
 
   useEffect(() => {
+    // Checks the current username against the array of followed users.
     function isFollowed(name) {
       const result = usersFollowed?.some((user) => user.name === name);
       setUserIsFollowed(result);
     }
-    // Checks the current username against the array of followed users.
     isFollowed(props.userprofile?.name);
     setProfile(props?.userprofile);
   }, [props, usersFollowed]);

@@ -1,4 +1,3 @@
-// Add error and success message ?
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Image } from "react-bootstrap";
 import * as yup from "yup";

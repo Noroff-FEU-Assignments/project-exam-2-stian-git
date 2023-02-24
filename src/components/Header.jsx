@@ -12,6 +12,7 @@ export default function Header() {
   const [showMenu, setShowMenu] = useState(false);
   const history = useNavigate();
 
+  // A helper function to close the menu.
   function menuClick() {
     setShowMenu(false);
   }

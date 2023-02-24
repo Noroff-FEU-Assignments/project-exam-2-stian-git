@@ -5,7 +5,6 @@ import FollowButton from "./FollowButton";
 
 function ShowUser(props) {
   const [user, setUser] = useState(null);
-  //const [error, setError] = useState(null);
   const navigateTo = useNavigate();
   useEffect(() => {
     setUser(props.user);
