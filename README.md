@@ -19,10 +19,12 @@ Some features:
 ## How to get started
 
 Just register a user on the system and get started.
-Site is hosted on the following url for testing purposes:
+It should be quite easy to get started and get the hang of it, once you are logged in.
+
+This site is hosted on the following url for testing purposes:
 [https://quiet-pavlova-2a196b.netlify.app/][https://quiet-pavlova-2a196b.netlify.app/]
 
-### Customization
+### Customization options
 
 In the variables-file we can, among other things, control:
 
@@ -62,3 +64,7 @@ If you want to publish the site in alternative ways, do the following:
 - Copy everything inside the "build"-folder and upload it to your webserver.
 - The build expects the site to be hosted at root folder. (Check out how to use the homepage-field in the package.json if you need to run it in a subfolder.)
 - Open the site in your browser.
+
+#####
+
+by Stian Martinsen-Stormyr - February 2023
