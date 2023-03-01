@@ -49,7 +49,7 @@ Just register a user on the system and get started. It should be quite easy to g
 It's worth mentioning that supported image extensions may differ from what the backend supports. It's controlled through regex and will inform the user upon saving.
 
 This site is hosted on the following url for testing purposes:
-[https://quiet-pavlova-2a196b.netlify.app/][https://quiet-pavlova-2a196b.netlify.app/]
+[https://quiet-pavlova-2a196b.netlify.app/](https://quiet-pavlova-2a196b.netlify.app/)
 
 ### Installing
 
