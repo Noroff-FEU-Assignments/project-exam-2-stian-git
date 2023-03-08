@@ -37,7 +37,7 @@ Here are some of the features for this project:
 
 ## Built With
 
-You can list a the tech stack that you've used over here
+This project was made using these components:
 
 - [React.js](https://reactjs.org/)
 - [Bootstrap](https://getbootstrap.com)
@@ -52,8 +52,6 @@ This site is hosted on the following url for testing purposes:
 [https://quiet-pavlova-2a196b.netlify.app/](https://quiet-pavlova-2a196b.netlify.app/)
 
 ### Installing
-
-This is where you list how to get the project started. It typically just includes telling a person to clone the repo and then to install the dependencies e.g.
 
 1. Clone the repo:
 
